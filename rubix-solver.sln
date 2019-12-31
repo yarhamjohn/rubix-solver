@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rubix-solver", "rubix-solver\rubix-solver.csproj", "{7C4C8B17-2C58-45B8-9BCF-626C28275BF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rubix-solver.tests", "rubix-solver.tests\rubix-solver.tests.csproj", "{BBC2D932-317B-4807-B8EE-9F774949C4F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C4C8B17-2C58-45B8-9BCF-626C28275BF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4C8B17-2C58-45B8-9BCF-626C28275BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4C8B17-2C58-45B8-9BCF-626C28275BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4C8B17-2C58-45B8-9BCF-626C28275BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC2D932-317B-4807-B8EE-9F774949C4F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC2D932-317B-4807-B8EE-9F774949C4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC2D932-317B-4807-B8EE-9F774949C4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC2D932-317B-4807-B8EE-9F774949C4F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

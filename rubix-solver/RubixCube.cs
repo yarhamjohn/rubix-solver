@@ -1,23 +1,17 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 
 namespace rubix_solver
 {
     public class RubixCube
     {
-        public Block[,,] Cube { get; set; }
+        // First index is layer from front to back (0 = Front layer, 1 = Middle Layer, 2 = Back Layer)
+        // Second index is row in layer from top to bottom (0 = Top Row, 1 = Middle Row, 2 = Bottom Row)
+        // Third index is column in Layer from left to right (0 = Left Columm, 1 = Middle Column, 3 = Right Column)
 
-        public RubixCube()
-        {
-            // First index is layer from front to back (0 = Front layer, 1 = Middle Layer, 2 = Back Layer)
-            // Second index is row in layer from top to bottom (0 = Top Row, 1 = Middle Row, 2 = Bottom Row)
-            // Third index is column in Layer from left to right (0 = Left Columm, 1 = Middle Column, 3 = Right Column)
-
-            // Makes assumption the cube and its faces scan always be referred to in a static orientation:
-            // white RubiRiubi nfront, yellow back, red left, orange right, green top and blue bottom
-            Cube = new[,,]
-            {
+        // Makes assumption the cube and its faces can always be referred to in a static orientation:
+        // white front, yellow back, red left, orange right, green top and blue bottom
+        public readonly Block[,,] SolvedCube = {
                 {
                     {
                         new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
@@ -70,9 +64,78 @@ namespace rubix_solver
                     }
                 }
             };
+        private Block[,,] Cube { get; set; }
+
+        public RubixCube(Block[,,] cube)
+        {
+            Cube = cube;
         }
 
-        public Colour? GetColour(Block block, Layer side)
+        public RubixCube()
+        {
+            Cube = SolvedCube.Clone() as Block[,,];
+        }
+
+        public bool IsSolved()
+        {
+            var back = GetFace(Layer.Back);
+            foreach (var block in back)
+            {
+                if (block.Back != Colour.Yellow)
+                {
+                    return false;
+                }
+            }
+            
+            var front = GetFace(Layer.Front);
+            foreach (var block in front)
+            {
+                if (block.Front != Colour.White)
+                {
+                    return false;
+                }
+            }
+
+            var left = GetFace(Layer.Left);
+            foreach (var block in left)
+            {
+                if (block.Left != Colour.Red)
+                {
+                    return false;
+                }
+            }
+            
+            var right = GetFace(Layer.Right);
+            foreach (var block in right)
+            {
+                if (block.Right != Colour.Orange)
+                {
+                    return false;
+                }
+            }
+            
+            var top = GetFace(Layer.Top);
+            foreach (var block in top)
+            {
+                if (block.Top != Colour.Green)
+                {
+                    return false;
+                }
+            }
+            
+            var bottom = GetFace(Layer.Bottom);
+            foreach (var block in bottom)
+            {
+                if (block.Bottom != Colour.Blue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private Colour? GetColour(Block block, Layer side)
         {
             return side switch
             {
@@ -102,7 +165,6 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-
                 case Layer.Left:
                     for (var row = 0; row < 3; row++)
                     {
@@ -168,34 +230,26 @@ namespace rubix_solver
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    if (layer == Layer.Front)
+                    switch (layer)
                     {
-                        Cube[0, row, col] = face[row, col];
-                    }
-                    
-                    if (layer == Layer.Back)
-                    {
-                        Cube[2, row, col] = face[row, col];
-                    }
-
-                    if (layer == Layer.Top)
-                    {
-                        Cube[Math.Abs(row - 2), 0, col] = face[row, col];
-                    }
-                    
-                    if (layer == Layer.Bottom)
-                    {
-                        Cube[Math.Abs(row - 2), 2, col] = face[row, col];
-                    }
-
-                    if (layer == Layer.Left)
-                    {
-                        Cube[Math.Abs(col - 2), row, 0] = face[row, col];
-                    }
-                    
-                    if (layer == Layer.Right)
-                    {
-                        Cube[Math.Abs(col - 2), row, 2] = face[row, col];
+                        case Layer.Front:
+                            Cube[0, row, col] = face[row, col];
+                            break;
+                        case Layer.Back:
+                            Cube[2, row, col] = face[row, col];
+                            break;
+                        case Layer.Top:
+                            Cube[Math.Abs(row - 2), 0, col] = face[row, col];
+                            break;
+                        case Layer.Bottom:
+                            Cube[Math.Abs(row - 2), 2, col] = face[row, col];
+                            break;
+                        case Layer.Left:
+                            Cube[Math.Abs(col - 2), row, 0] = face[row, col];
+                            break;
+                        case Layer.Right:
+                            Cube[Math.Abs(col - 2), row, 2] = face[row, col];
+                            break;
                     }
                 }
             }
@@ -210,39 +264,52 @@ namespace rubix_solver
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    switch (layer)
+                    newFace[col, Math.Abs(row - 2)] = layer switch
                     {
-                        case Layer.Front:
-                        case Layer.Back:
-                            newFace[col, Math.Abs(row - 2)] = new Block(
-                                face[row, col].Bottom,
-                                face[row, col].Top,
-                                face[row, col].Left,
-                                face[row, col].Right,
-                                face[row, col].Front,
-                                face[row, col].Back);
-                            break;
-                        case Layer.Top:
-                        case Layer.Bottom:
-                            newFace[col, Math.Abs(row - 2)] = new Block(
-                                face[row, col].Front,
-                                face[row, col].Back,
-                                face[row, col].Top,
-                                face[row, col].Bottom,
-                                face[row, col].Right,
-                                face[row, col].Left);
-                            break;
-                        case Layer.Left:
-                        case Layer.Right:
-                            newFace[col, Math.Abs(row - 2)] = new Block(
-                                face[row, col].Left,
-                                face[row, col].Right,
-                                face[row, col].Back,
-                                face[row, col].Front,
-                                face[row, col].Top,
-                                face[row, col].Bottom);
-                            break;
-                    }
+                        Layer.Front => new Block(
+                            face[row, col].Bottom, 
+                            face[row, col].Top, 
+                            face[row, col].Left,
+                            face[row, col].Right, 
+                            face[row, col].Front, 
+                            face[row, col].Back),
+                        Layer.Back => new Block(
+                            face[row, col].Bottom, 
+                            face[row, col].Top, 
+                            face[row, col].Left,
+                            face[row, col].Right, 
+                            face[row, col].Front, 
+                            face[row, col].Back),
+                        Layer.Top => new Block(
+                            face[row, col].Front, 
+                            face[row, col].Back, 
+                            face[row, col].Top,
+                            face[row, col].Bottom, 
+                            face[row, col].Right, 
+                            face[row, col].Left),
+                        Layer.Bottom => new Block(
+                            face[row, col].Front, 
+                            face[row, col].Back,
+                            face[row, col].Top,
+                            face[row, col].Bottom, 
+                            face[row, col].Right, 
+                            face[row, col].Left),
+                        Layer.Left => new Block(
+                            face[row, col].Left, 
+                            face[row, col].Right, 
+                            face[row, col].Back,
+                            face[row, col].Front, 
+                            face[row, col].Top, 
+                            face[row, col].Bottom),
+                        Layer.Right => new Block(
+                            face[row, col].Left, 
+                            face[row, col].Right, 
+                            face[row, col].Back,
+                            face[row, col].Front, 
+                            face[row, col].Top, 
+                            face[row, col].Bottom),
+                        _ => newFace[col, Math.Abs(row - 2)]
+                    };
                 }
             }
 
@@ -258,39 +325,52 @@ namespace rubix_solver
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    switch (layer)
+                    newFace[Math.Abs(col - 2), row] = layer switch
                     {
-                        case Layer.Front:
-                        case Layer.Back:
-                            newFace[Math.Abs(col - 2), row] = new Block(
-                                face[row, col].Top,
-                                face[row, col].Bottom,
-                                face[row, col].Right,
-                                face[row, col].Left,
-                                face[row, col].Front,
-                                face[row, col].Back);
-                            break;
-                        case Layer.Top:
-                        case Layer.Bottom:
-                            newFace[Math.Abs(col - 2), row] = new Block(
-                                face[row, col].Back,
-                                face[row, col].Front,
-                                face[row, col].Top,
-                                face[row, col].Bottom,
-                                face[row, col].Left,
-                                face[row, col].Right);
-                            break;
-                        case Layer.Left:
-                        case Layer.Right:
-                            newFace[Math.Abs(col - 2), row] = new Block(
-                                face[row, col].Left,
-                                face[row, col].Right,
-                                face[row, col].Front,
-                                face[row, col].Back,
-                                face[row, col].Bottom,
-                                face[row, col].Top);
-                            break;
-                    }
+                        Layer.Front => new Block(
+                            face[row, col].Top, 
+                            face[row, col].Bottom,
+                            face[row, col].Right,
+                            face[row, col].Left,
+                            face[row, col].Front,
+                            face[row, col].Back),
+                        Layer.Back => new Block(
+                            face[row, col].Top, 
+                            face[row, col].Bottom, 
+                            face[row, col].Right,
+                            face[row, col].Left, 
+                            face[row, col].Front, 
+                            face[row, col].Back),
+                        Layer.Top => new Block(
+                            face[row, col].Back, 
+                            face[row, col].Front, 
+                            face[row, col].Top,
+                            face[row, col].Bottom, 
+                            face[row, col].Left, 
+                            face[row, col].Right),
+                        Layer.Bottom => new Block(
+                            face[row, col].Back, 
+                            face[row, col].Front, 
+                            face[row, col].Top,
+                            face[row, col].Bottom, 
+                            face[row, col].Left, 
+                            face[row, col].Right),
+                        Layer.Left => new Block(
+                            face[row, col].Left, 
+                            face[row, col].Right, 
+                            face[row, col].Front,
+                            face[row, col].Back, 
+                            face[row, col].Bottom, 
+                            face[row, col].Top),
+                        Layer.Right => new Block(
+                            face[row, col].Left, 
+                            face[row, col].Right, 
+                            face[row, col].Front,
+                            face[row, col].Back, 
+                            face[row, col].Bottom, 
+                            face[row, col].Top),
+                        _ => newFace[Math.Abs(col - 2), row]
+                    };
                 }
             }
 

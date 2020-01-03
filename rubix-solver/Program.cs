@@ -9,67 +9,12 @@ namespace rubix_solver
     { 
         static void Main(string[] args)
         {
-            // var cube = new RubixCube();
-            // cube.PrintCube();
-            // cube.Randomise();
-            // cube.PrintCube();
-
-            Console.WriteLine("Start: ");
-            var cube = new RubixCube(new[,,]
-            {
-                {
-                    {
-                        new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
-                        new Block(null, null, Colour.Green, null, Colour.White, null),
-                        new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, Colour.White, null),
-                        new Block(null, null, null, null, Colour.White, null),
-                        new Block(null, Colour.Orange, null, null, Colour.White, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
-                        new Block(null, null, null, Colour.Blue, Colour.White, null),
-                        new Block(null, Colour.Orange, null, Colour.Blue, Colour.White, null)
-                    }
-                },
-                {
-                    {
-                        new Block(Colour.Red, null, Colour.Green, null, null, null),
-                        new Block(null, null, Colour.Green, null, null, null),
-                        new Block(null, Colour.Orange, Colour.Green, null, null, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, null, null),
-                        new Block(null, null, null, null, null, null),
-                        new Block(null, Colour.Orange, null, null, null, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, Colour.Blue, null, null),
-                        new Block(null, null, null, Colour.Blue, null, null),
-                        new Block(null, Colour.Orange, null, Colour.Blue, null, null)
-                    }
-                },
-                {
-                    {
-                        new Block(Colour.Blue, null, Colour.Yellow, null, null, Colour.Orange),
-                        new Block(null, null, Colour.Green, null, null, Colour.Yellow),
-                        new Block(null, Colour.Green, Colour.Yellow, null, null, Colour.Orange)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, null, Colour.Yellow),
-                        new Block(null, null, null, null, null, Colour.Yellow),
-                        new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
-                    },
-                    {
-                        new Block(Colour.Yellow, null, null, Colour.Green, null, Colour.Red),
-                        new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
-                        new Block(null, Colour.Yellow, null, Colour.Blue, null, Colour.Red)
-                    }
-                }
-            });
+            var cube = new RubixCube();
+            cube.PrintCube();
+            cube.RotateAntiClockwise(Layer.Back);
+            cube.PrintCube();
             //
+            // Console.WriteLine("Start: ");
             // var cube = new RubixCube(new[,,]
             // {
             //     {
@@ -108,7 +53,7 @@ namespace rubix_solver
             //     },
             //     {
             //         {
-            //             new Block(Colour.Yellow, null, Colour.Red, null, null, Colour.Green),
+            //             new Block(Colour.Blue, null, Colour.Yellow, null, null, Colour.Orange),
             //             new Block(null, null, Colour.Green, null, null, Colour.Yellow),
             //             new Block(null, Colour.Green, Colour.Yellow, null, null, Colour.Orange)
             //         },
@@ -118,16 +63,16 @@ namespace rubix_solver
             //             new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
             //         },
             //         {
-            //             new Block(Colour.Red, null, null, Colour.Blue, null, Colour.Yellow),
+            //             new Block(Colour.Yellow, null, null, Colour.Green, null, Colour.Red),
             //             new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
-            //             new Block(null, Colour.Yellow, null, Colour.Orange, null, Colour.Blue)
+            //             new Block(null, Colour.Yellow, null, Colour.Blue, null, Colour.Red)
             //         }
             //     }
             // });
             
-            cube.PrintCube();
+            // cube.PrintCube();
 
-            SolveThirdLayer(cube);
+            // SolveThirdLayer(cube);
         }
 
         private static void SolveThirdLayer(RubixCube cube)

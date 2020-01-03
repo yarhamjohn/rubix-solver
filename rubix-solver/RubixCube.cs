@@ -5,13 +5,15 @@ namespace rubix_solver
 {
     public class RubixCube
     {
+        private Block[,,] Cube { get; set; }
+
         // First index is layer from front to back (0 = Front layer, 1 = Middle Layer, 2 = Back Layer)
         // Second index is row in layer from top to bottom (0 = Top Row, 1 = Middle Row, 2 = Bottom Row)
         // Third index is column in Layer from left to right (0 = Left Columm, 1 = Middle Column, 3 = Right Column)
 
         // Makes assumption the cube and its faces can always be referred to in a static orientation:
         // white front, yellow back, red left, orange right, green top and blue bottom
-        public readonly Block[,,] SolvedCube = {
+        private readonly Block[,,] _solvedCube = {
                 {
                     {
                         new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
@@ -64,7 +66,6 @@ namespace rubix_solver
                     }
                 }
             };
-        private Block[,,] Cube { get; set; }
 
         public RubixCube(Block[,,] cube)
         {
@@ -73,7 +74,7 @@ namespace rubix_solver
 
         public RubixCube()
         {
-            Cube = SolvedCube.Clone() as Block[,,];
+            Cube = _solvedCube.Clone() as Block[,,];
         }
 
         public bool IsSolved()
@@ -181,8 +182,7 @@ namespace rubix_solver
                     {
                         for (var layer = 0; layer < 3; layer++)
                         {
-                            var col = Math.Abs(layer - 2);
-                            faceToReturn[row, col] = Cube[layer, row, 2];
+                            faceToReturn[row, layer] = Cube[layer, row, 2];
                         }
                     }
 
@@ -203,8 +203,7 @@ namespace rubix_solver
                     {
                         for (var layer = 0; layer < 3; layer++)
                         {
-                            var row = Math.Abs(layer - 2);
-                            faceToReturn[row, col] = Cube[layer, 2, col];
+                            faceToReturn[layer, col] = Cube[layer, 2, col];
                         }
                     }
 
@@ -214,17 +213,18 @@ namespace rubix_solver
                     {
                         for (var col = 0; col < 3; col++)
                         {
-                            faceToReturn[row, col] = Cube[2, row, col];
+                            var newCol = Math.Abs(col - 2);
+                            faceToReturn[row, newCol] = Cube[2, row, col];
                         }
                     }
 
                     return faceToReturn;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(side), side, null);
+                    throw new Exception($"Not a valid side: {side}");
             }
         }
 
-        private void SetFace(Block[,] face, Layer layer)
+        public void SetFace(Block[,] face, Layer layer)
         {
             for (var row = 0; row < 3; row++)
             {
@@ -236,20 +236,22 @@ namespace rubix_solver
                             Cube[0, row, col] = face[row, col];
                             break;
                         case Layer.Back:
-                            Cube[2, row, col] = face[row, col];
+                            Cube[2, row, Math.Abs(col - 2)] = face[row, col];
                             break;
                         case Layer.Top:
                             Cube[Math.Abs(row - 2), 0, col] = face[row, col];
                             break;
                         case Layer.Bottom:
-                            Cube[Math.Abs(row - 2), 2, col] = face[row, col];
+                            Cube[row, 2, col] = face[row, col];
                             break;
                         case Layer.Left:
                             Cube[Math.Abs(col - 2), row, 0] = face[row, col];
                             break;
                         case Layer.Right:
-                            Cube[Math.Abs(col - 2), row, 2] = face[row, col];
+                            Cube[col, row, 2] = face[row, col];
                             break;
+                        default:
+                            throw new Exception($"Not a valid face: {layer}");
                     }
                 }
             }
@@ -335,10 +337,10 @@ namespace rubix_solver
                             face[row, col].Front,
                             face[row, col].Back),
                         Layer.Back => new Block(
-                            face[row, col].Top, 
                             face[row, col].Bottom, 
-                            face[row, col].Right,
-                            face[row, col].Left, 
+                            face[row, col].Top, 
+                            face[row, col].Left,
+                            face[row, col].Right, 
                             face[row, col].Front, 
                             face[row, col].Back),
                         Layer.Top => new Block(
@@ -349,12 +351,12 @@ namespace rubix_solver
                             face[row, col].Left, 
                             face[row, col].Right),
                         Layer.Bottom => new Block(
-                            face[row, col].Back, 
                             face[row, col].Front, 
+                            face[row, col].Back, 
                             face[row, col].Top,
                             face[row, col].Bottom, 
-                            face[row, col].Left, 
-                            face[row, col].Right),
+                            face[row, col].Right, 
+                            face[row, col].Left),
                         Layer.Left => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
@@ -365,10 +367,10 @@ namespace rubix_solver
                         Layer.Right => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
-                            face[row, col].Front,
-                            face[row, col].Back, 
-                            face[row, col].Bottom, 
-                            face[row, col].Top),
+                            face[row, col].Back,
+                            face[row, col].Front, 
+                            face[row, col].Top, 
+                            face[row, col].Bottom),
                         _ => newFace[Math.Abs(col - 2), row]
                     };
                 }
@@ -398,45 +400,28 @@ namespace rubix_solver
         
         public void PrintCube()
         {
-            PrintTopFace();
+            PrintFace(Layer.Top);
             PrintFaces();
-            PrintBottomFace();
+            PrintFace(Layer.Bottom);
         }
 
-        private void PrintTopFace()
+        private void PrintFace(Layer layer)
         {
-            var face = GetFace(Layer.Top);
+            var face = GetFace(layer);
 
             for (var row = 0; row < 3; row++)
             {
                 Console.Write("                  "); // hack to indent top and bottom faces
-                PrintColour(GetColour(face[row, 0], Layer.Top));
+                PrintColour(GetColour(face[row, 0], layer));
                 Console.Write("   ");
-                PrintColour(GetColour(face[row, 1], Layer.Top));
+                PrintColour(GetColour(face[row, 1], layer));
                 Console.Write("   ");
-                PrintColour(GetColour(face[row, 2], Layer.Top));
+                PrintColour(GetColour(face[row, 2], layer));
                 Console.WriteLine();
                 Console.WriteLine();
             }
         }
 
-        private void PrintBottomFace()
-        {
-            var face = GetFace(Layer.Bottom);
-
-            for (var row = 2; row >= 0; row--)
-            {
-                Console.Write("                  "); // hack to indent top and bottom faces
-                PrintColour(GetColour(face[row, 0], Layer.Bottom));
-                Console.Write("   ");
-                PrintColour(GetColour(face[row, 1], Layer.Bottom));
-                Console.Write("   ");
-                PrintColour(GetColour(face[row, 2], Layer.Bottom));
-                Console.WriteLine();
-                Console.WriteLine();
-            }
-        }
-        
         private void PrintFaces()
         {
             for (var row = 0; row < 3; row++)
@@ -458,19 +443,19 @@ namespace rubix_solver
                 Console.Write("   ");
 
                 var right = GetFace(Layer.Right);
-                PrintColour(GetColour(right[row, 2], Layer.Right));
+                PrintColour(GetColour(right[row, 0], Layer.Right));
                 Console.Write("   ");
                 PrintColour(GetColour(right[row, 1], Layer.Right));
                 Console.Write("   ");
-                PrintColour(GetColour(right[row, 0], Layer.Right));
+                PrintColour(GetColour(right[row, 2], Layer.Right));
                 Console.Write("   ");
                 
                 var back = GetFace(Layer.Back);
-                PrintColour(GetColour(back[row, 2], Layer.Back));
+                PrintColour(GetColour(back[row, 0], Layer.Back));
                 Console.Write("   ");
                 PrintColour(GetColour(back[row, 1], Layer.Back));
                 Console.Write("   ");
-                PrintColour(GetColour(back[row, 0], Layer.Back));
+                PrintColour(GetColour(back[row, 2], Layer.Back));
 
                 Console.WriteLine();
                 Console.WriteLine();

@@ -6,7 +6,24 @@ namespace rubix_solver.tests
     public class RubixCubeTests
     {
         private RubixCube cube;
-
+        private Block[,] newFace = {
+            {
+                new Block(Colour.Blue, null, Colour.Yellow, null, Colour.Green, null),
+                new Block(null, null, Colour.Green, null, Colour.White, null),
+                new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
+            },
+            {
+                new Block(Colour.Red, null, null, null, Colour.White, null),
+                new Block(null, null, null, null, Colour.White, null),
+                new Block(null, Colour.Orange, null, null, Colour.White, null)
+            },
+            {
+                new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
+                new Block(null, null, null, Colour.Blue, Colour.White, null),
+                new Block(null, Colour.Red, null, Colour.Orange, Colour.White, null)
+            }
+        };
+        
         [SetUp]
         public void Setup()
         {
@@ -77,12 +94,20 @@ namespace rubix_solver.tests
 
                 switch (edgeLayer)
                 {
-                    case Layer.Left:
+                    case Layer.Left when faceLayer == Layer.Front:
                         block = face[i, 0];
                         Assert.AreEqual(colour, block.Left);
-                        break;
-                    case Layer.Right:
+                        break;                    
+                    case Layer.Left when faceLayer == Layer.Back:
                         block = face[i, 2];
+                        Assert.AreEqual(colour, block.Left);
+                        break;
+                    case Layer.Right when faceLayer == Layer.Front:
+                        block = face[i, 2];
+                        Assert.AreEqual(colour, block.Right);
+                        break;
+                    case Layer.Right when faceLayer == Layer.Back:
+                        block = face[i, 0];
                         Assert.AreEqual(colour, block.Right);
                         break;
                     case Layer.Top:
@@ -96,5 +121,314 @@ namespace rubix_solver.tests
                 }
             }
         }
+
+        [Test]
+        public void GetFrontFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Front);
+            Assert.AreEqual(Colour.Red, face[0, 0].Left);
+            Assert.AreEqual(Colour.White, face[0, 0].Front);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void GetBackFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Back);
+            Assert.AreEqual(Colour.Orange, face[0, 0].Right);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Back);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Left);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Back);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }        
+        
+        [Test]
+        public void GetTopFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Top);
+            Assert.AreEqual(Colour.Red, face[0, 0].Left);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Back);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Green, face[2, 2].Top);
+        }
+        
+        [Test]
+        public void GetBottomFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Bottom);
+            Assert.AreEqual(Colour.Red, face[0, 0].Left);
+            Assert.AreEqual(Colour.White, face[0, 0].Front);
+            Assert.AreEqual(Colour.Blue, face[0, 0].Bottom);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Right);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Back);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void GetLeftFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Left);
+            Assert.AreEqual(Colour.Red, face[0, 0].Left);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Back);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Left);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void GetRightFace_Returns_CorrectlyOrientatedFace()
+        {
+            var face = cube.GetFace(Layer.Right);
+            Assert.AreEqual(Colour.Orange, face[0, 0].Right);
+            Assert.AreEqual(Colour.White, face[0, 0].Front);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Right);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Back);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void IsSolved_Correctly_Identifies_SolvedRubixCube()
+        {
+            Assert.IsTrue(cube.IsSolved());
+        }
+        
+        [Test]
+        public void IsSolved_Correctly_Identifies_NonSolvedRubixCube()
+        {
+            var unsolvedCube = new RubixCube(new[,,]
+            {
+                {
+                    {
+                        new Block(Colour.Green, null, Colour.White, null, Colour.Red, null),
+                        new Block(null, null, Colour.Green, null, Colour.White, null),
+                        new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, Colour.White, null),
+                        new Block(null, null, null, null, Colour.White, null),
+                        new Block(null, Colour.Orange, null, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, Colour.Orange, null, Colour.Blue, Colour.White, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Red, null, Colour.Green, null, null, null),
+                        new Block(null, null, Colour.Green, null, null, null),
+                        new Block(null, Colour.Orange, Colour.Green, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, null, null),
+                        new Block(null, null, null, null, null, null),
+                        new Block(null, Colour.Orange, null, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, null, null),
+                        new Block(null, null, null, Colour.Blue, null, null),
+                        new Block(null, Colour.Orange, null, Colour.Blue, null, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Red, null, Colour.Green, null, null, Colour.Yellow),
+                        new Block(null, null, Colour.Green, null, null, Colour.Yellow),
+                        new Block(null, Colour.Orange, Colour.Green, null, null, Colour.Yellow)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, null, Colour.Yellow),
+                        new Block(null, null, null, null, null, Colour.Yellow),
+                        new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, null, Colour.Yellow),
+                        new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
+                        new Block(null, Colour.Orange, null, Colour.Blue, null, Colour.Yellow)
+                    }
+                }
+            });
+            
+            Assert.IsFalse(unsolvedCube.IsSolved());
+        }
+
+        [Test]
+        public void SetFrontFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Front);
+            var face = cube.GetFace(Layer.Front);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void SetBackFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Back);
+            var face = cube.GetFace(Layer.Back);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void SetLeftFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Left);
+            var face = cube.GetFace(Layer.Left);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void SetRightFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Right);
+            var face = cube.GetFace(Layer.Right);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void SetTopFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Top);
+            var face = cube.GetFace(Layer.Top);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void SetBottomFace_CorrectlySetsTheTargetedFace()
+        {
+            cube.SetFace(newFace, Layer.Bottom);
+            var face = cube.GetFace(Layer.Bottom);
+
+            Assert.AreEqual(Colour.Blue, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheFrontFace()
+        {
+            cube.RotateAntiClockwise(Layer.Front);
+            var face = cube.GetFace(Layer.Front);
+
+            Assert.AreEqual(Colour.Green, face[0, 0].Left);
+            Assert.AreEqual(Colour.White, face[0, 0].Front);
+            Assert.AreEqual(Colour.Orange, face[0, 0].Top);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Right);
+            Assert.AreEqual(Colour.White, face[2, 2].Front);
+            Assert.AreEqual(Colour.Red, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheBackFace()
+        {
+            cube.RotateAntiClockwise(Layer.Back);
+            var face = cube.GetFace(Layer.Back);
+
+            Assert.AreEqual(Colour.Green, face[0, 0].Right);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Back);
+            Assert.AreEqual(Colour.Red, face[0, 0].Top);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Left);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Back);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheTopFace()
+        {
+            cube.RotateAntiClockwise(Layer.Top);
+            var face = cube.GetFace(Layer.Top);
+
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Left);
+            Assert.AreEqual(Colour.Orange, face[0, 0].Back);
+            Assert.AreEqual(Colour.Green, face[0, 0].Top);
+            Assert.AreEqual(Colour.White, face[2, 2].Right);
+            Assert.AreEqual(Colour.Red, face[2, 2].Front);
+            Assert.AreEqual(Colour.Green, face[2, 2].Top);
+        }
+
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheBottomFace()
+        {
+            cube.RotateAntiClockwise(Layer.Bottom);
+            var face = cube.GetFace(Layer.Bottom);
+
+            Assert.AreEqual(Colour.White, face[0, 0].Left);
+            Assert.AreEqual(Colour.Orange, face[0, 0].Front);
+            Assert.AreEqual(Colour.Blue, face[0, 0].Bottom);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Right);
+            Assert.AreEqual(Colour.Red, face[2, 2].Back);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheLeftFace()
+        {
+            cube.RotateAntiClockwise(Layer.Left);
+            var face = cube.GetFace(Layer.Left);
+
+            Assert.AreEqual(Colour.Red, face[0, 0].Left);
+            Assert.AreEqual(Colour.Green, face[0, 0].Back);
+            Assert.AreEqual(Colour.White, face[0, 0].Top);
+            Assert.AreEqual(Colour.Red, face[2, 2].Left);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Front);
+            Assert.AreEqual(Colour.Yellow, face[2, 2].Bottom);
+        }
+        
+        [Test]
+        public void RotateAntiClockwise_CorrectlyRotatesTheRightFace()
+        {
+            cube.RotateAntiClockwise(Layer.Right);
+            var face = cube.GetFace(Layer.Right);
+
+            Assert.AreEqual(Colour.Orange, face[0, 0].Right);
+            Assert.AreEqual(Colour.Green, face[0, 0].Front);
+            Assert.AreEqual(Colour.Yellow, face[0, 0].Top);
+            Assert.AreEqual(Colour.Orange, face[2, 2].Right);
+            Assert.AreEqual(Colour.Blue, face[2, 2].Back);
+            Assert.AreEqual(Colour.White, face[2, 2].Bottom);
+        }
+        
+        //TODO: Test RotateClockwise
     }
 }

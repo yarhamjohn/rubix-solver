@@ -5,7 +5,7 @@ namespace rubix_solver
 {
     public class RubixCube
     {
-        private Block[,,] Cube { get; set; }
+        public Block[,,] Cube { get; set; }
 
         // First index is layer from front to back (0 = Front layer, 1 = Middle Layer, 2 = Back Layer)
         // Second index is row in layer from top to bottom (0 = Top Row, 1 = Middle Row, 2 = Bottom Row)
@@ -135,6 +135,8 @@ namespace rubix_solver
 
             return true;
         }
+        
+        
 
         private Colour? GetColour(Block block, Layer side)
         {
@@ -276,10 +278,10 @@ namespace rubix_solver
                             face[row, col].Front, 
                             face[row, col].Back),
                         Layer.Back => new Block(
-                            face[row, col].Bottom, 
                             face[row, col].Top, 
-                            face[row, col].Left,
-                            face[row, col].Right, 
+                            face[row, col].Bottom, 
+                            face[row, col].Right,
+                            face[row, col].Left, 
                             face[row, col].Front, 
                             face[row, col].Back),
                         Layer.Top => new Block(
@@ -290,12 +292,12 @@ namespace rubix_solver
                             face[row, col].Right, 
                             face[row, col].Left),
                         Layer.Bottom => new Block(
-                            face[row, col].Front, 
-                            face[row, col].Back,
+                            face[row, col].Back, 
+                            face[row, col].Front,
                             face[row, col].Top,
                             face[row, col].Bottom, 
-                            face[row, col].Right, 
-                            face[row, col].Left),
+                            face[row, col].Left, 
+                            face[row, col].Right),
                         Layer.Left => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
@@ -306,10 +308,10 @@ namespace rubix_solver
                         Layer.Right => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
-                            face[row, col].Back,
-                            face[row, col].Front, 
-                            face[row, col].Top, 
-                            face[row, col].Bottom),
+                            face[row, col].Front,
+                            face[row, col].Back, 
+                            face[row, col].Bottom, 
+                            face[row, col].Top),
                         _ => newFace[col, Math.Abs(row - 2)]
                     };
                 }
@@ -476,6 +478,83 @@ namespace rubix_solver
             };
             Console.Write("   ");
             Console.ResetColor();
+        }
+
+        public Block[,,] CloneCube()
+        {
+            return new[,,]
+            {
+                {
+                    {
+                        new Block(Cube[0, 0, 0].Left, Cube[0, 0, 0].Right, Cube[0, 0, 0].Top, Cube[0, 0, 0].Bottom, Cube[0, 0, 0].Front, Cube[0, 0, 0].Back),
+                        new Block(Cube[0, 0, 1].Left, Cube[0, 0, 1].Right, Cube[0, 0, 1].Top, Cube[0, 0, 1].Bottom, Cube[0, 0, 1].Front, Cube[0, 0, 1].Back),
+                        new Block(Cube[0, 0, 2].Left, Cube[0, 0, 2].Right, Cube[0, 0, 2].Top, Cube[0, 0, 2].Bottom, Cube[0, 0, 2].Front, Cube[0, 0, 2].Back)
+                    },
+                    {
+                        new Block(Cube[0, 1, 0].Left, Cube[0, 1, 0].Right, Cube[0, 1, 0].Top, Cube[0, 1, 0].Bottom, Cube[0, 1, 0].Front, Cube[0, 1, 0].Back),
+                        new Block(Cube[0, 1, 1].Left, Cube[0, 1, 1].Right, Cube[0, 1, 1].Top, Cube[0, 1, 1].Bottom, Cube[0, 1, 1].Front, Cube[0, 1, 1].Back),
+                        new Block(Cube[0, 1, 2].Left, Cube[0, 1, 2].Right, Cube[0, 1, 2].Top, Cube[0, 1, 2].Bottom, Cube[0, 1, 2].Front, Cube[0, 1, 2].Back)
+                    },
+                    {
+                        new Block(Cube[0, 2, 0].Left, Cube[0, 2, 0].Right, Cube[0, 2, 0].Top, Cube[0, 2, 0].Bottom, Cube[0, 2, 0].Front, Cube[0, 2, 0].Back),
+                        new Block(Cube[0, 2, 1].Left, Cube[0, 2, 1].Right, Cube[0, 2, 1].Top, Cube[0, 2, 1].Bottom, Cube[0, 2, 1].Front, Cube[0, 2, 1].Back),
+                        new Block(Cube[0, 2, 2].Left, Cube[0, 2, 2].Right, Cube[0, 2, 2].Top, Cube[0, 2, 2].Bottom, Cube[0, 2, 2].Front, Cube[0, 2, 2].Back)
+                    }
+                },
+                {
+                    {
+                        new Block(Cube[1, 0, 0].Left, Cube[1, 0, 0].Right, Cube[1, 0, 0].Top, Cube[1, 0, 0].Bottom, Cube[1, 0, 0].Front, Cube[1, 0, 0].Back),
+                        new Block(Cube[1, 0, 1].Left, Cube[1, 0, 1].Right, Cube[1, 0, 1].Top, Cube[1, 0, 1].Bottom, Cube[1, 0, 1].Front, Cube[1, 0, 1].Back),
+                        new Block(Cube[1, 0, 2].Left, Cube[1, 0, 2].Right, Cube[1, 0, 2].Top, Cube[1, 0, 2].Bottom, Cube[1, 0, 2].Front, Cube[1, 0, 2].Back)
+                    },
+                    {
+                        new Block(Cube[1, 1, 0].Left, Cube[1, 1, 0].Right, Cube[1, 1, 0].Top, Cube[1, 1, 0].Bottom, Cube[1, 1, 0].Front, Cube[1, 1, 0].Back),
+                        new Block(Cube[1, 1, 1].Left, Cube[1, 1, 1].Right, Cube[1, 1, 1].Top, Cube[1, 1, 1].Bottom, Cube[1, 1, 1].Front, Cube[1, 1, 1].Back),
+                        new Block(Cube[1, 1, 2].Left, Cube[1, 1, 2].Right, Cube[1, 1, 2].Top, Cube[1, 1, 2].Bottom, Cube[1, 1, 2].Front, Cube[1, 1, 2].Back)
+                    },
+                    {
+                        new Block(Cube[1, 2, 0].Left, Cube[1, 2, 0].Right, Cube[1, 2, 0].Top, Cube[1, 2, 0].Bottom, Cube[1, 2, 0].Front, Cube[1, 2, 0].Back),
+                        new Block(Cube[1, 2, 1].Left, Cube[1, 2, 1].Right, Cube[1, 2, 1].Top, Cube[1, 2, 1].Bottom, Cube[1, 2, 1].Front, Cube[1, 2, 1].Back),
+                        new Block(Cube[1, 2, 2].Left, Cube[1, 2, 2].Right, Cube[1, 2, 2].Top, Cube[1, 2, 2].Bottom, Cube[1, 2, 2].Front, Cube[1, 2, 2].Back)
+                    }
+                },
+                {
+                    {
+                        new Block(Cube[2, 0, 0].Left, Cube[2, 0, 0].Right, Cube[2, 0, 0].Top, Cube[2, 0, 0].Bottom, Cube[2, 0, 0].Front, Cube[2, 0, 0].Back),
+                        new Block(Cube[2, 0, 1].Left, Cube[2, 0, 1].Right, Cube[2, 0, 1].Top, Cube[2, 0, 1].Bottom, Cube[2, 0, 1].Front, Cube[2, 0, 1].Back),
+                        new Block(Cube[2, 0, 2].Left, Cube[2, 0, 2].Right, Cube[2, 0, 2].Top, Cube[2, 0, 2].Bottom, Cube[2, 0, 2].Front, Cube[2, 0, 2].Back)
+                    },
+                    {
+                        new Block(Cube[2, 1, 0].Left, Cube[2, 1, 0].Right, Cube[2, 1, 0].Top, Cube[2, 1, 0].Bottom, Cube[2, 1, 0].Front, Cube[2, 1, 0].Back),
+                        new Block(Cube[2, 1, 1].Left, Cube[2, 1, 1].Right, Cube[2, 1, 1].Top, Cube[2, 1, 1].Bottom, Cube[2, 1, 1].Front, Cube[2, 1, 1].Back),
+                        new Block(Cube[2, 1, 2].Left, Cube[2, 1, 2].Right, Cube[2, 1, 2].Top, Cube[2, 1, 2].Bottom, Cube[2, 1, 2].Front, Cube[2, 1, 2].Back)
+                    },
+                    {
+                        new Block(Cube[2, 2, 0].Left, Cube[2, 2, 0].Right, Cube[2, 2, 0].Top, Cube[2, 2, 0].Bottom, Cube[2, 2, 0].Front, Cube[2, 2, 0].Back),
+                        new Block(Cube[2, 2, 1].Left, Cube[2, 2, 1].Right, Cube[2, 2, 1].Top, Cube[2, 2, 1].Bottom, Cube[2, 2, 1].Front, Cube[2, 2, 1].Back),
+                        new Block(Cube[2, 2, 2].Left, Cube[2, 2, 2].Right, Cube[2, 2, 2].Top, Cube[2, 2, 2].Bottom, Cube[2, 2, 2].Front, Cube[2, 2, 2].Back)
+                    }
+                }
+            };
+        }
+
+        public void Solve()
+        {
+            SolveThirdLayer();
+        }
+
+        private void SolveThirdLayer()
+        {
+            var solver = new ThirdLayerSolver(this);
+            
+            // Form a cross on the back face
+            // Correct the location of the middle edge pieces
+            
+            // Get the corner pieces in the right corners
+            solver.ReorganiseCorners();
+            
+            // Correct the orientation of the corner pieces
+            solver.CorrectCornerOrientation();
         }
     }
 }

@@ -49,19 +49,19 @@ namespace rubix_solver
                 },
                 {
                     {
-                        new Block(Colour.Blue, null, Colour.Red, null, null, Colour.Yellow),
-                        new Block(null, null, Colour.Green, null, null, Colour.Yellow),
-                        new Block(null, Colour.Green, Colour.Yellow, null, null, Colour.Orange)
+                        new Block(Colour.Orange, null, Colour.Blue, null, null, Colour.Yellow),
+                        new Block(null, null, Colour.Red, null, null, Colour.Yellow),
+                        new Block(null, Colour.Yellow, Colour.Orange, null, null, Colour.Green)
                     },
                     {
-                        new Block(Colour.Red, null, null, null, null, Colour.Yellow),
+                        new Block(Colour.Green, null, null, null, null, Colour.Yellow),
                         new Block(null, null, null, null, null, Colour.Yellow),
                         new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
                     },
                     {
-                        new Block(Colour.Orange, null, null, Colour.Yellow, null, Colour.Blue),
+                        new Block(Colour.Yellow, null, null, Colour.Red, null, Colour.Blue),
                         new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
-                        new Block(null, Colour.Yellow, null, Colour.Red, null, Colour.Green)
+                        new Block(null, Colour.Green, null, Colour.Yellow, null, Colour.Red)
                     }
                 }
             });

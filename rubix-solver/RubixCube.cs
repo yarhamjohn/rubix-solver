@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using rubix_solver.Solvers;
 
 namespace rubix_solver
 {
@@ -549,6 +550,7 @@ namespace rubix_solver
             
             // Form a cross on the back face
             // Correct the location of the middle edge pieces
+            solver.ReorganiseMiddleEdges();
             
             // Get the corner pieces in the right corners
             solver.ReorganiseCorners();

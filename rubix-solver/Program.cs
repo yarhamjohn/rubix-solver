@@ -50,17 +50,17 @@ namespace rubix_solver
                 {
                     {
                         new Block(Colour.Orange, null, Colour.Blue, null, null, Colour.Yellow),
-                        new Block(null, null, Colour.Red, null, null, Colour.Yellow),
-                        new Block(null, Colour.Yellow, Colour.Orange, null, null, Colour.Green)
+                        new Block(null, null, Colour.Yellow, null, null, Colour.Green),
+                        new Block(null, Colour.Yellow, Colour.Red, null, null, Colour.Blue)
                     },
                     {
-                        new Block(Colour.Green, null, null, null, null, Colour.Yellow),
+                        new Block(Colour.Yellow, null, null, null, null, Colour.Blue),
                         new Block(null, null, null, null, null, Colour.Yellow),
-                        new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
+                        new Block(null, Colour.Yellow, null, null, null, Colour.Red)
                     },
                     {
-                        new Block(Colour.Yellow, null, null, Colour.Red, null, Colour.Blue),
-                        new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
+                        new Block(Colour.Yellow, null, null, Colour.Orange, null, Colour.Green),
+                        new Block(null, null, null, Colour.Yellow, null, Colour.Orange),
                         new Block(null, Colour.Green, null, Colour.Yellow, null, Colour.Red)
                     }
                 }

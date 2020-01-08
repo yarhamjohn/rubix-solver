@@ -13,24 +13,86 @@ namespace rubix_solver.Solvers
             _cube = cube;
         }
 
+        public void FormYellowCross()
+        {
+            if (_cube.IsSolved())
+            {
+                return;
+            }
+
+            while (!YellowCrossShowing())
+            {
+                var face = _cube.GetFace(Layer.Back);
+                var crossBlocks = new Dictionary<(int, int), Block>
+                {
+                    {(0, 1), face[0, 1]},
+                    {(1, 1), face[1, 1]},
+                    {(2, 1), face[2, 1]},
+                    {(1, 0), face[1, 0]},
+                    {(1, 2), face[1, 2]},
+                };
+
+                if (crossBlocks.Values.Count(f => f.Back == Colour.Yellow) < 3)
+                {
+                    // Any rotation is fine here (providing the face matches the side)
+                    PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                }
+                else
+                {
+                    if (face[0, 1].Back == Colour.Yellow && face[1, 2].Back == Colour.Yellow &&
+                        face[1, 1].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                    }
+                    else if (face[0, 1].Back == Colour.Yellow && face[1, 0].Back == Colour.Yellow &&
+                             face[1, 1].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Bottom, Layer.Left);
+                    }
+                    else if (face[1, 2].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
+                             face[1, 1].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Top, Layer.Right);
+                    }
+                    else if (face[1, 0].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
+                             face[1, 1].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Left, Layer.Top);
+                    }
+                    else if (face[0, 1].Back == Colour.Yellow &&
+                             face[1, 1].Back == Colour.Yellow &&
+                             face[2, 1].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                    }
+                    else if (face[1, 0].Back == Colour.Yellow &&
+                             face[1, 1].Back == Colour.Yellow &&
+                             face[1, 2].Back == Colour.Yellow)
+                    {
+                        PerformFruRufRotations(Layer.Bottom, Layer.Left);
+                    }
+                }
+            }
+        }
+        
         public void ReorganiseMiddleEdges()
         {
             if (_cube.IsSolved())
             {
                 return;
             }
-            
+
             if (!YellowCrossShowing())
             {
                 throw new Exception(
                     "The cube is not in the correct state (yellow cross) to reorganise the middle edges.");
             }
-            
+
             while (!MiddleEdgesAreSolved())
             {
                 var middleEdges = GetMiddleEdges();
                 var numIncorrectEdges = middleEdges.Count(b => b.isCorrect);
-                
+
                 if (numIncorrectEdges == 2)
                 {
                     var firstIncorrectEdge = middleEdges.First(b => !b.isCorrect);
@@ -92,7 +154,7 @@ namespace rubix_solver.Solvers
                         (1, 0) => Layer.Top,
                         _ => throw new Exception("The selected block is not a middle edge")
                     };
-                    
+
                     PerformRuRuRuuRuRotation(sideToRotate);
                 }
                 else
@@ -100,18 +162,6 @@ namespace rubix_solver.Solvers
                     _cube.RotateClockwise(Layer.Back);
                 }
             }
-        }
-
-        private LinkedList<(bool isCorrect, Block, (int, int) index)> GetMiddleEdges()
-        {
-            var face = _cube.GetFace(Layer.Back);
-
-            var middleEdges = new LinkedList<(bool isCorrect, Block, (int, int) index)>();
-            middleEdges.AddLast((face[0, 1].Top == Colour.Green, face[0, 1], (0, 1)));
-            middleEdges.AddLast((face[1, 2].Left == Colour.Red, face[1, 2], (1, 2)));
-            middleEdges.AddLast((face[2, 1].Bottom == Colour.Blue, face[2, 1], (2, 1)));
-            middleEdges.AddLast((face[1, 0].Right == Colour.Orange, face[1, 0], (1, 0)));
-            return middleEdges;
         }
 
         public void ReorganiseCorners()
@@ -209,6 +259,54 @@ namespace rubix_solver.Solvers
             }
         }
 
+        private void PerformFruRufRotations(Layer face, Layer side)
+        {
+            _cube.RotateClockwise(face);
+            _cube.RotateClockwise(side);
+            _cube.RotateClockwise(Layer.Back);
+
+            _cube.RotateAntiClockwise(side);
+            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(face);
+        }
+
+        private void PerformRuRuRuuRuRotation(Layer sideToRotate)
+        {
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(Layer.Back);
+
+            _cube.RotateAntiClockwise(sideToRotate);
+            _cube.RotateClockwise(Layer.Back);
+
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Layer.Back);
+
+            _cube.RotateAntiClockwise(sideToRotate);
+            _cube.RotateClockwise(Layer.Back);
+        }
+
+        private void PerformUrulRotations(Layer rightSide, Layer leftSide)
+        {
+            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(rightSide);
+            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(leftSide);
+
+            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(rightSide);
+            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateClockwise(leftSide);
+        }
+
+        private void PerformRdrdRotations(Layer sideToRotate)
+        {
+            _cube.RotateAntiClockwise(sideToRotate);
+            _cube.RotateAntiClockwise(Layer.Front);
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(Layer.Front);
+        }
+
         private Dictionary<(int, int), Block> GetCornerBlocks()
         {
             var face = _cube.GetFace(Layer.Back);
@@ -271,60 +369,36 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void PerformRuRuRuuRuRotation(Layer sideToRotate)
+        private LinkedList<(bool isCorrect, Block, (int, int) index)> GetMiddleEdges()
         {
-            _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
+            var face = _cube.GetFace(Layer.Back);
 
-            _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
-
-            _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
-            _cube.RotateClockwise(Layer.Back);
-
-            _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
-        }
-
-        private void PerformUrulRotations(Layer rightSide, Layer leftSide)
-        {
-            _cube.RotateClockwise(Layer.Back);
-            _cube.RotateClockwise(rightSide);
-            _cube.RotateAntiClockwise(Layer.Back);
-            _cube.RotateAntiClockwise(leftSide);
-
-            _cube.RotateClockwise(Layer.Back);
-            _cube.RotateAntiClockwise(rightSide);
-            _cube.RotateAntiClockwise(Layer.Back);
-            _cube.RotateClockwise(leftSide);
-        }
-
-        private void PerformRdrdRotations(Layer sideToRotate)
-        {
-            _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateAntiClockwise(Layer.Front);
-            _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Front);
+            var middleEdges = new LinkedList<(bool isCorrect, Block, (int, int) index)>();
+            middleEdges.AddLast((face[0, 1].Top == Colour.Green, face[0, 1], (0, 1)));
+            middleEdges.AddLast((face[1, 2].Left == Colour.Red, face[1, 2], (1, 2)));
+            middleEdges.AddLast((face[2, 1].Bottom == Colour.Blue, face[2, 1], (2, 1)));
+            middleEdges.AddLast((face[1, 0].Right == Colour.Orange, face[1, 0], (1, 0)));
+            return middleEdges;
         }
 
         private bool MiddleEdgesAreSolved()
         {
             var face = _cube.GetFace(Layer.Back);
-            return YellowCrossShowing() && 
-                   face[0, 1].Top == Colour.Green && 
+            return YellowCrossShowing() &&
+                   face[0, 1].Top == Colour.Green &&
                    face[1, 2].Left == Colour.Red &&
-                   face[2, 1].Bottom == Colour.Blue && 
+                   face[2, 1].Bottom == Colour.Blue &&
                    face[1, 0].Right == Colour.Orange;
         }
 
         private bool YellowCrossShowing()
-        {        
+        {
             var face = _cube.GetFace(Layer.Back);
             return face[0, 1].Back == Colour.Yellow &&
                    face[1, 2].Back == Colour.Yellow &&
                    face[2, 1].Back == Colour.Yellow &&
-                   face[1, 0].Back == Colour.Yellow;
+                   face[1, 0].Back == Colour.Yellow && 
+                   face[1, 1].Back == Colour.Yellow;
         }
     }
 }

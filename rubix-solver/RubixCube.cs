@@ -549,6 +549,8 @@ namespace rubix_solver
             var solver = new ThirdLayerSolver(this);
             
             // Form a cross on the back face
+            solver.FormYellowCross();
+            
             // Correct the location of the middle edge pieces
             solver.ReorganiseMiddleEdges();
             

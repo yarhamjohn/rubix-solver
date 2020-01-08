@@ -904,5 +904,71 @@ namespace rubix_solver.tests
             
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
+        [Test]
+        public void ReorganiseMiddleEdges_FormsTheYellowCross_GivenOnlyTheCentreBlock()
+        {
+            var cube = new RubixCube(new[,,]
+            {
+                {
+                    {
+                        new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
+                        new Block(null, null, Colour.Green, null, Colour.White, null),
+                        new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, Colour.White, null),
+                        new Block(null, null, null, null, Colour.White, null),
+                        new Block(null, Colour.Orange, null, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, Colour.Orange, null, Colour.Blue, Colour.White, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Red, null, Colour.Green, null, null, null),
+                        new Block(null, null, Colour.Green, null, null, null),
+                        new Block(null, Colour.Orange, Colour.Green, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, null, null),
+                        new Block(null, null, null, null, null, null),
+                        new Block(null, Colour.Orange, null, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, null, null),
+                        new Block(null, null, null, Colour.Blue, null, null),
+                        new Block(null, Colour.Orange, null, Colour.Blue, null, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Orange, null, Colour.Blue, null, null, Colour.Yellow),
+                        new Block(null, null, Colour.Yellow, null, null, Colour.Green),
+                        new Block(null, Colour.Yellow, Colour.Red, null, null, Colour.Blue)
+                    },
+                    {
+                        new Block(Colour.Yellow, null, null, null, null, Colour.Blue),
+                        new Block(null, null, null, null, null, Colour.Yellow),
+                        new Block(null, Colour.Yellow, null, null, null, Colour.Red)
+                    },
+                    {
+                        new Block(Colour.Yellow, null, null, Colour.Orange, null, Colour.Green),
+                        new Block(null, null, null, Colour.Yellow, null, Colour.Orange),
+                        new Block(null, Colour.Green, null, Colour.Yellow, null, Colour.Red)
+                    }
+                }
+            });
+        
+            var solver = new ThirdLayerSolver(cube);
+            solver.FormYellowCross();
+            solver.ReorganiseMiddleEdges();
+            solver.ReorganiseCorners();
+            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
+            
+            Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
+        }
     }
 }

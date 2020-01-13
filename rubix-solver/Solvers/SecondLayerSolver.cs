@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace rubix_solver
@@ -25,11 +26,108 @@ namespace rubix_solver
                 var middleEdges = GetMiddleEdges();
                 if (NumSwitchableMiddleEdges(middleEdges) == 0)
                 {
-                    // check second layer for piece in reverse orientation
+                    if (_cube.Cube[1, 0, 0].Top != Colour.Yellow && _cube.Cube[1, 0, 0].Left != Colour.Yellow)
+                    {
+                        PerformRightSwitch(Layer.Left, Layer.Top);
+                    }
+                    
+                    if (_cube.Cube[1, 0, 2].Top != Colour.Yellow && _cube.Cube[1, 0, 2].Right != Colour.Yellow)
+                    {
+                        PerformRightSwitch(Layer.Top, Layer.Right);
+                    }
+                    
+                    if (_cube.Cube[1, 2, 0].Bottom != Colour.Yellow && _cube.Cube[1, 2, 0].Left != Colour.Yellow)
+                    {
+                        PerformRightSwitch(Layer.Bottom, Layer.Left);
+                    }
+                    
+                    if (_cube.Cube[1, 2, 2].Bottom != Colour.Yellow && _cube.Cube[1, 2, 2].Right != Colour.Yellow)
+                    {
+                        PerformRightSwitch(Layer.Right, Layer.Bottom);
+                    }
                 }
 
-                // Rotate third layer until a middle edge matches its side, check which way it should switch and move it
+                while (!MiddleEdgeIsCorrectlyPositioned(_cube.Cube))
+                {
+                    _cube.RotateClockwise(Layer.Back);
+                }
+
+                var (face, targetFace) = GetCorrectlyPositionedMiddleEdge(_cube.Cube);
+                {
+                    if (face == Layer.Top && targetFace == Layer.Left ||
+                        face == Layer.Left && targetFace == Layer.Bottom ||
+                        face == Layer.Bottom && targetFace == Layer.Right ||
+                        face == Layer.Right && targetFace == Layer.Top)
+                    {
+                        PerformLeftSwitch(face, targetFace);
+                    }
+
+                    if (face == Layer.Top && targetFace == Layer.Right ||
+                        face == Layer.Right && targetFace == Layer.Bottom ||
+                        face == Layer.Bottom && targetFace == Layer.Left ||
+                        face == Layer.Left && targetFace == Layer.Top)
+                    {
+                        PerformRightSwitch(face, targetFace);
+                    }
+                }
             }
+        }
+
+        private (Layer face, Layer targetFace) GetCorrectlyPositionedMiddleEdge(Block[,,] cube)
+        {
+            if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Red)
+            {
+                return (Layer.Top, Layer.Left);
+            } 
+            
+            if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Orange)
+            {
+                return (Layer.Top, Layer.Right);
+            } 
+            
+            if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Green)
+            {
+                return (Layer.Left, Layer.Top);
+            } 
+            
+            if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Blue)
+            {
+                return (Layer.Left, Layer.Bottom);
+            } 
+            
+            if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Green)
+            {
+                return (Layer.Right, Layer.Top);
+            } 
+            
+            if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Blue)
+            {
+                return (Layer.Right, Layer.Bottom);
+            } 
+            
+            if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Red)
+            {
+                return (Layer.Bottom, Layer.Left);
+            } 
+            
+            if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange)
+            {
+                return (Layer.Bottom, Layer.Right);
+            }
+            
+            throw new Exception("There are no matching middle edges but there should be...");
+        }
+        
+        private bool MiddleEdgeIsCorrectlyPositioned(Block[,,] cube)
+        {
+            return cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Red ||
+                   cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Orange ||
+                   cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Green ||
+                   cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Blue || 
+                   cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Green || 
+                   cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Blue || 
+                   cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Red || 
+                   cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange;
         }
 
         private static int NumSwitchableMiddleEdges(Dictionary<(int, int), Block> middleEdges)
@@ -85,27 +183,27 @@ namespace rubix_solver
             };
         }
 
-        public void PerformLeftSwitch(Layer top, Layer face, Layer side)
+        public void PerformLeftSwitch(Layer face, Layer side)
         {
-            _cube.RotateAntiClockwise(top);
+            _cube.RotateAntiClockwise(Layer.Back);
             _cube.RotateAntiClockwise(side);
-            _cube.RotateClockwise(top);
+            _cube.RotateClockwise(Layer.Back);
             _cube.RotateClockwise(side);
-            _cube.RotateClockwise(top);
+            _cube.RotateClockwise(Layer.Back);
             _cube.RotateClockwise(face);
-            _cube.RotateAntiClockwise(top);
+            _cube.RotateAntiClockwise(Layer.Back);
             _cube.RotateAntiClockwise(face);
         }
 
-        public void PerformRightSwitch(Layer top, Layer face, Layer side)
+        public void PerformRightSwitch(Layer face, Layer side)
         {
-            _cube.RotateClockwise(top);
+            _cube.RotateClockwise(Layer.Back);
             _cube.RotateClockwise(side);
-            _cube.RotateAntiClockwise(top);
+            _cube.RotateAntiClockwise(Layer.Back);
             _cube.RotateAntiClockwise(side);
-            _cube.RotateAntiClockwise(top);
+            _cube.RotateAntiClockwise(Layer.Back);
             _cube.RotateAntiClockwise(face);
-            _cube.RotateClockwise(top);
+            _cube.RotateClockwise(Layer.Back);
             _cube.RotateClockwise(face);
         }
     }

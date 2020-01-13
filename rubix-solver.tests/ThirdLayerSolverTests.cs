@@ -709,7 +709,7 @@ namespace rubix_solver.tests
         }
         
         [Test]
-        public void ReorganiseCorners_CorrectlyPositionsTheCorners_GivenZeroCorrectlyPositionedCorners() // This is the output from the test for ReorganiseMiddleEdges so why doesn't it work?
+        public void ReorganiseCorners_CorrectlyPositionsTheCorners_GivenZeroCorrectlyPositionedCorners()
         {
             var cube = new RubixCube(new[,,]
             {

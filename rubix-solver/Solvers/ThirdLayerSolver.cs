@@ -13,6 +13,14 @@ namespace rubix_solver.Solvers
             _cube = cube;
         }
 
+        public void Solve()
+        {
+            FormYellowCross();
+            ReorganiseMiddleEdges();
+            ReorganiseCorners();
+            CorrectCornerOrientation();
+        }
+
         public void FormYellowCross()
         {
             if (_cube.IsSolved())

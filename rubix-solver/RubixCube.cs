@@ -541,8 +541,15 @@ namespace rubix_solver
 
         public void Solve()
         {
+            SolveFirstLayer();
             SolveSecondLayer();
             SolveThirdLayer();
+        }
+
+        private void SolveFirstLayer()
+        {
+            var solver = new FirstLayerSolver(this);
+            solver.SolveCorners();
         }
 
         private void SolveSecondLayer()
@@ -627,6 +634,76 @@ namespace rubix_solver
                 }
             }
 
+            return true;
+        }
+
+        public bool FirstLayerIsSolved()
+        {
+            var front = GetFace(Layer.Front);
+            foreach (var block in front)
+            {
+                if (block.Front != Colour.White)
+                {
+                    return false;
+                }
+            }
+            
+            var left = GetFace(Layer.Left);
+            for (var x = 0; x < 3; x++)
+            {
+                if (left[x, 2].Left != Colour.Red)
+                {
+                    return false;
+                }
+            }
+
+            if (left[1, 1].Left != Colour.Red)
+            {
+                return false;
+            }
+            
+            var right = GetFace(Layer.Right);
+            for (var x = 0; x < 3; x++)
+            {
+                if (right[x, 0].Right != Colour.Orange)
+                {
+                    return false;
+                }
+            }
+            
+            if (right[1, 1].Right != Colour.Orange)
+            {
+                return false;
+            }
+            
+            var top = GetFace(Layer.Top);
+            for (var y = 0; y < 3; y++)
+            {
+                if (top[2, y].Top != Colour.Green)
+                {
+                    return false;
+                }
+            }
+            
+            if (top[1, 1].Top != Colour.Green)
+            {
+                return false;
+            }
+            
+            var bottom = GetFace(Layer.Bottom);
+            for (var y = 0; y < 3; y++)
+            {
+                if (bottom[0, y].Bottom != Colour.Blue)
+                {
+                    return false;
+                }
+            }
+
+            if (bottom[1, 1].Bottom != Colour.Blue)
+            {
+                return false;
+            }
+            
             return true;
         }
     }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 
-namespace rubix_solver
+namespace rubix_solver.Solvers
 {
     public class SecondLayerSolver
     {

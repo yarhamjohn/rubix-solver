@@ -36,5 +36,15 @@ namespace rubix_solver
                    Front == block.Front && 
                    Back == block.Back;
         }
+
+        public bool HasColour(Colour colour)
+        {
+            return Left == colour || 
+                   Right == colour || 
+                   Top == colour || 
+                   Bottom == colour || 
+                   Front == colour ||
+                   Back == colour;
+        }
     }
 }

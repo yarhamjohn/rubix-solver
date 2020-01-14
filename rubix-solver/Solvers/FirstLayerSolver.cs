@@ -13,6 +13,112 @@ namespace rubix_solver.Solvers
             _cube = cube;
         }
 
+        public void FormCross()
+        {
+            if (_cube.IsSolved())
+            {
+                return;
+            }
+
+            while (!CrossIsFormed())
+            {
+                var middleEdges = GetMiddleEdges();
+                var incorrectMiddleEdge = middleEdges.First(IsIncorrectMiddleEdge);
+                
+                // Rotate cube so that white side is on the bottom face
+                // Rotate bottom face to match the center colour
+                // Rotate so that white side is on the top face
+
+            }
+        }
+
+        private bool IsIncorrectMiddleEdge(((Layer, Layer), Block) edge)
+        {
+            if (edge.Item2.Top != Colour.White)
+            {
+                return false;
+            }
+
+            var nonTopEdge = edge.Item1.Item1 == Layer.Top ? edge.Item1.Item2 : edge.Item1.Item1;
+            switch (nonTopEdge)
+            {
+                case Layer.Left:
+                {
+                    var face = _cube.GetFace(Layer.Left);
+                    return edge.Item2.Left != Colour.Red || face[1, 1].Left != Colour.Red;
+                }
+                case Layer.Right:
+                {
+                    var face = _cube.GetFace(Layer.Right);
+                    return edge.Item2.Right != Colour.Orange || face[1, 1].Right != Colour.Orange;
+                }
+                case Layer.Top:
+                {
+                    var face = _cube.GetFace(Layer.Top);
+                    return edge.Item2.Top != Colour.Green || face[1, 1].Top != Colour.Green;
+                }
+                case Layer.Bottom:
+                {
+                    var face = _cube.GetFace(Layer.Bottom);
+                    return edge.Item2.Bottom != Colour.Blue || face[1, 1].Bottom != Colour.Blue;
+                }
+                default:
+                    throw new Exception("This edge is not in the top layer which it should be");
+            }
+        }
+
+        private List<((Layer, Layer), Block)> GetMiddleEdges()
+        {
+            var edges = new List<((Layer, Layer), Block)>();
+            var front = _cube.GetFace(Layer.Front);
+            edges.AddRange(new List<((Layer, Layer), Block)>
+            {
+                ((Layer.Front, Layer.Top), front[0, 1]), 
+                ((Layer.Front, Layer.Left), front[1, 0]), 
+                ((Layer.Front, Layer.Right), front[1, 2]), 
+                ((Layer.Front, Layer.Bottom), front[2, 1])
+            });
+
+            var back = _cube.GetFace(Layer.Back);
+            edges.AddRange(new List<((Layer, Layer), Block)>
+            {
+                ((Layer.Back, Layer.Top), back[0, 1]), 
+                ((Layer.Back, Layer.Right), back[1, 0]), 
+                ((Layer.Back, Layer.Left), back[1, 2]), 
+                ((Layer.Back, Layer.Bottom), back[2, 1])
+            });
+            
+            var left = _cube.GetFace(Layer.Left);
+            edges.AddRange(new List<((Layer, Layer), Block)>
+            {
+                ((Layer.Left, Layer.Top), left[0, 1]), 
+                ((Layer.Left, Layer.Bottom), left[2, 1])
+            });
+            
+            var right = _cube.GetFace(Layer.Right);
+            edges.AddRange(new List<((Layer, Layer), Block)>
+            {
+                ((Layer.Right, Layer.Top), right[0, 1]), 
+                ((Layer.Right, Layer.Bottom), right[2, 1])
+            });
+
+            return edges.Where(e => e.Item2.HasColour(Colour.White)).ToList();
+        }
+
+        private bool CrossIsFormed()
+        {
+            var face = _cube.GetFace(Layer.Front);
+            return face[0, 0].Front == Colour.White &&
+                   face[0, 2].Front == Colour.White &&
+                   face[2, 0].Front == Colour.White &&
+                   face[2, 2].Front == Colour.White &&
+                   face[0, 1].Top == Colour.Green &&
+                   face[1, 0].Left == Colour.Red &&
+                   face[1, 2].Right == Colour.Orange &&
+                   face[2, 1].Bottom == Colour.Blue && 
+                   _cube.CenterBlocksAreCorrect();
+        }
+
         public void SolveCorners()
         {
             if (_cube.IsSolved())

@@ -706,5 +706,15 @@ namespace rubix_solver
             
             return true;
         }
+
+        public bool CenterBlocksAreCorrect()
+        {
+            return Cube[0, 1, 1].Front == Colour.White && 
+                   Cube[1, 0, 1].Top == Colour.Green &&
+                   Cube[1, 1, 0].Left == Colour.Red && 
+                   Cube[1, 1, 2].Right == Colour.Orange &&
+                   Cube[1, 2, 1].Bottom == Colour.Blue && 
+                   Cube[2, 1, 1].Back == Colour.Yellow;
+        }
     }
 }

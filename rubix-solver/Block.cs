@@ -46,5 +46,40 @@ namespace rubix_solver
                    Front == colour ||
                    Back == colour;
         }
+
+        public Layer? GetLayer(Colour colour)
+        {
+            if (Left == colour)
+            {
+                return Layer.Left;
+            }
+
+            if (Right == colour)
+            {
+                return Layer.Right;
+            }
+            
+            if (Top == colour)
+            {
+                return Layer.Top;
+            }
+
+            if (Bottom == colour)
+            {
+                return Layer.Bottom;
+            }
+            
+            if (Front == colour)
+            {
+                return Layer.Front;
+            }
+
+            if (Back == colour)
+            {
+                return Layer.Back;
+            }
+
+            return null;
+        }
     }
 }

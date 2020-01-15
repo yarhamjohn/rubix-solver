@@ -549,6 +549,7 @@ namespace rubix_solver
         private void SolveFirstLayer()
         {
             var solver = new FirstLayerSolver(this);
+            solver.FormCross();
             solver.SolveCorners();
         }
 

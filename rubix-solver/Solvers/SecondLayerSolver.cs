@@ -21,6 +21,8 @@ namespace rubix_solver.Solvers
 
             while (!_cube.SecondLayerIsSolved())
             {
+                Console.WriteLine("Second layer not formed");
+                _cube.PrintCube();
                 var middleEdges = GetMiddleEdges();
                 if (NumSwitchableMiddleEdges(middleEdges) == 0)
                 {

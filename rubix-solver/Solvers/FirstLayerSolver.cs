@@ -928,7 +928,7 @@ namespace rubix_solver.Solvers
                 if (GetCorners(Layer.Back).Any(c => c.Item2.HasColour(Colour.White)))
                 {
                     Console.WriteLine("corner not in correct corner on bottom");
-                    var corner = GetCorners(Layer.Back).First(c => c.Item2.HasColour(Colour.White)); // TODO: This needs solving before getting the next one
+                    var corner = GetCorners(Layer.Back).First(c => c.Item2.HasColour(Colour.White));
                     if (!IsBetweenCorrectBackSides(corner))
                     {
                         corner = RotateToCorrectCorner(corner);
@@ -940,8 +940,12 @@ namespace rubix_solver.Solvers
                 {
                     var corner = GetCorners(Layer.Front).First(c => !IsCorrectlyPositioned(c));
                     Console.WriteLine("corner not correctly positioned on front");
-                    switch (corner.Item1) {
+                    switch (corner.Item1) { //TODO; this isn't right. Should rotate to the back and then round and back up. Right now it just rotates at the top
                         case (0, 0):
+                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Top);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Top);
@@ -950,13 +954,25 @@ namespace rubix_solver.Solvers
                             _cube.RotateClockwise(Layer.Right);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Layer.Back);
+                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateAntiClockwise(Layer.Right);
                             break;
                         case (2, 0):
                             _cube.RotateClockwise(Layer.Left);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Left);
+                            _cube.RotateAntiClockwise(Layer.Back);
+                            _cube.RotateClockwise(Layer.Left);
+                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateAntiClockwise(Layer.Left);
                             break;
                         case (2, 2):
+                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateAntiClockwise(Layer.Bottom);
+                            _cube.RotateAntiClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Bottom);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Bottom);

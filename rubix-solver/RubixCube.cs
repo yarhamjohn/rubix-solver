@@ -136,10 +136,8 @@ namespace rubix_solver
 
             return true;
         }
-        
-        
 
-        private Colour? GetColour(Block block, Layer side)
+        public Colour? GetColour(Block block, Layer side)
         {
             return side switch
             {
@@ -400,86 +398,6 @@ namespace rubix_solver
                 }
             }
         }
-        
-        public void PrintCube()
-        {
-            PrintFace(Layer.Top);
-            PrintFaces();
-            PrintFace(Layer.Bottom);
-        }
-
-        private void PrintFace(Layer layer)
-        {
-            var face = GetFace(layer);
-
-            for (var row = 0; row < 3; row++)
-            {
-                Console.Write("                  "); // hack to indent top and bottom faces
-                PrintColour(GetColour(face[row, 0], layer));
-                Console.Write("   ");
-                PrintColour(GetColour(face[row, 1], layer));
-                Console.Write("   ");
-                PrintColour(GetColour(face[row, 2], layer));
-                Console.WriteLine();
-                Console.WriteLine();
-            }
-        }
-
-        private void PrintFaces()
-        {
-            for (var row = 0; row < 3; row++)
-            {
-                var left = GetFace(Layer.Left);
-                PrintColour(GetColour(left[row, 0], Layer.Left));
-                Console.Write("   ");
-                PrintColour(GetColour(left[row, 1], Layer.Left));
-                Console.Write("   ");
-                PrintColour(GetColour(left[row, 2], Layer.Left));
-                Console.Write("   ");
-                
-                var front = GetFace(Layer.Front);
-                PrintColour(GetColour(front[row, 0], Layer.Front));
-                Console.Write("   ");
-                PrintColour(GetColour(front[row, 1], Layer.Front));
-                Console.Write("   ");
-                PrintColour(GetColour(front[row, 2], Layer.Front));
-                Console.Write("   ");
-
-                var right = GetFace(Layer.Right);
-                PrintColour(GetColour(right[row, 0], Layer.Right));
-                Console.Write("   ");
-                PrintColour(GetColour(right[row, 1], Layer.Right));
-                Console.Write("   ");
-                PrintColour(GetColour(right[row, 2], Layer.Right));
-                Console.Write("   ");
-                
-                var back = GetFace(Layer.Back);
-                PrintColour(GetColour(back[row, 0], Layer.Back));
-                Console.Write("   ");
-                PrintColour(GetColour(back[row, 1], Layer.Back));
-                Console.Write("   ");
-                PrintColour(GetColour(back[row, 2], Layer.Back));
-
-                Console.WriteLine();
-                Console.WriteLine();
-            }
-        }
-        
-        private void PrintColour(Colour? colour)
-        {
-            Console.BackgroundColor = colour switch
-            {
-                Colour.Blue => ConsoleColor.DarkBlue,
-                Colour.Green => ConsoleColor.DarkGreen,
-                Colour.Red => ConsoleColor.DarkRed,
-                Colour.Orange => ConsoleColor.Red,
-                Colour.Yellow => ConsoleColor.DarkYellow,
-                Colour.White => ConsoleColor.White,
-                _ => Console.BackgroundColor
-            };
-            Console.Write("   ");
-            Console.ResetColor();
-        }
 
         public Block[,,] CloneCube()
         {
@@ -562,23 +480,15 @@ namespace rubix_solver
         private void SolveThirdLayer()
         {
             var solver = new ThirdLayerSolver(this);
-            Console.WriteLine("Solving third layer");
-            PrintCube();
 
             // Form a cross on the back face
             solver.FormYellowCross();
-            Console.WriteLine("solved yellow cross");
-            PrintCube();
 
             // Correct the location of the middle edge pieces
             solver.ReorganiseMiddleEdges();
-            Console.WriteLine("solved middle edges");
-            PrintCube();
 
             // Get the corner pieces in the right corners
             solver.ReorganiseCorners();
-            Console.WriteLine("solved corners");
-            PrintCube();
 
             // Correct the orientation of the corner pieces
             solver.CorrectCornerOrientation();

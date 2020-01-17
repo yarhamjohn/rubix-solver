@@ -7,12 +7,11 @@ namespace rubix_solver
         static void Main(string[] args)
         {
             var cube = new RubixCube();
-            cube.PrintCube();
+            RubixCubePrinter.PrintCube(cube);
             cube.Randomise();
-            
-            cube.PrintCube();
+            RubixCubePrinter.PrintCube(cube);
             cube.Solve();
-            cube.PrintCube();
+            RubixCubePrinter.PrintCube(cube);
         }
     }
 }

@@ -22,8 +22,6 @@ namespace rubix_solver.Solvers
 
             while (!CrossIsFormed())
             {
-                Console.WriteLine("Cross not formed");
-                _cube.PrintCube();
                 var middleEdges = GetMiddleEdges();
                 var incorrectMiddleEdge = middleEdges.First(IsIncorrectMiddleEdge);
                 if (incorrectMiddleEdge.Item1.Item1 == Layer.Front || incorrectMiddleEdge.Item1.Item2 == Layer.Front)
@@ -922,11 +920,8 @@ namespace rubix_solver.Solvers
 
             while (!_cube.FirstLayerIsSolved())
             {
-                Console.WriteLine("first layer not solved");
-                _cube.PrintCube();
                 if (GetCorners(Layer.Back).Any(c => c.Item2.HasColour(Colour.White)))
                 {
-                    Console.WriteLine("corner not in correct corner on bottom");
                     var corner = GetCorners(Layer.Back).First(c => c.Item2.HasColour(Colour.White));
                     if (!IsBetweenCorrectBackSides(corner))
                     {
@@ -938,13 +933,11 @@ namespace rubix_solver.Solvers
                 else
                 {
                     var corner = GetCorners(Layer.Front).First(c => !IsCorrectlyPositioned(c));
-                    Console.WriteLine("corner not correctly positioned on front");
                     switch (corner.Item1) {
                         case (0, 0):
                             _cube.RotateClockwise(Layer.Top);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Top);
-                            _cube.PrintCube();
                             break;
                         case (0, 2):
                             _cube.RotateClockwise(Layer.Right);

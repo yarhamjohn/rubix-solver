@@ -122,8 +122,6 @@ namespace rubix_solver.Solvers
                         };
 
                         PerformRuRuRuuRuRotation(sideToRotate);
-                        Console.WriteLine("Rotate for next node");
-                        _cube.PrintCube();
                     }
                     else if (startNode.Previous != null && !startNode.Previous.Value.isCorrect)
                     {
@@ -137,8 +135,6 @@ namespace rubix_solver.Solvers
                         };
 
                         PerformRuRuRuuRuRotation(sideToRotate);
-                        Console.WriteLine("Rotate for previous node");
-                        _cube.PrintCube();
                     }
                     else
                     {
@@ -157,9 +153,6 @@ namespace rubix_solver.Solvers
                                 PerformRuRuRuuRuRotation(Layer.Right);
                                 break;
                         }
-
-                        Console.WriteLine("Rotate for other node");
-                        _cube.PrintCube();
                     }
                 }
                 else if (numIncorrectEdges == 3)

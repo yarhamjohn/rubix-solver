@@ -23,11 +23,6 @@ namespace rubix_solver.Solvers
 
         public void FormYellowCross()
         {
-            if (_cube.IsSolved())
-            {
-                return;
-            }
-
             while (!YellowCrossShowing())
             {
                 var face = _cube.GetFace(Layer.Back);
@@ -85,17 +80,6 @@ namespace rubix_solver.Solvers
         
         public void ReorganiseMiddleEdges()
         {
-            if (_cube.IsSolved())
-            {
-                return;
-            }
-
-            if (!YellowCrossShowing())
-            {
-                throw new Exception(
-                    "The cube is not in the correct state (yellow cross) to reorganise the middle edges.");
-            }
-
             while (!MiddleEdgesAreSolved())
             {
                 var middleEdges = GetMiddleEdges();
@@ -178,11 +162,6 @@ namespace rubix_solver.Solvers
 
         public void ReorganiseCorners()
         {
-            if (_cube.IsSolved())
-            {
-                return;
-            }
-
             switch (GetIncorrectlyPositionedCornerBlocks().Count)
             {
                 case 1:
@@ -233,7 +212,7 @@ namespace rubix_solver.Solvers
 
         public void CorrectCornerOrientation()
         {
-            if (_cube.IsSolved())
+            if (IsSolved())
             {
                 return;
             }
@@ -247,7 +226,7 @@ namespace rubix_solver.Solvers
 
             var ((x, y), _) = incorrectCornerBlocks.First();
 
-            while (!_cube.IsSolved())
+            while (!IsSolved())
             {
                 var currentFace = _cube.GetFace(Layer.Back);
                 if (currentFace[x, y].Back == Colour.Yellow)
@@ -411,6 +390,65 @@ namespace rubix_solver.Solvers
                    face[2, 1].Back == Colour.Yellow &&
                    face[1, 0].Back == Colour.Yellow && 
                    face[1, 1].Back == Colour.Yellow;
+        }
+
+        private bool IsSolved()
+        {
+            var back = _cube.GetFace(Layer.Back);
+            foreach (var block in back)
+            {
+                if (block.Back != Colour.Yellow)
+                {
+                    return false;
+                }
+            }
+
+            var front = _cube.GetFace(Layer.Front);
+            foreach (var block in front)
+            {
+                if (block.Front != Colour.White)
+                {
+                    return false;
+                }
+            }
+
+            var left = _cube.GetFace(Layer.Left);
+            foreach (var block in left)
+            {
+                if (block.Left != Colour.Red)
+                {
+                    return false;
+                }
+            }
+
+            var right = _cube.GetFace(Layer.Right);
+            foreach (var block in right)
+            {
+                if (block.Right != Colour.Orange)
+                {
+                    return false;
+                }
+            }
+
+            var top = _cube.GetFace(Layer.Top);
+            foreach (var block in top)
+            {
+                if (block.Top != Colour.Green)
+                {
+                    return false;
+                }
+            }
+
+            var bottom = _cube.GetFace(Layer.Bottom);
+            foreach (var block in bottom)
+            {
+                if (block.Bottom != Colour.Blue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

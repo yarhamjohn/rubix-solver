@@ -4,7 +4,7 @@ namespace rubix_solver
 {
     public static class RubixCubePrinter
     {
-        public static void PrintCube(RubixCube cube)
+        public static void Print(RubixCube cube)
         {
             PrintFace(cube, Layer.Top);
             PrintFaces(cube);

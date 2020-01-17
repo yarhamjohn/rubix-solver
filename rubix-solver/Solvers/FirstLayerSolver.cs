@@ -13,13 +13,14 @@ namespace rubix_solver.Solvers
             _cube = cube;
         }
 
+        public void Solve()
+        {
+            FormCross();
+            SolveCorners();
+        }
+
         public void FormCross()
         {
-            if (_cube.IsSolved())
-            {
-                return;
-            }
-
             while (!CrossIsFormed())
             {
                 var middleEdges = GetMiddleEdges();
@@ -908,17 +909,12 @@ namespace rubix_solver.Solvers
                    face[1, 0].Left == Colour.Red &&
                    face[1, 2].Right == Colour.Orange &&
                    face[2, 1].Bottom == Colour.Blue && 
-                   _cube.CenterBlocksAreCorrect();
+                   CenterBlocksAreCorrect();
         }
 
         public void SolveCorners()
         {
-            if (_cube.IsSolved())
-            {
-                return;
-            }
-
-            while (!_cube.FirstLayerIsSolved())
+            while (!FirstLayerIsSolved())
             {
                 if (GetCorners(Layer.Back).Any(c => c.Item2.HasColour(Colour.White)))
                 {
@@ -1208,6 +1204,86 @@ namespace rubix_solver.Solvers
                 ((2, 0), face[2, 0]), 
                 ((2, 2), face[2, 2])
             };
+        }
+
+        public bool FirstLayerIsSolved()
+        {
+            var front = _cube.GetFace(Layer.Front);
+            foreach (var block in front)
+            {
+                if (block.Front != Colour.White)
+                {
+                    return false;
+                }
+            }
+
+            var left = _cube.GetFace(Layer.Left);
+            for (var x = 0; x < 3; x++)
+            {
+                if (left[x, 2].Left != Colour.Red)
+                {
+                    return false;
+                }
+            }
+
+            if (left[1, 1].Left != Colour.Red)
+            {
+                return false;
+            }
+
+            var right = _cube.GetFace(Layer.Right);
+            for (var x = 0; x < 3; x++)
+            {
+                if (right[x, 0].Right != Colour.Orange)
+                {
+                    return false;
+                }
+            }
+
+            if (right[1, 1].Right != Colour.Orange)
+            {
+                return false;
+            }
+
+            var top = _cube.GetFace(Layer.Top);
+            for (var y = 0; y < 3; y++)
+            {
+                if (top[2, y].Top != Colour.Green)
+                {
+                    return false;
+                }
+            }
+
+            if (top[1, 1].Top != Colour.Green)
+            {
+                return false;
+            }
+
+            var bottom = _cube.GetFace(Layer.Bottom);
+            for (var y = 0; y < 3; y++)
+            {
+                if (bottom[0, y].Bottom != Colour.Blue)
+                {
+                    return false;
+                }
+            }
+
+            if (bottom[1, 1].Bottom != Colour.Blue)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CenterBlocksAreCorrect()
+        {
+            return _cube.Cube[0, 1, 1].Front == Colour.White &&
+                   _cube.Cube[1, 0, 1].Top == Colour.Green &&
+                   _cube.Cube[1, 1, 0].Left == Colour.Red &&
+                   _cube.Cube[1, 1, 2].Right == Colour.Orange &&
+                   _cube.Cube[1, 2, 1].Bottom == Colour.Blue &&
+                   _cube.Cube[2, 1, 1].Back == Colour.Yellow;
         }
     }
 }

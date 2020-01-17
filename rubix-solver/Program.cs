@@ -1,4 +1,5 @@
 ﻿using System;
+using rubix_solver.Solvers;
 
 namespace rubix_solver
 {
@@ -7,11 +8,14 @@ namespace rubix_solver
         static void Main(string[] args)
         {
             var cube = new RubixCube();
-            RubixCubePrinter.PrintCube(cube);
+            RubixCubePrinter.Print(cube);
+
             cube.Randomise();
-            RubixCubePrinter.PrintCube(cube);
-            cube.Solve();
-            RubixCubePrinter.PrintCube(cube);
+            RubixCubePrinter.Print(cube);
+
+            var solver = new RubixCubeSolver(cube);
+            solver.Solve();
+            RubixCubePrinter.Print(cube);
         }
     }
 }

@@ -61,6 +61,68 @@ namespace rubix_solver
             return true;
         }
 
+        public static bool SecondLayerIsSolved(RubixCube cube)
+        {
+            var front = cube.GetFace(Layer.Front);
+            foreach (var block in front)
+            {
+                if (block.Front != Colour.White)
+                {
+                    return false;
+                }
+            }
+
+            var left = cube.GetFace(Layer.Left);
+            for (var x = 0; x < 3; x++)
+            {
+                for (var y = 1; y < 3; y++)
+                {
+                    if (left[x, y].Left != Colour.Red)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            var right = cube.GetFace(Layer.Right);
+            for (var x = 0; x < 3; x++)
+            {
+                for (var y = 0; y < 2; y++)
+                {
+                    if (right[x, y].Right != Colour.Orange)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            var top = cube.GetFace(Layer.Top);
+            for (var x = 1; x < 3; x++)
+            {
+                for (var y = 0; y < 3; y++)
+                {
+                    if (top[x, y].Top != Colour.Green)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            var bottom = cube.GetFace(Layer.Bottom);
+            for (var x = 0; x < 2; x++)
+            {
+                for (var y = 0; y < 3; y++)
+                {
+                    if (bottom[x, y].Bottom != Colour.Blue)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public static bool FirstLayerIsSolved(RubixCube cube)
         {
             var front = cube.GetFace(Layer.Front);

@@ -14,7 +14,7 @@ namespace rubix_solver.Solvers
 
         public void Solve()
         {
-            while (!SecondLayerIsSolved())
+            while (!RubixCubeStatusEvaluator.SecondLayerIsSolved(_cube))
             {
                 var middleEdges = GetMiddleEdges();
                 if (NumSwitchableMiddleEdges(middleEdges) == 0)
@@ -198,68 +198,6 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(face);
             _cube.RotateClockwise(Layer.Back);
             _cube.RotateClockwise(face);
-        }
-
-        public bool SecondLayerIsSolved()
-        {
-            var front = _cube.GetFace(Layer.Front);
-            foreach (var block in front)
-            {
-                if (block.Front != Colour.White)
-                {
-                    return false;
-                }
-            }
-
-            var left = _cube.GetFace(Layer.Left);
-            for (var x = 0; x < 3; x++)
-            {
-                for (var y = 1; y < 3; y++)
-                {
-                    if (left[x, y].Left != Colour.Red)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            var right = _cube.GetFace(Layer.Right);
-            for (var x = 0; x < 3; x++)
-            {
-                for (var y = 0; y < 2; y++)
-                {
-                    if (right[x, y].Right != Colour.Orange)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            var top = _cube.GetFace(Layer.Top);
-            for (var x = 1; x < 3; x++)
-            {
-                for (var y = 0; y < 3; y++)
-                {
-                    if (top[x, y].Top != Colour.Green)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            var bottom = _cube.GetFace(Layer.Bottom);
-            for (var x = 0; x < 2; x++)
-            {
-                for (var y = 0; y < 3; y++)
-                {
-                    if (bottom[x, y].Bottom != Colour.Blue)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
     }
 }

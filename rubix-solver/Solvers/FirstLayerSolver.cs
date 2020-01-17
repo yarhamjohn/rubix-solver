@@ -92,38 +92,37 @@ namespace rubix_solver.Solvers
                             throw new Exception($"Incorrect edge piece: whiteFace = Left, {incorrectMiddleEdge.Item2.Bottom.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Left && nonWhiteFace == Layer.Right)
+                if (whiteFace == Layer.Left && nonWhiteFace == Layer.Top)
                 {
-                    switch (incorrectMiddleEdge.Item2.Right)
+                    switch (incorrectMiddleEdge.Item2.Top)
                     {
                         case Colour.Red:
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateClockwise(Layer.Top);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Left);
                             _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Layer.Top);
                             break;
                         case Colour.Orange:
+                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Right);
-
+                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Layer.Top);
                             break;
                         case Colour.Green:
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Layer.Top);
                             break;
                         case Colour.Blue:
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Back);
+                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateClockwise(Layer.Back);
+                            _cube.RotateClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Bottom);
                             _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Layer.Top);
                             break;
                         default:
-                            throw new Exception($"Incorrect edge piece: whiteFace = Left, {incorrectMiddleEdge.Item2.Right.ToString()}");
+                            throw new Exception($"Incorrect edge piece: whiteFace = Left, {incorrectMiddleEdge.Item2.Top.ToString()}");
                     }
                 }
                 if (whiteFace == Layer.Right && nonWhiteFace == Layer.Top)
@@ -940,21 +939,14 @@ namespace rubix_solver.Solvers
                 {
                     var corner = GetCorners(Layer.Front).First(c => !IsCorrectlyPositioned(c));
                     Console.WriteLine("corner not correctly positioned on front");
-                    switch (corner.Item1) { //TODO; this isn't right. Should rotate to the back and then round and back up. Right now it just rotates at the top
+                    switch (corner.Item1) {
                         case (0, 0):
                             _cube.RotateClockwise(Layer.Top);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.PrintCube();
                             break;
                         case (0, 2):
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Right);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Right);
@@ -963,16 +955,8 @@ namespace rubix_solver.Solvers
                             _cube.RotateClockwise(Layer.Left);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Left);
                             break;
                         case (2, 2):
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Back);
                             _cube.RotateClockwise(Layer.Bottom);
                             _cube.RotateClockwise(Layer.Back);
                             _cube.RotateAntiClockwise(Layer.Bottom);
@@ -991,20 +975,20 @@ namespace rubix_solver.Solvers
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
                     _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((2, 0), corner.Item2);
+                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateClockwise(Layer.Back);
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 2), corner.Item2);
+                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 2), corner.Item2);
+                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
                 }
             }
 
@@ -1013,20 +997,20 @@ namespace rubix_solver.Solvers
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 2), corner.Item2);
+                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Orange))
                 {
                     _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((0, 0), corner.Item2);
+                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
                     _cube.RotateClockwise(Layer.Back);
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 0), corner.Item2);
+                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
                 }
             }
 
@@ -1035,20 +1019,20 @@ namespace rubix_solver.Solvers
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((2, 2), corner.Item2);
+                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Orange))
                 {
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 0), corner.Item2);
+                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateClockwise(Layer.Back);
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 2), corner.Item2);
+                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
                 }
             }
 
@@ -1058,19 +1042,19 @@ namespace rubix_solver.Solvers
                 {
                     _cube.RotateClockwise(Layer.Back);
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 0), corner.Item2);
+                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
                     _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((0, 2), corner.Item2);
+                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
                     _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 0), corner.Item2);
+                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
                 }
             }
 

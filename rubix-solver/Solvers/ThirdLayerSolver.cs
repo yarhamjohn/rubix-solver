@@ -105,8 +105,12 @@ namespace rubix_solver.Solvers
                 {
                     var firstIncorrectEdge = middleEdges.First(b => !b.isCorrect);
                     var startNode = middleEdges.Find(firstIncorrectEdge);
+                    if (startNode == null)
+                    {
+                        throw new Exception("There should be an incorrect edge");
+                    }
 
-                    if (!startNode.Next.Value.isCorrect)
+                    if (startNode.Next != null && !startNode.Next.Value.isCorrect) // TODO: managed to get a NullReferenceException here...
                     {
                         var sideToRotate = firstIncorrectEdge.index switch
                         {
@@ -118,8 +122,10 @@ namespace rubix_solver.Solvers
                         };
 
                         PerformRuRuRuuRuRotation(sideToRotate);
+                        Console.WriteLine("Rotate for next node");
+                        _cube.PrintCube();
                     }
-                    else if (!startNode.Previous.Value.isCorrect)
+                    else if (startNode.Previous != null && !startNode.Previous.Value.isCorrect)
                     {
                         var sideToRotate = firstIncorrectEdge.index switch
                         {
@@ -131,6 +137,8 @@ namespace rubix_solver.Solvers
                         };
 
                         PerformRuRuRuuRuRotation(sideToRotate);
+                        Console.WriteLine("Rotate for previous node");
+                        _cube.PrintCube();
                     }
                     else
                     {
@@ -149,6 +157,9 @@ namespace rubix_solver.Solvers
                                 PerformRuRuRuuRuRotation(Layer.Right);
                                 break;
                         }
+
+                        Console.WriteLine("Rotate for other node");
+                        _cube.PrintCube();
                     }
                 }
                 else if (numIncorrectEdges == 3)

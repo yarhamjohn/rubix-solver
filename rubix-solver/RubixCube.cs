@@ -562,16 +562,24 @@ namespace rubix_solver
         private void SolveThirdLayer()
         {
             var solver = new ThirdLayerSolver(this);
-            
+            Console.WriteLine("Solving third layer");
+            PrintCube();
+
             // Form a cross on the back face
             solver.FormYellowCross();
-            
+            Console.WriteLine("solved yellow cross");
+            PrintCube();
+
             // Correct the location of the middle edge pieces
             solver.ReorganiseMiddleEdges();
-            
+            Console.WriteLine("solved middle edges");
+            PrintCube();
+
             // Get the corner pieces in the right corners
             solver.ReorganiseCorners();
-            
+            Console.WriteLine("solved corners");
+            PrintCube();
+
             // Correct the orientation of the corner pieces
             solver.CorrectCornerOrientation();
         }

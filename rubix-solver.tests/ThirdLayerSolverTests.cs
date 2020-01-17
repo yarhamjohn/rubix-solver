@@ -838,7 +838,7 @@ namespace rubix_solver.tests
             
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
-        
+
         [Test]
         public void ReorganiseMiddleEdges_CorrectlyPositionsTheMiddleEdges_GivenThreeIncorrectlyPositionedMiddleEdges()
         {

@@ -62,7 +62,7 @@ namespace rubix_solver.tests
         };
 
         [Test]
-        public void FirstLayerSolver_CorrectlySolvesCorners()
+        public void FirstLayerSolver_CorrectlySolvesCorners_GivenCornerBetweenWrongSidesOnFront()
         {
             var cube = new RubixCube(new[,,]
             {
@@ -122,6 +122,76 @@ namespace rubix_solver.tests
             var solver = new FirstLayerSolver(cube);
             solver.SolveCorners();
             
+            var secondLayerSolver = new SecondLayerSolver(cube);
+            secondLayerSolver.Solve();
+
+            var thirdLayerSolver = new ThirdLayerSolver(cube);
+            thirdLayerSolver.Solve();
+
+            Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
+        }
+
+        [Test]
+        public void FirstLayerSolver_CorrectlySolvesCorners_GivenCornerBetweenCorrectSidesOnFront()
+        {
+            var cube = new RubixCube(new[,,]
+            {
+                {
+                    {
+                        new Block(Colour.Green, null, Colour.White, null, Colour.Red, null),
+                        new Block(null, null, Colour.Green, null, Colour.White, null),
+                        new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, Colour.White, null),
+                        new Block(null, null, null, null, Colour.White, null),
+                        new Block(null, Colour.Orange, null, null, Colour.White, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, null, null, Colour.Blue, Colour.White, null),
+                        new Block(null, Colour.Blue, null, Colour.White, Colour.Orange, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Red, null, Colour.Green, null, null, null),
+                        new Block(null, null, Colour.Green, null, null, null),
+                        new Block(null, Colour.Blue, Colour.Orange, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Red, null, null, null, null, null),
+                        new Block(null, null, null, null, null, null),
+                        new Block(null, Colour.Orange, null, null, null, null)
+                    },
+                    {
+                        new Block(Colour.Yellow, null, null, Colour.Red, null, null),
+                        new Block(null, null, null, Colour.Blue, null, null),
+                        new Block(null, Colour.Blue, null, Colour.Red, null, null)
+                    }
+                },
+                {
+                    {
+                        new Block(Colour.Blue, null, Colour.Red, null, null, Colour.Yellow),
+                        new Block(null, null, Colour.Yellow, null, null, Colour.Green),
+                        new Block(null, Colour.Yellow, Colour.Green, null, null, Colour.Red)
+                    },
+                    {
+                        new Block(Colour.Blue, null, null, null, null, Colour.Yellow),
+                        new Block(null, null, null, null, null, Colour.Yellow),
+                        new Block(null, Colour.Yellow, null, null, null, Colour.Orange)
+                    },
+                    {
+                        new Block(Colour.Yellow, null, null, Colour.Orange, null, Colour.Green),
+                        new Block(null, null, null, Colour.Green, null, Colour.Orange),
+                        new Block(null, Colour.Orange, null, Colour.Blue, null, Colour.Yellow)
+                    }
+                }
+            });
+
+            var solver = new FirstLayerSolver(cube);
+            solver.SolveCorners();
+
             var secondLayerSolver = new SecondLayerSolver(cube);
             secondLayerSolver.Solve();
 

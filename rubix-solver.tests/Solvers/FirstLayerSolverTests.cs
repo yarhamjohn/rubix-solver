@@ -1,66 +1,11 @@
 ﻿using NUnit.Framework;
 using rubix_solver.Solvers;
 
-namespace rubix_solver.tests
+namespace rubix_solver.tests.Solvers
 {
     [TestFixture]
     public class FirstLayerSolverTests
     {
-        private readonly Block[,,] _solvedCube =
-        {
-            {
-                {
-                    new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
-                    new Block(null, null, Colour.Green, null, Colour.White, null),
-                    new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
-                },
-                {
-                    new Block(Colour.Red, null, null, null, Colour.White, null),
-                    new Block(null, null, null, null, Colour.White, null),
-                    new Block(null, Colour.Orange, null, null, Colour.White, null)
-                },
-                {
-                    new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
-                    new Block(null, null, null, Colour.Blue, Colour.White, null),
-                    new Block(null, Colour.Orange, null, Colour.Blue, Colour.White, null)
-                }
-            },
-            {
-                {
-                    new Block(Colour.Red, null, Colour.Green, null, null, null),
-                    new Block(null, null, Colour.Green, null, null, null),
-                    new Block(null, Colour.Orange, Colour.Green, null, null, null)
-                },
-                {
-                    new Block(Colour.Red, null, null, null, null, null),
-                    new Block(null, null, null, null, null, null),
-                    new Block(null, Colour.Orange, null, null, null, null)
-                },
-                {
-                    new Block(Colour.Red, null, null, Colour.Blue, null, null),
-                    new Block(null, null, null, Colour.Blue, null, null),
-                    new Block(null, Colour.Orange, null, Colour.Blue, null, null)
-                }
-            },
-            {
-                {
-                    new Block(Colour.Red, null, Colour.Green, null, null, Colour.Yellow),
-                    new Block(null, null, Colour.Green, null, null, Colour.Yellow),
-                    new Block(null, Colour.Orange, Colour.Green, null, null, Colour.Yellow)
-                },
-                {
-                    new Block(Colour.Red, null, null, null, null, Colour.Yellow),
-                    new Block(null, null, null, null, null, Colour.Yellow),
-                    new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
-                },
-                {
-                    new Block(Colour.Red, null, null, Colour.Blue, null, Colour.Yellow),
-                    new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
-                    new Block(null, Colour.Orange, null, Colour.Blue, null, Colour.Yellow)
-                }
-            }
-        };
-
         [Test]
         public void FirstLayerSolver_CorrectlySolvesCorners_GivenCornerBetweenWrongSidesOnFront()
         {
@@ -120,15 +65,9 @@ namespace rubix_solver.tests
             });
 
             var solver = new FirstLayerSolver(cube);
-            solver.SolveCorners();
-            
-            var secondLayerSolver = new SecondLayerSolver(cube);
-            secondLayerSolver.Solve();
+            solver.Solve();
 
-            var thirdLayerSolver = new ThirdLayerSolver(cube);
-            thirdLayerSolver.Solve();
-
-            Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
+            Assert.That(RubixCubeStatusEvaluator.FirstLayerIsSolved(cube), Is.True);
         }
 
         [Test]
@@ -190,15 +129,9 @@ namespace rubix_solver.tests
             });
 
             var solver = new FirstLayerSolver(cube);
-            solver.SolveCorners();
+            solver.Solve();
 
-            var secondLayerSolver = new SecondLayerSolver(cube);
-            secondLayerSolver.Solve();
-
-            var thirdLayerSolver = new ThirdLayerSolver(cube);
-            thirdLayerSolver.Solve();
-
-            Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
+            Assert.That(RubixCubeStatusEvaluator.FirstLayerIsSolved(cube), Is.True);
         }
     }
 }

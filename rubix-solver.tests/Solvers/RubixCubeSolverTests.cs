@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using rubix_solver.Solvers;
 
-namespace rubix_solver.tests
+namespace rubix_solver.tests.Solvers
 {
     [TestFixture]
-    public class GoldenTests
+    public class RubixCubeSolverTests
     {
             private readonly Block[,,] _solvedCube = {
                 {
@@ -63,7 +61,7 @@ namespace rubix_solver.tests
             };
 
         [Test, Repeat(100)]
-        public void EndToEndTest()
+        public void RubixCubeSolver_SolvesRandomRubixCube()
         {
             var cube = new RubixCube();
             cube.Randomise();

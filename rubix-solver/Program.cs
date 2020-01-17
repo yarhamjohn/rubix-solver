@@ -1,5 +1,4 @@
-﻿using System;
-using rubix_solver.Solvers;
+﻿using rubix_solver.Solvers;
 
 namespace rubix_solver
 {

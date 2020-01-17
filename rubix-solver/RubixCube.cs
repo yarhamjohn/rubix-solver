@@ -397,5 +397,11 @@ namespace rubix_solver
                 }
             };
         }
+
+        public Block GetCenterBlock(Layer layer)
+        {
+            var face = GetFace(layer);
+            return face[1, 1];
+        }
     }
 }

@@ -1,58 +1,36 @@
+using System;
+
 namespace rubix_solver
 {
     public static class RubixCubeStatusEvaluator
     {
         public static bool IsSolved(RubixCube cube)
         {
-            var back = cube.GetFace(Layer.Back);
-            foreach (var block in back)
-            {
-                if (block.Back != Colour.Yellow)
-                {
-                    return false;
-                }
-            }
+            return FaceIsSolved(cube, Layer.Back) &&
+                   FaceIsSolved(cube, Layer.Front) &&
+                   FaceIsSolved(cube, Layer.Left) &&
+                   FaceIsSolved(cube, Layer.Right) &&
+                   FaceIsSolved(cube, Layer.Top) &&
+                   FaceIsSolved(cube, Layer.Bottom);
+        }
 
-            var front = cube.GetFace(Layer.Front);
-            foreach (var block in front)
+        private static bool FaceIsSolved(RubixCube cube, Layer layer)
+        {
+            var face = cube.GetFace(layer);
+            foreach (var block in face)
             {
-                if (block.Front != Colour.White)
+                var correctColour = layer switch
                 {
-                    return false;
-                }
-            }
+                    Layer.Back => block.Back == Colour.Yellow,
+                    Layer.Front => block.Front == Colour.White,
+                    Layer.Left => block.Left == Colour.Red,
+                    Layer.Right => block.Right == Colour.Orange,
+                    Layer.Top => block.Top == Colour.Green,
+                    Layer.Bottom => block.Bottom == Colour.Blue,
+                    _ => throw new Exception($"Not a valid layer: {layer.ToString()}")
+                };
 
-            var left = cube.GetFace(Layer.Left);
-            foreach (var block in left)
-            {
-                if (block.Left != Colour.Red)
-                {
-                    return false;
-                }
-            }
-
-            var right = cube.GetFace(Layer.Right);
-            foreach (var block in right)
-            {
-                if (block.Right != Colour.Orange)
-                {
-                    return false;
-                }
-            }
-
-            var top = cube.GetFace(Layer.Top);
-            foreach (var block in top)
-            {
-                if (block.Top != Colour.Green)
-                {
-                    return false;
-                }
-            }
-
-            var bottom = cube.GetFace(Layer.Bottom);
-            foreach (var block in bottom)
-            {
-                if (block.Bottom != Colour.Blue)
+                if (!correctColour)
                 {
                     return false;
                 }
@@ -63,13 +41,9 @@ namespace rubix_solver
 
         public static bool SecondLayerIsSolved(RubixCube cube)
         {
-            var front = cube.GetFace(Layer.Front);
-            foreach (var block in front)
+            if (!FaceIsSolved(cube, Layer.Front))
             {
-                if (block.Front != Colour.White)
-                {
-                    return false;
-                }
+                return false;
             }
 
             var left = cube.GetFace(Layer.Left);
@@ -125,13 +99,9 @@ namespace rubix_solver
 
         public static bool FirstLayerIsSolved(RubixCube cube)
         {
-            var front = cube.GetFace(Layer.Front);
-            foreach (var block in front)
+            if (!FaceIsSolved(cube, Layer.Front) || !CenterBlocksAreCorrect(cube))
             {
-                if (block.Front != Colour.White)
-                {
-                    return false;
-                }
+                return false;
             }
 
             var left = cube.GetFace(Layer.Left);
@@ -143,11 +113,6 @@ namespace rubix_solver
                 }
             }
 
-            if (left[1, 1].Left != Colour.Red)
-            {
-                return false;
-            }
-
             var right = cube.GetFace(Layer.Right);
             for (var x = 0; x < 3; x++)
             {
@@ -155,11 +120,6 @@ namespace rubix_solver
                 {
                     return false;
                 }
-            }
-
-            if (right[1, 1].Right != Colour.Orange)
-            {
-                return false;
             }
 
             var top = cube.GetFace(Layer.Top);
@@ -171,11 +131,6 @@ namespace rubix_solver
                 }
             }
 
-            if (top[1, 1].Top != Colour.Green)
-            {
-                return false;
-            }
-
             var bottom = cube.GetFace(Layer.Bottom);
             for (var y = 0; y < 3; y++)
             {
@@ -183,11 +138,6 @@ namespace rubix_solver
                 {
                     return false;
                 }
-            }
-
-            if (bottom[1, 1].Bottom != Colour.Blue)
-            {
-                return false;
             }
 
             return true;

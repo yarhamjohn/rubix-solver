@@ -23,7 +23,7 @@ namespace rubix_solver.Solvers
 
         public void FormYellowCross()
         {
-            while (!YellowCrossShowing())
+            while (!RubixCubeStatusEvaluator.CrossFaceIsFormed(_cube, Side.Back))
             {
                 var face = _cube.GetFace(Side.Back);
                 var crossBlocks = new Dictionary<(int, int), Block>
@@ -80,7 +80,7 @@ namespace rubix_solver.Solvers
         
         public void ReorganiseMiddleEdges()
         {
-            while (!MiddleEdgesAreSolved())
+            while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Back))
             {
                 var middleEdges = GetMiddleEdges();
                 var numIncorrectEdges = middleEdges.Count(b => b.isCorrect);
@@ -370,26 +370,6 @@ namespace rubix_solver.Solvers
             middleEdges.AddLast((face[2, 1].Bottom == Colour.Blue, face[2, 1], (2, 1)));
             middleEdges.AddLast((face[1, 0].Right == Colour.Orange, face[1, 0], (1, 0)));
             return middleEdges;
-        }
-
-        private bool MiddleEdgesAreSolved()
-        {
-            var face = _cube.GetFace(Side.Back);
-            return YellowCrossShowing() &&
-                   face[0, 1].Top == Colour.Green &&
-                   face[1, 2].Left == Colour.Red &&
-                   face[2, 1].Bottom == Colour.Blue &&
-                   face[1, 0].Right == Colour.Orange;
-        }
-
-        private bool YellowCrossShowing()
-        {
-            var face = _cube.GetFace(Side.Back);
-            return face[0, 1].Back == Colour.Yellow &&
-                   face[1, 2].Back == Colour.Yellow &&
-                   face[2, 1].Back == Colour.Yellow &&
-                   face[1, 0].Back == Colour.Yellow && 
-                   face[1, 1].Back == Colour.Yellow;
         }
     }
 }

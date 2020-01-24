@@ -212,7 +212,7 @@ namespace rubix_solver.Solvers
 
         public void CorrectCornerOrientation()
         {
-            if (RubixCubeStatusEvaluator.IsSolved(_cube))
+            if (RubixCubeStatusEvaluator.ThirdLayerIsSolved(_cube))
             {
                 return;
             }
@@ -226,7 +226,7 @@ namespace rubix_solver.Solvers
 
             var ((x, y), _) = incorrectCornerBlocks.First();
 
-            while (!RubixCubeStatusEvaluator.IsSolved(_cube))
+            while (!RubixCubeStatusEvaluator.ThirdLayerIsSolved(_cube))
             {
                 var currentFace = _cube.GetFace(Side.Back);
                 if (currentFace[x, y].Back == Colour.Yellow)

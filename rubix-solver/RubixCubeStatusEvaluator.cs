@@ -6,24 +6,15 @@ namespace rubix_solver
 {
     public static class RubixCubeStatusEvaluator
     {
-        public static bool IsSolved(RubixCube cube)
+        public static bool ThirdLayerIsSolved(RubixCube cube)
         {
-            return CubeFaceIsSolved(cube, Side.Back) &&
-                   CubeFaceIsSolved(cube, Side.Front) &&
-                   CubeFaceIsSolved(cube, Side.Left) &&
-                   CubeFaceIsSolved(cube, Side.Right) &&
-                   CubeFaceIsSolved(cube, Side.Top) &&
-                   CubeFaceIsSolved(cube, Side.Bottom);
+            return ((Side[]) Enum.GetValues(typeof(Side))).All(side => CubeFaceIsSolved(cube, side));
         }
 
         public static bool SecondLayerIsSolved(RubixCube cube)
         {
-            if (!FirstLayerIsSolved(cube))
-            {
-                return false;
-            }
-
-            return MiddleLayerFacesAreSolved(cube, Side.Left) &&
+            return FirstLayerIsSolved(cube) &&
+                   MiddleLayerFacesAreSolved(cube, Side.Left) &&
                    MiddleLayerFacesAreSolved(cube, Side.Right) &&
                    MiddleLayerFacesAreSolved(cube, Side.Top) &&
                    MiddleLayerFacesAreSolved(cube, Side.Bottom);
@@ -31,25 +22,22 @@ namespace rubix_solver
 
         public static bool FirstLayerIsSolved(RubixCube cube)
         {
-            if (!CubeFaceIsSolved(cube, Side.Front) || !CenterBlocksAreCorrect(cube))
-            {
-                return false;
-            }
-
-            return BottomLayerFacesAreSolved(cube, Side.Left) &&
+            return CubeFaceIsSolved(cube, Side.Front) &&
+                   CentreBlocksAreOnCorrectFaces(cube) &&
+                   BottomLayerFacesAreSolved(cube, Side.Left) &&
                    BottomLayerFacesAreSolved(cube, Side.Right) &&
                    BottomLayerFacesAreSolved(cube, Side.Top) &&
                    BottomLayerFacesAreSolved(cube, Side.Bottom);
         }
 
-        public static bool CenterBlocksAreCorrect(RubixCube cube)
+        public static bool CentreBlocksAreOnCorrectFaces(RubixCube cube)
         {
-            return cube.Cube[0, 1, 1].Front == Colour.White &&
-                   cube.Cube[1, 0, 1].Top == Colour.Green &&
-                   cube.Cube[1, 1, 0].Left == Colour.Red &&
-                   cube.Cube[1, 1, 2].Right == Colour.Orange &&
-                   cube.Cube[1, 2, 1].Bottom == Colour.Blue &&
-                   cube.Cube[2, 1, 1].Back == Colour.Yellow;
+            return cube.GetCenterBlockFace(Side.Front) == Colour.White &&
+                   cube.GetCenterBlockFace(Side.Top) == Colour.Green &&
+                   cube.GetCenterBlockFace(Side.Back) == Colour.Yellow &&
+                   cube.GetCenterBlockFace(Side.Bottom) == Colour.Blue &&
+                   cube.GetCenterBlockFace(Side.Left) == Colour.Red &&
+                   cube.GetCenterBlockFace(Side.Right) == Colour.Orange;
         }
 
         private static bool CubeFaceIsSolved(RubixCube cube, Side side)

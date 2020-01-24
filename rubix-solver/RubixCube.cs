@@ -399,10 +399,18 @@ namespace rubix_solver
             };
         }
 
-        public Block GetCenterBlock(Side side)
+        public Colour? GetCenterBlockFace(Side side)
         {
-            var face = GetFace(side);
-            return face[1, 1];
+            return side switch
+            {
+                Side.Front => Cube[0, 1, 1].Front,
+                Side.Top => Cube[1, 0, 1].Top,
+                Side.Left => Cube[1, 1, 0].Left,
+                Side.Right => Cube[1, 1, 2].Right,
+                Side.Bottom => Cube[1, 2, 1].Bottom,
+                Side.Back => Cube[2, 1, 1].Back,
+                _ => throw new Exception($"Not a valid side ({side.ToString()}")
+            };
         }
 
         public List<Block> GetMiddleLayer(Side side)

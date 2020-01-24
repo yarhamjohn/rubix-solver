@@ -866,32 +866,32 @@ namespace rubix_solver.Solvers
             var front = _cube.GetFace(Side.Front);
             edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Side.Front, Side.Top), front[0, 1]), 
-                ((Side.Front, Side.Left), front[1, 0]), 
-                ((Side.Front, Side.Right), front[1, 2]), 
+                ((Side.Front, Side.Top), front[0, 1]),
+                ((Side.Front, Side.Left), front[1, 0]),
+                ((Side.Front, Side.Right), front[1, 2]),
                 ((Side.Front, Side.Bottom), front[2, 1])
             });
 
             var back = _cube.GetFace(Side.Back);
             edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Side.Back, Side.Top), back[0, 1]), 
-                ((Side.Back, Side.Right), back[1, 0]), 
-                ((Side.Back, Side.Left), back[1, 2]), 
+                ((Side.Back, Side.Top), back[0, 1]),
+                ((Side.Back, Side.Right), back[1, 0]),
+                ((Side.Back, Side.Left), back[1, 2]),
                 ((Side.Back, Side.Bottom), back[2, 1])
             });
             
             var left = _cube.GetFace(Side.Left);
             edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Side.Left, Side.Top), left[0, 1]), 
+                ((Side.Left, Side.Top), left[0, 1]),
                 ((Side.Left, Side.Bottom), left[2, 1])
             });
             
             var right = _cube.GetFace(Side.Right);
             edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Side.Right, Side.Top), right[0, 1]), 
+                ((Side.Right, Side.Top), right[0, 1]),
                 ((Side.Right, Side.Bottom), right[2, 1])
             });
 
@@ -909,7 +909,7 @@ namespace rubix_solver.Solvers
                    face[1, 0].Left == Colour.Red &&
                    face[1, 2].Right == Colour.Orange &&
                    face[2, 1].Bottom == Colour.Blue && 
-                   RubixCubeStatusEvaluator.CenterBlocksAreCorrect(_cube);
+                   RubixCubeStatusEvaluator.CentreBlocksAreOnCorrectFaces(_cube);
         }
 
         public void SolveCorners()
@@ -1165,12 +1165,12 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private bool IsCorrectlyPositioned(((int x, int y), Block block) corner)
+        private static bool IsCorrectlyPositioned(((int x, int y), Block block) corner)
         {
             return IsBetweenCorrectFrontSides(corner) && corner.block.Front == Colour.White;
         }
 
-        private bool IsBetweenCorrectBackSides(((int x, int y), Block block) corner)
+        private static bool IsBetweenCorrectBackSides(((int x, int y), Block block) corner)
         {
             return corner.Item1 switch
             {
@@ -1182,7 +1182,7 @@ namespace rubix_solver.Solvers
             };
         }
         
-        private bool IsBetweenCorrectFrontSides(((int x, int y), Block block) corner)
+        private static bool IsBetweenCorrectFrontSides(((int x, int y), Block block) corner)
         {
             return corner.Item1 switch
             {
@@ -1194,7 +1194,7 @@ namespace rubix_solver.Solvers
             };
         }
 
-        private List<((int x, int y), Block)> GetCorners(Side side)
+        private IEnumerable<((int x, int y), Block)> GetCorners(Side side)
         {            
             var face = _cube.GetFace(side);
             return new List<((int x, int y), Block)>

@@ -34,7 +34,7 @@ namespace rubix_solver
         {
             var face = cube.GetFace(side);
             return CrossFaceIsFormed(cube, side) &&
-                   MiddleEdgeBlockFacesAreSolved(face, side) &&
+                   CenterEdgeBlockFacesAreSolved(face, side) &&
                    CentreBlocksAreOnCorrectFaces(cube);
         }
 
@@ -75,7 +75,7 @@ namespace rubix_solver
             return BlockFacesAreSolved(side, blocks);
         }
 
-        private static bool MiddleEdgeBlockFacesAreSolved(Block[,] face, Side side)
+        private static bool CenterEdgeBlockFacesAreSolved(Block[,] face, Side side)
         {
             var leftFaceBlock = side == Side.Front ? face[1, 0] : face[1, 2];
             var rightFaceBlock = side == Side.Front ? face[1, 2] : face[1, 0];

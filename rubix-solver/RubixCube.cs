@@ -413,7 +413,7 @@ namespace rubix_solver
             };
         }
 
-        public List<Block> GetMiddleLayer(Side side)
+        public IEnumerable<Block> GetMiddleLayer(Side side)
         {
             var face = GetFace(side);
             if (side == Side.Left || side == Side.Right)
@@ -438,6 +438,18 @@ namespace rubix_solver
                 Side.Right => new List<Block> {face[0, 0], face[1, 0], face[2, 0]},
                 Side.Bottom => new List<Block> {face[0, 0], face[0, 1], face[0, 2]},
                 _ => new List<Block> {face[2, 0], face[2, 1], face[2, 2]}
+            };
+        }
+
+        public List<((int x, int y), Block)> GetCornerBlocks(Side side)
+        {
+            var face = GetFace(side);
+            return new List<((int x, int y), Block)>
+            {
+                ((0, 0), face[0, 0]),
+                ((0, 2), face[0, 2]),
+                ((2, 0), face[2, 0]),
+                ((2, 2), face[2, 2])
             };
         }
     }

@@ -329,46 +329,61 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
             {
-                if (GetCorners(Side.Back).Any(c => c.Item2.HasColour(Colour.White)))
+                if (BackContainsSolvableCornerBlock())
                 {
-                    var corner = GetCorners(Side.Back).First(c => c.Item2.HasColour(Colour.White));
-                    if (!IsBetweenCorrectBackSides(corner))
-                    {
-                        corner = RotateToCorrectCorner(corner);
-                    }
-
-                    RotateUpToFace(corner);
+                    var corner = GetSolvableBackCornerBlock();
+                    RotateToFront(corner);
                 }
                 else
                 {
-                    var corner = GetCorners(Side.Front).First(c => !IsCorrectlyPositioned(c));
-                    switch (corner.Item1)
-                    {
-                        case (0, 0):
-                            _cube.RotateClockwise(Side.Top);
-                            _cube.RotateClockwise(Side.Back);
-                            _cube.RotateAntiClockwise(Side.Top);
-                            break;
-                        case (0, 2):
-                            _cube.RotateClockwise(Side.Right);
-                            _cube.RotateClockwise(Side.Back);
-                            _cube.RotateAntiClockwise(Side.Right);
-                            break;
-                        case (2, 0):
-                            _cube.RotateClockwise(Side.Left);
-                            _cube.RotateClockwise(Side.Back);
-                            _cube.RotateAntiClockwise(Side.Left);
-                            break;
-                        case (2, 2):
-                            _cube.RotateClockwise(Side.Bottom);
-                            _cube.RotateClockwise(Side.Back);
-                            _cube.RotateAntiClockwise(Side.Bottom);
-                            break;
-                        default:
-                            throw new Exception("Not a corner...");
-                    }
+                    var corner = GetSolvableFrontCornerBlock();
+                    RotateToBack(corner);
                 }
             }
+        }
+
+        private void RotateToBack(((int x, int y) location, Block) corner)
+        {
+            switch (corner.location)
+            {
+                case (0, 0):
+                    _cube.RotateClockwise(Side.Top);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Top);
+                    break;
+                case (0, 2):
+                    _cube.RotateClockwise(Side.Right);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Right);
+                    break;
+                case (2, 0):
+                    _cube.RotateClockwise(Side.Left);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Left);
+                    break;
+                case (2, 2):
+                    _cube.RotateClockwise(Side.Bottom);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Bottom);
+                    break;
+                default:
+                    throw new Exception("Not a corner...");
+            }
+        }
+
+        private ((int x, int y) location, Block) GetSolvableFrontCornerBlock()
+        {
+            return _cube.GetCornerBlocks(Side.Front).First(c => !IsCorrectlyPositioned(c));
+        }
+
+        private ((int x, int y), Block) GetSolvableBackCornerBlock()
+        {
+            return _cube.GetCornerBlocks(Side.Back).First(c => c.Item2.HasColour(Colour.White));
+        }
+
+        private bool BackContainsSolvableCornerBlock()
+        {
+            return _cube.GetCornerBlocks(Side.Back).Any(c => c.Item2.HasColour(Colour.White));
         }
 
         private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Side, Side), Block) incorrectMiddleEdge)
@@ -1037,8 +1052,13 @@ namespace rubix_solver.Solvers
             return corner;
         }
 
-        private void RotateUpToFace(((int x, int y), Block) corner)
+        private void RotateToFront(((int x, int y), Block) corner)
         {
+            if (!IsInCorrectCorner(corner))
+            {
+                corner = RotateToCorrectCorner(corner);
+            }
+
             if (corner.Item1 == (0, 0))
             {
                 if (corner.Item2.Top == Colour.White)
@@ -1157,7 +1177,7 @@ namespace rubix_solver.Solvers
             return IsBetweenCorrectFrontSides(corner) && corner.block.Front == Colour.White;
         }
 
-        private static bool IsBetweenCorrectBackSides(((int x, int y), Block block) corner)
+        private static bool IsInCorrectCorner(((int x, int y), Block block) corner)
         {
             return corner.Item1 switch
             {
@@ -1178,18 +1198,6 @@ namespace rubix_solver.Solvers
                 (2, 0) => corner.block.HasColour(Colour.Blue) && corner.block.HasColour(Colour.Red),
                 (2, 2) => corner.block.HasColour(Colour.Blue) && corner.block.HasColour(Colour.Orange),
                 _ => throw new Exception("This isn't a corner block...")
-            };
-        }
-
-        private IEnumerable<((int x, int y), Block)> GetCorners(Side side)
-        {            
-            var face = _cube.GetFace(side);
-            return new List<((int x, int y), Block)>
-            {
-                ((0, 0), face[0, 0]), 
-                ((0, 2), face[0, 2]), 
-                ((2, 0), face[2, 0]), 
-                ((2, 2), face[2, 2])
             };
         }
     }

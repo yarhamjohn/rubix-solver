@@ -414,5 +414,23 @@ namespace rubix_solver
             }
             return new List<Block> {face[1, 0], face[1, 1], face[1, 2]};
         }
+
+        public IEnumerable<Block> GetBottomLayer(Side side)
+        {
+            if (side == Side.Back || side == Side.Front)
+            {
+                throw new Exception(
+                    $"This side ({side}) has no concept of layers as these are calculated in relation to the front side.");
+            }
+
+            var face = GetFace(side);
+            return side switch
+            {
+                Side.Left => new List<Block> {face[0, 2], face[1, 2], face[2, 2]},
+                Side.Right => new List<Block> {face[0, 0], face[1, 0], face[2, 0]},
+                Side.Bottom => new List<Block> {face[0, 0], face[0, 1], face[0, 2]},
+                _ => new List<Block> {face[2, 0], face[2, 1], face[2, 2]}
+            };
+        }
     }
 }

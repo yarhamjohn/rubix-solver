@@ -6,47 +6,45 @@ namespace rubix_solver
 {
     public static class RubixCubeStatusEvaluator
     {
-        //TODO: Distinguish between layer and face (also cube vs block face)?
-
         public static bool IsSolved(RubixCube cube)
         {
-            return CubeFaceIsSolved(cube, Layer.Back) &&
-                   CubeFaceIsSolved(cube, Layer.Front) &&
-                   CubeFaceIsSolved(cube, Layer.Left) &&
-                   CubeFaceIsSolved(cube, Layer.Right) &&
-                   CubeFaceIsSolved(cube, Layer.Top) &&
-                   CubeFaceIsSolved(cube, Layer.Bottom);
+            return CubeFaceIsSolved(cube, Side.Back) &&
+                   CubeFaceIsSolved(cube, Side.Front) &&
+                   CubeFaceIsSolved(cube, Side.Left) &&
+                   CubeFaceIsSolved(cube, Side.Right) &&
+                   CubeFaceIsSolved(cube, Side.Top) &&
+                   CubeFaceIsSolved(cube, Side.Bottom);
         }
 
-        private static bool CubeFaceIsSolved(RubixCube cube, Layer layer)
+        private static bool CubeFaceIsSolved(RubixCube cube, Side side)
         {
-            var face = cube.GetFace(layer);
-            return BlockFacesAreSolved(layer, face.Cast<Block>());
+            var face = cube.GetFace(side);
+            return BlockFacesAreSolved(side, face.Cast<Block>());
         }
 
-        private static bool BlockFacesAreSolved(Layer layer, IEnumerable<Block> face)
+        private static bool BlockFacesAreSolved(Side side, IEnumerable<Block> face)
         {
-            return face.Select(block => CorrectColour(layer, block)).All(correctColour => correctColour);
+            return face.Select(block => CorrectColour(side, block)).All(correctColour => correctColour);
         }
 
-        private static bool CorrectColour(Layer layer, Block block)
+        private static bool CorrectColour(Side side, Block block)
         {
-            return layer switch
+            return side switch
             {
-                Layer.Back => block.Back == Colour.Yellow,
-                Layer.Front => block.Front == Colour.White,
-                Layer.Left => block.Left == Colour.Red,
-                Layer.Right => block.Right == Colour.Orange,
-                Layer.Top => block.Top == Colour.Green,
-                Layer.Bottom => block.Bottom == Colour.Blue,
-                _ => throw new Exception($"Not a valid layer: {layer.ToString()}")
+                Side.Back => block.Back == Colour.Yellow,
+                Side.Front => block.Front == Colour.White,
+                Side.Left => block.Left == Colour.Red,
+                Side.Right => block.Right == Colour.Orange,
+                Side.Top => block.Top == Colour.Green,
+                Side.Bottom => block.Bottom == Colour.Blue,
+                _ => throw new Exception($"Not a valid layer: {side.ToString()}")
             };
         }
 
-        private static bool MiddleLayerBlockFacesAreSolved(RubixCube cube, Layer layer)
+        private static bool MiddleLayerBlockFacesAreSolved(RubixCube cube, Side side)
         {
-            var blocks = cube.GetMiddleLayer(layer);
-            return BlockFacesAreSolved(layer, blocks);
+            var blocks = cube.GetMiddleLayer(side);
+            return BlockFacesAreSolved(side, blocks);
         }
 
         public static bool SecondLayerIsSolved(RubixCube cube)
@@ -56,20 +54,20 @@ namespace rubix_solver
                 return false;
             }
 
-            return MiddleLayerBlockFacesAreSolved(cube, Layer.Left) &&
-                   MiddleLayerBlockFacesAreSolved(cube, Layer.Right) &&
-                   MiddleLayerBlockFacesAreSolved(cube, Layer.Top) &&
-                   MiddleLayerBlockFacesAreSolved(cube, Layer.Bottom);
+            return MiddleLayerBlockFacesAreSolved(cube, Side.Left) &&
+                   MiddleLayerBlockFacesAreSolved(cube, Side.Right) &&
+                   MiddleLayerBlockFacesAreSolved(cube, Side.Top) &&
+                   MiddleLayerBlockFacesAreSolved(cube, Side.Bottom);
         }
 
         public static bool FirstLayerIsSolved(RubixCube cube)
         {
-            if (!CubeFaceIsSolved(cube, Layer.Front) || !CenterBlocksAreCorrect(cube))
+            if (!CubeFaceIsSolved(cube, Side.Front) || !CenterBlocksAreCorrect(cube))
             {
                 return false;
             }
 
-            var left = cube.GetFace(Layer.Left);
+            var left = cube.GetFace(Side.Left);
             for (var x = 0; x < 3; x++)
             {
                 if (left[x, 2].Left != Colour.Red)
@@ -78,7 +76,7 @@ namespace rubix_solver
                 }
             }
 
-            var right = cube.GetFace(Layer.Right);
+            var right = cube.GetFace(Side.Right);
             for (var x = 0; x < 3; x++)
             {
                 if (right[x, 0].Right != Colour.Orange)
@@ -87,7 +85,7 @@ namespace rubix_solver
                 }
             }
 
-            var top = cube.GetFace(Layer.Top);
+            var top = cube.GetFace(Side.Top);
             for (var y = 0; y < 3; y++)
             {
                 if (top[2, y].Top != Colour.Green)
@@ -96,7 +94,7 @@ namespace rubix_solver
                 }
             }
 
-            var bottom = cube.GetFace(Layer.Bottom);
+            var bottom = cube.GetFace(Side.Bottom);
             for (var y = 0; y < 3; y++)
             {
                 if (bottom[0, y].Bottom != Colour.Blue)

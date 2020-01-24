@@ -6,23 +6,23 @@ namespace rubix_solver
     {
         public static void Print(RubixCube cube)
         {
-            PrintFace(cube, Layer.Top);
+            PrintFace(cube, Side.Top);
             PrintFaces(cube);
-            PrintFace(cube, Layer.Bottom);
+            PrintFace(cube, Side.Bottom);
         }
 
-        private static void PrintFace(RubixCube cube, Layer layer)
+        private static void PrintFace(RubixCube cube, Side side)
         {
-            var face = cube.GetFace(layer);
+            var face = cube.GetFace(side);
 
             for (var row = 0; row < 3; row++)
             {
                 Console.Write("                  "); // hack to indent top and bottom faces
-                PrintColour(cube.GetColour(face[row, 0], layer));
+                PrintColour(cube.GetColour(face[row, 0], side));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(face[row, 1], layer));
+                PrintColour(cube.GetColour(face[row, 1], side));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(face[row, 2], layer));
+                PrintColour(cube.GetColour(face[row, 2], side));
                 Console.WriteLine();
                 Console.WriteLine();
             }
@@ -32,36 +32,36 @@ namespace rubix_solver
         {
             for (var row = 0; row < 3; row++)
             {
-                var left = cube.GetFace(Layer.Left);
-                PrintColour(cube.GetColour(left[row, 0], Layer.Left));
+                var left = cube.GetFace(Side.Left);
+                PrintColour(cube.GetColour(left[row, 0], Side.Left));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(left[row, 1], Layer.Left));
+                PrintColour(cube.GetColour(left[row, 1], Side.Left));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(left[row, 2], Layer.Left));
-                Console.Write("   ");
-
-                var front = cube.GetFace(Layer.Front);
-                PrintColour(cube.GetColour(front[row, 0], Layer.Front));
-                Console.Write("   ");
-                PrintColour(cube.GetColour(front[row, 1], Layer.Front));
-                Console.Write("   ");
-                PrintColour(cube.GetColour(front[row, 2], Layer.Front));
+                PrintColour(cube.GetColour(left[row, 2], Side.Left));
                 Console.Write("   ");
 
-                var right = cube.GetFace(Layer.Right);
-                PrintColour(cube.GetColour(right[row, 0], Layer.Right));
+                var front = cube.GetFace(Side.Front);
+                PrintColour(cube.GetColour(front[row, 0], Side.Front));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(right[row, 1], Layer.Right));
+                PrintColour(cube.GetColour(front[row, 1], Side.Front));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(right[row, 2], Layer.Right));
+                PrintColour(cube.GetColour(front[row, 2], Side.Front));
                 Console.Write("   ");
 
-                var back = cube.GetFace(Layer.Back);
-                PrintColour(cube.GetColour(back[row, 0], Layer.Back));
+                var right = cube.GetFace(Side.Right);
+                PrintColour(cube.GetColour(right[row, 0], Side.Right));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(back[row, 1], Layer.Back));
+                PrintColour(cube.GetColour(right[row, 1], Side.Right));
                 Console.Write("   ");
-                PrintColour(cube.GetColour(back[row, 2], Layer.Back));
+                PrintColour(cube.GetColour(right[row, 2], Side.Right));
+                Console.Write("   ");
+
+                var back = cube.GetFace(Side.Back);
+                PrintColour(cube.GetColour(back[row, 0], Side.Back));
+                Console.Write("   ");
+                PrintColour(cube.GetColour(back[row, 1], Side.Back));
+                Console.Write("   ");
+                PrintColour(cube.GetColour(back[row, 2], Side.Back));
 
                 Console.WriteLine();
                 Console.WriteLine();

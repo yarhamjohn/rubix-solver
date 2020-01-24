@@ -1,6 +1,6 @@
 ﻿namespace rubix_solver
 {
-    public enum Layer
+    public enum Side
     {
         Left,
         Right,

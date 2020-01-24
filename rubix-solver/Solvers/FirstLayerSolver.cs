@@ -25,7 +25,7 @@ namespace rubix_solver.Solvers
             {
                 var middleEdges = GetMiddleEdges();
                 var incorrectMiddleEdge = middleEdges.First(IsIncorrectMiddleEdge);
-                if (incorrectMiddleEdge.Item1.Item1 == Layer.Front || incorrectMiddleEdge.Item1.Item2 == Layer.Front)
+                if (incorrectMiddleEdge.Item1.Item1 == Side.Front || incorrectMiddleEdge.Item1.Item2 == Side.Front)
                 {
                     if (incorrectMiddleEdge.Item2.Front == Colour.White)
                     {
@@ -37,7 +37,7 @@ namespace rubix_solver.Solvers
                     }
                 }
 
-                if (incorrectMiddleEdge.Item1.Item1 == Layer.Back || incorrectMiddleEdge.Item1.Item2 == Layer.Back)
+                if (incorrectMiddleEdge.Item1.Item1 == Side.Back || incorrectMiddleEdge.Item1.Item2 == Side.Back)
                 {
                     if (incorrectMiddleEdge.Item2.Back == Colour.White)
                     {
@@ -58,265 +58,265 @@ namespace rubix_solver.Solvers
                 var nonWhiteFace = incorrectMiddleEdge.Item1.Item1 == whiteFace
                     ? incorrectMiddleEdge.Item1.Item2
                     : incorrectMiddleEdge.Item1.Item1;
-                if (whiteFace == Layer.Left && nonWhiteFace == Layer.Bottom)
+                if (whiteFace == Side.Left && nonWhiteFace == Side.Bottom)
                 {
                     switch (incorrectMiddleEdge.Item2.Bottom)
                     {
                         case Colour.Red:
-                            _cube.RotateAntiClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateAntiClockwise(Side.Bottom);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Bottom);
                             break;
                         case Colour.Orange:
-                            _cube.RotateAntiClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateAntiClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Bottom);
                             break;
                         case Colour.Green:
-                            _cube.RotateAntiClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateAntiClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Bottom);
                             break;
                         case Colour.Blue:
-                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Left, {incorrectMiddleEdge.Item2.Bottom.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Left && nonWhiteFace == Layer.Top)
+                if (whiteFace == Side.Left && nonWhiteFace == Side.Top)
                 {
                     switch (incorrectMiddleEdge.Item2.Top)
                     {
                         case Colour.Red:
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateAntiClockwise(Side.Top);
                             break;
                         case Colour.Orange:
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateAntiClockwise(Side.Top);
                             break;
                         case Colour.Green:
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Side.Top);
                             break;
                         case Colour.Blue:
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateAntiClockwise(Side.Top);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Left, {incorrectMiddleEdge.Item2.Top.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Right && nonWhiteFace == Layer.Top)
+                if (whiteFace == Side.Right && nonWhiteFace == Side.Top)
                 {
                     switch (incorrectMiddleEdge.Item2.Top)
                     {
                         case Colour.Red:
-                            _cube.RotateAntiClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Top);
                             break;
                         case Colour.Orange:
-                            _cube.RotateAntiClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Side.Top);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Top);
                             break;
                         case Colour.Green:
-                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateClockwise(Side.Top);
                             break;
                         case Colour.Blue:
-                            _cube.RotateAntiClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Top);
+                            _cube.RotateAntiClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Top);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Right, {incorrectMiddleEdge.Item2.Top.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Right && nonWhiteFace == Layer.Bottom)
+                if (whiteFace == Side.Right && nonWhiteFace == Side.Bottom)
                 {
                     switch (incorrectMiddleEdge.Item2.Bottom)
                     {
                         case Colour.Red:
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateAntiClockwise(Side.Bottom);
                             break;
                         case Colour.Orange:
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateAntiClockwise(Side.Bottom);
                             break;
                         case Colour.Green:
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateAntiClockwise(Side.Bottom);
                             break;
                         case Colour.Blue:
-                            _cube.RotateClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Right, {incorrectMiddleEdge.Item2.Bottom.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Top && nonWhiteFace == Layer.Left)
+                if (whiteFace == Side.Top && nonWhiteFace == Side.Left)
                 {
                     switch (incorrectMiddleEdge.Item2.Left)
                     {
                         case Colour.Red:
-                            _cube.RotateClockwise(Layer.Left);
+                            _cube.RotateClockwise(Side.Left);
                             break;
                         case Colour.Orange:
-                            _cube.RotateAntiClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Left);
+                            _cube.RotateAntiClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Left);
                             break;
                         case Colour.Green:
-                            _cube.RotateAntiClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Left);
+                            _cube.RotateAntiClockwise(Side.Left);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Left);
                             break;
                         case Colour.Blue:
-                            _cube.RotateAntiClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Left);
+                            _cube.RotateAntiClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Left);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Top, {incorrectMiddleEdge.Item2.Left.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Top && nonWhiteFace == Layer.Right)
+                if (whiteFace == Side.Top && nonWhiteFace == Side.Right)
                 {
                     switch (incorrectMiddleEdge.Item2.Right)
                     {
                         case Colour.Red:
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         case Colour.Orange:
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         case Colour.Green:
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         case Colour.Blue:
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Top, {incorrectMiddleEdge.Item2.Right.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Bottom && nonWhiteFace == Layer.Right)
+                if (whiteFace == Side.Bottom && nonWhiteFace == Side.Right)
                 {
                     switch (incorrectMiddleEdge.Item2.Right)
                     {
                         case Colour.Red:
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Right);
                             break;
                         case Colour.Orange:
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Right);
                             break;
                         case Colour.Green:
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Right);
                             break;
                         case Colour.Blue:                            
-                            _cube.RotateAntiClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Right);
+                            _cube.RotateAntiClockwise(Side.Right);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Right);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Bottom, {incorrectMiddleEdge.Item2.Right.ToString()}");
                     }
                 }
-                if (whiteFace == Layer.Bottom && nonWhiteFace == Layer.Left)
+                if (whiteFace == Side.Bottom && nonWhiteFace == Side.Left)
                 {
                     switch (incorrectMiddleEdge.Item2.Left)
                     {
                         case Colour.Red:
-                            _cube.RotateAntiClockwise(Layer.Left);
+                            _cube.RotateAntiClockwise(Side.Left);
                             break;
                         case Colour.Orange:
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateAntiClockwise(Layer.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateAntiClockwise(Side.Left);
                             break;
                         case Colour.Green:
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateAntiClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateAntiClockwise(Layer.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateAntiClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateAntiClockwise(Side.Left);
                             break;
                         case Colour.Blue:                            
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         default:
                             throw new Exception($"Incorrect edge piece: whiteFace = Bottom, {incorrectMiddleEdge.Item2.Left.ToString()}");
@@ -325,130 +325,130 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Layer, Layer), Block) incorrectMiddleEdge)
+        private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Side, Side), Block) incorrectMiddleEdge)
         {
-            var nonBackLayer = incorrectMiddleEdge.Item1.Item1 == Layer.Back
+            var nonBackLayer = incorrectMiddleEdge.Item1.Item1 == Side.Back
                 ? incorrectMiddleEdge.Item1.Item2
                 : incorrectMiddleEdge.Item1.Item1;
 
-            if (nonBackLayer == Layer.Left)
+            if (nonBackLayer == Side.Left)
             {
                 switch (incorrectMiddleEdge.Item2.Back)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateAntiClockwise(Layer.Left);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateAntiClockwise(Side.Left);
+                        _cube.RotateAntiClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Left);
                         break;
                     case Colour.Blue:
-                        _cube.RotateAntiClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Right)
+            if (nonBackLayer == Side.Right)
             {
                 switch (incorrectMiddleEdge.Item2.Back)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Green:
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
-                        _cube.RotateAntiClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Bottom);
+                        _cube.RotateAntiClockwise(Side.Right);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Top)
+            if (nonBackLayer == Side.Top)
             {
                 switch (incorrectMiddleEdge.Item2.Back)
                 {
                     case Colour.Red:
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Left);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Bottom)
+            if (nonBackLayer == Side.Bottom)
             {
                 switch (incorrectMiddleEdge.Item2.Back)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateAntiClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
-                        _cube.RotateAntiClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Bottom);
+                        _cube.RotateAntiClockwise(Side.Right);
                         break;
                     case Colour.Orange:
-                        _cube.RotateAntiClockwise(Layer.Bottom);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Bottom);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
@@ -456,122 +456,122 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteOnBackFace(((Layer, Layer), Block) incorrectMiddleEdge)
+        private void SolveIncorrectEdgeWithWhiteOnBackFace(((Side, Side), Block) incorrectMiddleEdge)
         {
-            var nonBackLayer = incorrectMiddleEdge.Item1.Item1 == Layer.Back
+            var nonBackLayer = incorrectMiddleEdge.Item1.Item1 == Side.Back
                 ? incorrectMiddleEdge.Item1.Item2
                 : incorrectMiddleEdge.Item1.Item1;
 
-            if (nonBackLayer == Layer.Left)
+            if (nonBackLayer == Side.Left)
             {
                 switch (incorrectMiddleEdge.Item2.Left)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Right)
+            if (nonBackLayer == Side.Right)
             {
                 switch (incorrectMiddleEdge.Item2.Right)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Top)
+            if (nonBackLayer == Side.Top)
             {
                 switch (incorrectMiddleEdge.Item2.Top)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonBackLayer == Layer.Bottom)
+            if (nonBackLayer == Side.Bottom)
             {
                 switch (incorrectMiddleEdge.Item2.Bottom)
                 {
                     case Colour.Red:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
@@ -579,130 +579,130 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteNotOnFrontFace(((Layer, Layer), Block) incorrectMiddleEdge)
+        private void SolveIncorrectEdgeWithWhiteNotOnFrontFace(((Side, Side), Block) incorrectMiddleEdge)
         {
-            var nonFrontLayer = incorrectMiddleEdge.Item1.Item1 == Layer.Front
+            var nonFrontLayer = incorrectMiddleEdge.Item1.Item1 == Side.Front
                 ? incorrectMiddleEdge.Item1.Item2
                 : incorrectMiddleEdge.Item1.Item1;
             
-            if (nonFrontLayer == Layer.Left)
+            if (nonFrontLayer == Side.Left)
             {
                 switch (incorrectMiddleEdge.Item2.Front)
                 {
                     case Colour.Red:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Bottom);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Blue:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Top);
                         break;
                     case Colour.Orange:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontLayer == Layer.Top)
+            if (nonFrontLayer == Side.Top)
             {
                 switch (incorrectMiddleEdge.Item2.Front)
                 {
                     case Colour.Red:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Blue:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Left);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Left);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Orange:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Right);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontLayer == Layer.Right)
+            if (nonFrontLayer == Side.Right)
             {
                 switch (incorrectMiddleEdge.Item2.Front)
                 {
                     case Colour.Red:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Blue:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Orange:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Top);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Top);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontLayer == Layer.Bottom)
+            if (nonFrontLayer == Side.Bottom)
             {
                 switch (incorrectMiddleEdge.Item2.Front)
                 {
                     case Colour.Red:
                         _cube.RotateAntiClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Left);
                         break;
                     case Colour.Blue:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Green:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateAntiClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Orange:
                         _cube.RotateClockwise(nonFrontLayer);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
@@ -710,109 +710,109 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteOnFrontFace(((Layer, Layer), Block) incorrectMiddleEdge)
+        private void SolveIncorrectEdgeWithWhiteOnFrontFace(((Side, Side), Block) incorrectMiddleEdge)
         {
-            var nonFrontEdge = incorrectMiddleEdge.Item1.Item1 == Layer.Front
+            var nonFrontEdge = incorrectMiddleEdge.Item1.Item1 == Side.Front
                 ? incorrectMiddleEdge.Item1.Item2
                 : incorrectMiddleEdge.Item1.Item1;
 
             _cube.RotateClockwise(nonFrontEdge);
             _cube.RotateClockwise(nonFrontEdge);
 
-            if (nonFrontEdge == Layer.Left)
+            if (nonFrontEdge == Side.Left)
             {
                 switch (incorrectMiddleEdge.Item2.Left)
                 {
                     case Colour.Green:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Orange:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontEdge == Layer.Right)
+            if (nonFrontEdge == Side.Right)
             {
                 switch (incorrectMiddleEdge.Item2.Right)
                 {
                     case Colour.Blue:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Red:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontEdge == Layer.Top)
+            if (nonFrontEdge == Side.Top)
             {
                 switch (incorrectMiddleEdge.Item2.Top)
                 {
                     case Colour.Orange:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Bottom);
-                        _cube.RotateClockwise(Layer.Bottom);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Bottom);
+                        _cube.RotateClockwise(Side.Bottom);
                         break;
                     case Colour.Red:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
                 }
             }
 
-            if (nonFrontEdge == Layer.Bottom)
+            if (nonFrontEdge == Side.Bottom)
             {
                 switch (incorrectMiddleEdge.Item2.Bottom)
                 {
                     case Colour.Red:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Left);
-                        _cube.RotateClockwise(Layer.Left);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Left);
+                        _cube.RotateClockwise(Side.Left);
                         break;
                     case Colour.Green:
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateAntiClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Top);
-                        _cube.RotateClockwise(Layer.Top);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateAntiClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Top);
+                        _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Layer.Back);
-                        _cube.RotateClockwise(Layer.Right);
-                        _cube.RotateClockwise(Layer.Right);
+                        _cube.RotateClockwise(Side.Back);
+                        _cube.RotateClockwise(Side.Right);
+                        _cube.RotateClockwise(Side.Right);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
@@ -820,39 +820,39 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private bool IsIncorrectMiddleEdge(((Layer, Layer), Block) edge)
+        private bool IsIncorrectMiddleEdge(((Side, Side), Block) edge)
         {
             if (edge.Item2.Front != Colour.White)
             {
                 return true;
             }
 
-            var nonTopEdge = edge.Item1.Item1 == Layer.Front ? edge.Item1.Item2 : edge.Item1.Item1;
+            var nonTopEdge = edge.Item1.Item1 == Side.Front ? edge.Item1.Item2 : edge.Item1.Item1;
             switch (nonTopEdge)
             {
-                case Layer.Left:
+                case Side.Left:
                 {
-                    var face = _cube.GetFace(Layer.Left);
+                    var face = _cube.GetFace(Side.Left);
                     return edge.Item2.Left != Colour.Red || face[1, 1].Left != Colour.Red;
                 }
-                case Layer.Right:
+                case Side.Right:
                 {
-                    var face = _cube.GetFace(Layer.Right);
+                    var face = _cube.GetFace(Side.Right);
                     return edge.Item2.Right != Colour.Orange || face[1, 1].Right != Colour.Orange;
                 }
-                case Layer.Top:
+                case Side.Top:
                 {
-                    var face = _cube.GetFace(Layer.Top);
+                    var face = _cube.GetFace(Side.Top);
                     return edge.Item2.Top != Colour.Green || face[1, 1].Top != Colour.Green;
                 }
-                case Layer.Bottom:
+                case Side.Bottom:
                 {
-                    var face = _cube.GetFace(Layer.Bottom);
+                    var face = _cube.GetFace(Side.Bottom);
                     return edge.Item2.Bottom != Colour.Blue || face[1, 1].Bottom != Colour.Blue;
                 }
-                case Layer.Back:
+                case Side.Back:
                 {
-                    var face = _cube.GetFace(Layer.Back);
+                    var face = _cube.GetFace(Side.Back);
                     return edge.Item2.Back != Colour.Yellow || face[1, 1].Back != Colour.Yellow;
                 }
                 default:
@@ -860,39 +860,39 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private List<((Layer, Layer), Block)> GetMiddleEdges()
+        private List<((Side, Side), Block)> GetMiddleEdges()
         {
-            var edges = new List<((Layer, Layer), Block)>();
-            var front = _cube.GetFace(Layer.Front);
-            edges.AddRange(new List<((Layer, Layer), Block)>
+            var edges = new List<((Side, Side), Block)>();
+            var front = _cube.GetFace(Side.Front);
+            edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Layer.Front, Layer.Top), front[0, 1]), 
-                ((Layer.Front, Layer.Left), front[1, 0]), 
-                ((Layer.Front, Layer.Right), front[1, 2]), 
-                ((Layer.Front, Layer.Bottom), front[2, 1])
+                ((Side.Front, Side.Top), front[0, 1]), 
+                ((Side.Front, Side.Left), front[1, 0]), 
+                ((Side.Front, Side.Right), front[1, 2]), 
+                ((Side.Front, Side.Bottom), front[2, 1])
             });
 
-            var back = _cube.GetFace(Layer.Back);
-            edges.AddRange(new List<((Layer, Layer), Block)>
+            var back = _cube.GetFace(Side.Back);
+            edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Layer.Back, Layer.Top), back[0, 1]), 
-                ((Layer.Back, Layer.Right), back[1, 0]), 
-                ((Layer.Back, Layer.Left), back[1, 2]), 
-                ((Layer.Back, Layer.Bottom), back[2, 1])
+                ((Side.Back, Side.Top), back[0, 1]), 
+                ((Side.Back, Side.Right), back[1, 0]), 
+                ((Side.Back, Side.Left), back[1, 2]), 
+                ((Side.Back, Side.Bottom), back[2, 1])
             });
             
-            var left = _cube.GetFace(Layer.Left);
-            edges.AddRange(new List<((Layer, Layer), Block)>
+            var left = _cube.GetFace(Side.Left);
+            edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Layer.Left, Layer.Top), left[0, 1]), 
-                ((Layer.Left, Layer.Bottom), left[2, 1])
+                ((Side.Left, Side.Top), left[0, 1]), 
+                ((Side.Left, Side.Bottom), left[2, 1])
             });
             
-            var right = _cube.GetFace(Layer.Right);
-            edges.AddRange(new List<((Layer, Layer), Block)>
+            var right = _cube.GetFace(Side.Right);
+            edges.AddRange(new List<((Side, Side), Block)>
             {
-                ((Layer.Right, Layer.Top), right[0, 1]), 
-                ((Layer.Right, Layer.Bottom), right[2, 1])
+                ((Side.Right, Side.Top), right[0, 1]), 
+                ((Side.Right, Side.Bottom), right[2, 1])
             });
 
             return edges.Where(e => e.Item2.HasColour(Colour.White)).ToList();
@@ -900,7 +900,7 @@ namespace rubix_solver.Solvers
 
         private bool CrossIsFormed()
         {
-            var face = _cube.GetFace(Layer.Front);
+            var face = _cube.GetFace(Side.Front);
             return face[0, 1].Front == Colour.White &&
                    face[1, 0].Front == Colour.White &&
                    face[1, 2].Front == Colour.White &&
@@ -916,9 +916,9 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
             {
-                if (GetCorners(Layer.Back).Any(c => c.Item2.HasColour(Colour.White)))
+                if (GetCorners(Side.Back).Any(c => c.Item2.HasColour(Colour.White)))
                 {
-                    var corner = GetCorners(Layer.Back).First(c => c.Item2.HasColour(Colour.White));
+                    var corner = GetCorners(Side.Back).First(c => c.Item2.HasColour(Colour.White));
                     if (!IsBetweenCorrectBackSides(corner))
                     {
                         corner = RotateToCorrectCorner(corner);
@@ -928,27 +928,27 @@ namespace rubix_solver.Solvers
                 }
                 else
                 {
-                    var corner = GetCorners(Layer.Front).First(c => !IsCorrectlyPositioned(c));
+                    var corner = GetCorners(Side.Front).First(c => !IsCorrectlyPositioned(c));
                     switch (corner.Item1) {
                         case (0, 0):
-                            _cube.RotateClockwise(Layer.Top);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Top);
+                            _cube.RotateClockwise(Side.Top);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateAntiClockwise(Side.Top);
                             break;
                         case (0, 2):
-                            _cube.RotateClockwise(Layer.Right);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Right);
+                            _cube.RotateClockwise(Side.Right);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateAntiClockwise(Side.Right);
                             break;
                         case (2, 0):
-                            _cube.RotateClockwise(Layer.Left);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Left);
+                            _cube.RotateClockwise(Side.Left);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateAntiClockwise(Side.Left);
                             break;
                         case (2, 2):
-                            _cube.RotateClockwise(Layer.Bottom);
-                            _cube.RotateClockwise(Layer.Back);
-                            _cube.RotateAntiClockwise(Layer.Bottom);
+                            _cube.RotateClockwise(Side.Bottom);
+                            _cube.RotateClockwise(Side.Back);
+                            _cube.RotateAntiClockwise(Side.Bottom);
                             break;
                         default:
                             throw new Exception("Not a corner...");
@@ -963,21 +963,21 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    corner = ((2, 0), _cube.GetFace(Side.Back)[2, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((2, 2), _cube.GetFace(Side.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((0, 2), _cube.GetFace(Side.Back)[0, 2]);
                 }
             }
 
@@ -985,21 +985,21 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((2, 2), _cube.GetFace(Side.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    corner = ((0, 0), _cube.GetFace(Side.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((2, 0), _cube.GetFace(Side.Back)[2, 0]);
                 }
             }
 
@@ -1007,21 +1007,21 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((2, 2), _cube.GetFace(Layer.Back)[2, 2]);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    corner = ((2, 2), _cube.GetFace(Side.Back)[2, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((0, 0), _cube.GetFace(Side.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((0, 2), _cube.GetFace(Side.Back)[0, 2]);
                 }
             }
 
@@ -1029,21 +1029,21 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((0, 0), _cube.GetFace(Layer.Back)[0, 0]);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((0, 0), _cube.GetFace(Side.Back)[0, 0]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Green) && corner.Item2.HasColour(Colour.Red))
                 {
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    corner = ((0, 2), _cube.GetFace(Layer.Back)[0, 2]);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    corner = ((0, 2), _cube.GetFace(Side.Back)[0, 2]);
                 }
 
                 if (corner.Item2.HasColour(Colour.Blue) && corner.Item2.HasColour(Colour.Orange))
                 {
-                    _cube.RotateClockwise(Layer.Back);
-                    corner = ((2, 0), _cube.GetFace(Layer.Back)[2, 0]);
+                    _cube.RotateClockwise(Side.Back);
+                    corner = ((2, 0), _cube.GetFace(Side.Back)[2, 0]);
                 }
             }
 
@@ -1056,27 +1056,27 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.Top == Colour.White)
                 {
-                    _cube.RotateAntiClockwise(Layer.Top);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Top);
+                    _cube.RotateAntiClockwise(Side.Top);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Top);
                 }
                 else if (corner.Item2.Right == Colour.White)
                 {
-                    _cube.RotateClockwise(Layer.Right);
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Right);
+                    _cube.RotateClockwise(Side.Right);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Right);
                 }
                 else
                 {
-                    _cube.RotateAntiClockwise(Layer.Top);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Top);
-                    _cube.RotateClockwise(Layer.Right);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Right);
-                    _cube.RotateAntiClockwise(Layer.Top);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Top);
+                    _cube.RotateAntiClockwise(Side.Top);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Top);
+                    _cube.RotateClockwise(Side.Right);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Right);
+                    _cube.RotateAntiClockwise(Side.Top);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Top);
                 }
             }
 
@@ -1084,27 +1084,27 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.Left == Colour.White)
                 {
-                    _cube.RotateAntiClockwise(Layer.Left);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Left);
+                    _cube.RotateAntiClockwise(Side.Left);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Left);
                 }
                 else if (corner.Item2.Top == Colour.White)
                 {
-                    _cube.RotateClockwise(Layer.Top);
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Top);
+                    _cube.RotateClockwise(Side.Top);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Top);
                 }
                 else
                 {
-                    _cube.RotateAntiClockwise(Layer.Left);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Left);
-                    _cube.RotateClockwise(Layer.Top);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Top);
-                    _cube.RotateAntiClockwise(Layer.Left);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Left);
+                    _cube.RotateAntiClockwise(Side.Left);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Left);
+                    _cube.RotateClockwise(Side.Top);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Top);
+                    _cube.RotateAntiClockwise(Side.Left);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Left);
                 }
             }
 
@@ -1112,27 +1112,27 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.Right == Colour.White)
                 {
-                    _cube.RotateAntiClockwise(Layer.Right);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Right);
+                    _cube.RotateAntiClockwise(Side.Right);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Right);
                 }
                 else if (corner.Item2.Bottom == Colour.White)
                 {
-                    _cube.RotateClockwise(Layer.Bottom);
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Bottom);
+                    _cube.RotateClockwise(Side.Bottom);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Bottom);
                 }
                 else
                 {
-                    _cube.RotateAntiClockwise(Layer.Right);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Right);
-                    _cube.RotateClockwise(Layer.Bottom);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Bottom);
-                    _cube.RotateAntiClockwise(Layer.Right);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Right);
+                    _cube.RotateAntiClockwise(Side.Right);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Right);
+                    _cube.RotateClockwise(Side.Bottom);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Bottom);
+                    _cube.RotateAntiClockwise(Side.Right);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Right);
                 }
             }
 
@@ -1140,27 +1140,27 @@ namespace rubix_solver.Solvers
             {
                 if (corner.Item2.Bottom == Colour.White)
                 {
-                    _cube.RotateAntiClockwise(Layer.Bottom);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Bottom);
+                    _cube.RotateAntiClockwise(Side.Bottom);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Bottom);
                 }
                 else if (corner.Item2.Left == Colour.White)
                 {
-                    _cube.RotateClockwise(Layer.Left);
-                    _cube.RotateClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Left);
+                    _cube.RotateClockwise(Side.Left);
+                    _cube.RotateClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Left);
                 }
                 else
                 {
-                    _cube.RotateAntiClockwise(Layer.Bottom);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Bottom);
-                    _cube.RotateClockwise(Layer.Left);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateAntiClockwise(Layer.Left);
-                    _cube.RotateAntiClockwise(Layer.Bottom);
-                    _cube.RotateAntiClockwise(Layer.Back);
-                    _cube.RotateClockwise(Layer.Bottom);
+                    _cube.RotateAntiClockwise(Side.Bottom);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Bottom);
+                    _cube.RotateClockwise(Side.Left);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateAntiClockwise(Side.Left);
+                    _cube.RotateAntiClockwise(Side.Bottom);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(Side.Bottom);
                 }
             }
         }
@@ -1194,9 +1194,9 @@ namespace rubix_solver.Solvers
             };
         }
 
-        private List<((int x, int y), Block)> GetCorners(Layer layer)
+        private List<((int x, int y), Block)> GetCorners(Side side)
         {            
-            var face = _cube.GetFace(layer);
+            var face = _cube.GetFace(side);
             return new List<((int x, int y), Block)>
             {
                 ((0, 0), face[0, 0]), 

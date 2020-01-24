@@ -79,27 +79,27 @@ namespace rubix_solver
             Cube = _solvedCube.Clone() as Block[,,];
         }
 
-        public Colour? GetColour(Block block, Layer side)
+        public Colour? GetColour(Block block, Side side)
         {
             return side switch
             {
-                Layer.Left => block.Left, 
-                Layer.Right => block.Right, 
-                Layer.Front => block.Front,
-                Layer.Back => block.Back, 
-                Layer.Top => block.Top, 
-                Layer.Bottom => block.Bottom, 
+                Side.Left => block.Left,
+                Side.Right => block.Right,
+                Side.Front => block.Front,
+                Side.Back => block.Back,
+                Side.Top => block.Top,
+                Side.Bottom => block.Bottom,
                 _ => null
             };
         }
 
-        public Block[,] GetFace(Layer side)
+        public Block[,] GetFace(Side side)
         {
             var faceToReturn = new Block[3, 3];
 
             switch (side)
             {
-                case Layer.Front:
+                case Side.Front:
                     for (var row = 0; row < 3; row++)
                     {
                         for (var col = 0; col < 3; col++)
@@ -109,7 +109,7 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-                case Layer.Left:
+                case Side.Left:
                     for (var row = 0; row < 3; row++)
                     {
                         for (var layer = 0; layer < 3; layer++)
@@ -120,7 +120,7 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-                case Layer.Right:
+                case Side.Right:
                     for (var row = 0; row < 3; row++)
                     {
                         for (var layer = 0; layer < 3; layer++)
@@ -130,7 +130,7 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-                case Layer.Top:
+                case Side.Top:
                     for (var col = 0; col < 3; col++)
                     {
                         for (var layer = 0; layer < 3; layer++)
@@ -141,7 +141,7 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-                case Layer.Bottom:
+                case Side.Bottom:
                     for (var col = 0; col < 3; col++)
                     {
                         for (var layer = 0; layer < 3; layer++)
@@ -151,7 +151,7 @@ namespace rubix_solver
                     }
 
                     return faceToReturn;
-                case Layer.Back:
+                case Side.Back:
                     for (var row = 0; row < 3; row++)
                     {
                         for (var col = 0; col < 3; col++)
@@ -167,86 +167,86 @@ namespace rubix_solver
             }
         }
 
-        public void SetFace(Block[,] face, Layer layer)
+        public void SetFace(Block[,] face, Side side)
         {
             for (var row = 0; row < 3; row++)
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    switch (layer)
+                    switch (side)
                     {
-                        case Layer.Front:
+                        case Side.Front:
                             Cube[0, row, col] = face[row, col];
                             break;
-                        case Layer.Back:
+                        case Side.Back:
                             Cube[2, row, Math.Abs(col - 2)] = face[row, col];
                             break;
-                        case Layer.Top:
+                        case Side.Top:
                             Cube[Math.Abs(row - 2), 0, col] = face[row, col];
                             break;
-                        case Layer.Bottom:
+                        case Side.Bottom:
                             Cube[row, 2, col] = face[row, col];
                             break;
-                        case Layer.Left:
+                        case Side.Left:
                             Cube[Math.Abs(col - 2), row, 0] = face[row, col];
                             break;
-                        case Layer.Right:
+                        case Side.Right:
                             Cube[col, row, 2] = face[row, col];
                             break;
                         default:
-                            throw new Exception($"Not a valid face: {layer}");
+                            throw new Exception($"Not a valid face: {side}");
                     }
                 }
             }
         }
         
-        public void RotateClockwise(Layer layer)
+        public void RotateClockwise(Side side)
         {
-            var face = GetFace(layer);
+            var face = GetFace(side);
             var newFace = new Block[3, 3];
 
             for (var row = 0; row < 3; row++)
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    newFace[col, Math.Abs(row - 2)] = layer switch
+                    newFace[col, Math.Abs(row - 2)] = side switch
                     {
-                        Layer.Front => new Block(
+                        Side.Front => new Block(
                             face[row, col].Bottom, 
                             face[row, col].Top, 
                             face[row, col].Left,
                             face[row, col].Right, 
                             face[row, col].Front, 
                             face[row, col].Back),
-                        Layer.Back => new Block(
+                        Side.Back => new Block(
                             face[row, col].Top, 
                             face[row, col].Bottom, 
                             face[row, col].Right,
                             face[row, col].Left, 
                             face[row, col].Front, 
                             face[row, col].Back),
-                        Layer.Top => new Block(
+                        Side.Top => new Block(
                             face[row, col].Front, 
                             face[row, col].Back, 
                             face[row, col].Top,
                             face[row, col].Bottom, 
                             face[row, col].Right, 
                             face[row, col].Left),
-                        Layer.Bottom => new Block(
+                        Side.Bottom => new Block(
                             face[row, col].Back, 
                             face[row, col].Front,
                             face[row, col].Top,
                             face[row, col].Bottom, 
                             face[row, col].Left, 
                             face[row, col].Right),
-                        Layer.Left => new Block(
+                        Side.Left => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
                             face[row, col].Back,
                             face[row, col].Front, 
                             face[row, col].Top, 
                             face[row, col].Bottom),
-                        Layer.Right => new Block(
+                        Side.Right => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
                             face[row, col].Front,
@@ -258,56 +258,56 @@ namespace rubix_solver
                 }
             }
 
-            SetFace(newFace, layer);
+            SetFace(newFace, side);
         }
 
-        public void RotateAntiClockwise(Layer layer)
+        public void RotateAntiClockwise(Side side)
         {
-            var face = GetFace(layer);
+            var face = GetFace(side);
             var newFace = new Block[3, 3];
 
             for (var row = 0; row < 3; row++)
             {
                 for (var col = 0; col < 3; col++)
                 {
-                    newFace[Math.Abs(col - 2), row] = layer switch
+                    newFace[Math.Abs(col - 2), row] = side switch
                     {
-                        Layer.Front => new Block(
+                        Side.Front => new Block(
                             face[row, col].Top, 
                             face[row, col].Bottom,
                             face[row, col].Right,
                             face[row, col].Left,
                             face[row, col].Front,
                             face[row, col].Back),
-                        Layer.Back => new Block(
+                        Side.Back => new Block(
                             face[row, col].Bottom, 
                             face[row, col].Top, 
                             face[row, col].Left,
                             face[row, col].Right, 
                             face[row, col].Front, 
                             face[row, col].Back),
-                        Layer.Top => new Block(
+                        Side.Top => new Block(
                             face[row, col].Back, 
                             face[row, col].Front, 
                             face[row, col].Top,
                             face[row, col].Bottom, 
                             face[row, col].Left, 
                             face[row, col].Right),
-                        Layer.Bottom => new Block(
+                        Side.Bottom => new Block(
                             face[row, col].Front, 
                             face[row, col].Back, 
                             face[row, col].Top,
                             face[row, col].Bottom, 
                             face[row, col].Right, 
                             face[row, col].Left),
-                        Layer.Left => new Block(
+                        Side.Left => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
                             face[row, col].Front,
                             face[row, col].Back, 
                             face[row, col].Bottom, 
                             face[row, col].Top),
-                        Layer.Right => new Block(
+                        Side.Right => new Block(
                             face[row, col].Left, 
                             face[row, col].Right, 
                             face[row, col].Back,
@@ -319,7 +319,7 @@ namespace rubix_solver
                 }
             }
 
-            SetFace(newFace, layer);
+            SetFace(newFace, side);
         }
 
         public void Randomise()
@@ -327,7 +327,7 @@ namespace rubix_solver
             var random = new Random();
             foreach (var _ in Enumerable.Range(0, 100))
             {
-                var layer = (Layer)random.Next(0, 5);
+                var layer = (Side)random.Next(0, 5);
                 var direction = random.Next(0, 1);
 
                 if (direction == 0)
@@ -399,16 +399,16 @@ namespace rubix_solver
             };
         }
 
-        public Block GetCenterBlock(Layer layer)
+        public Block GetCenterBlock(Side side)
         {
-            var face = GetFace(layer);
+            var face = GetFace(side);
             return face[1, 1];
         }
 
-        public List<Block> GetMiddleLayer(Layer layer)
+        public List<Block> GetMiddleLayer(Side side)
         {
-            var face = GetFace(layer);
-            if (layer == Layer.Left || layer == Layer.Right)
+            var face = GetFace(side);
+            if (side == Side.Left || side == Side.Right)
             {
                 return new List<Block> {face[0, 1], face[1, 1], face[2, 1]};
             }

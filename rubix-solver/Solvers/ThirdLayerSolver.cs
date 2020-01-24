@@ -25,7 +25,7 @@ namespace rubix_solver.Solvers
         {
             while (!YellowCrossShowing())
             {
-                var face = _cube.GetFace(Layer.Back);
+                var face = _cube.GetFace(Side.Back);
                 var crossBlocks = new Dictionary<(int, int), Block>
                 {
                     {(0, 1), face[0, 1]},
@@ -38,41 +38,41 @@ namespace rubix_solver.Solvers
                 if (crossBlocks.Values.Count(f => f.Back == Colour.Yellow) < 3)
                 {
                     // Any rotation is fine here (providing the face matches the side)
-                    PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                    PerformFruRufRotations(Side.Right, Side.Bottom);
                 }
                 else
                 {
                     if (face[0, 1].Back == Colour.Yellow && face[1, 2].Back == Colour.Yellow &&
                         face[1, 1].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                        PerformFruRufRotations(Side.Right, Side.Bottom);
                     }
                     else if (face[0, 1].Back == Colour.Yellow && face[1, 0].Back == Colour.Yellow &&
                              face[1, 1].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Bottom, Layer.Left);
+                        PerformFruRufRotations(Side.Bottom, Side.Left);
                     }
                     else if (face[1, 2].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
                              face[1, 1].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Top, Layer.Right);
+                        PerformFruRufRotations(Side.Top, Side.Right);
                     }
                     else if (face[1, 0].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
                              face[1, 1].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Left, Layer.Top);
+                        PerformFruRufRotations(Side.Left, Side.Top);
                     }
                     else if (face[0, 1].Back == Colour.Yellow &&
                              face[1, 1].Back == Colour.Yellow &&
                              face[2, 1].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Right, Layer.Bottom);
+                        PerformFruRufRotations(Side.Right, Side.Bottom);
                     }
                     else if (face[1, 0].Back == Colour.Yellow &&
                              face[1, 1].Back == Colour.Yellow &&
                              face[1, 2].Back == Colour.Yellow)
                     {
-                        PerformFruRufRotations(Layer.Bottom, Layer.Left);
+                        PerformFruRufRotations(Side.Bottom, Side.Left);
                     }
                 }
             }
@@ -98,10 +98,10 @@ namespace rubix_solver.Solvers
                     {
                         var sideToRotate = firstIncorrectEdge.index switch
                         {
-                            (0, 1) => Layer.Right,
-                            (1, 2) => Layer.Top,
-                            (2, 1) => Layer.Left,
-                            (1, 0) => Layer.Bottom,
+                            (0, 1) => Side.Right,
+                            (1, 2) => Side.Top,
+                            (2, 1) => Side.Left,
+                            (1, 0) => Side.Bottom,
                             _ => throw new Exception("The selected block is not a middle edge")
                         };
 
@@ -111,10 +111,10 @@ namespace rubix_solver.Solvers
                     {
                         var sideToRotate = firstIncorrectEdge.index switch
                         {
-                            (0, 1) => Layer.Bottom,
-                            (1, 2) => Layer.Right,
-                            (2, 1) => Layer.Top,
-                            (1, 0) => Layer.Left,
+                            (0, 1) => Side.Bottom,
+                            (1, 2) => Side.Right,
+                            (2, 1) => Side.Top,
+                            (1, 0) => Side.Left,
                             _ => throw new Exception("The selected block is not a middle edge")
                         };
 
@@ -126,15 +126,15 @@ namespace rubix_solver.Solvers
                         {
                             case (0, 1):
                             case (2, 1):
-                                PerformRuRuRuuRuRotation(Layer.Bottom);
-                                PerformRuRuRuuRuRotation(Layer.Left);
-                                PerformRuRuRuuRuRotation(Layer.Bottom);
+                                PerformRuRuRuuRuRotation(Side.Bottom);
+                                PerformRuRuRuuRuRotation(Side.Left);
+                                PerformRuRuRuuRuRotation(Side.Bottom);
                                 break;
                             case (1, 2):
                             case (1, 0):
-                                PerformRuRuRuuRuRotation(Layer.Right);
-                                PerformRuRuRuuRuRotation(Layer.Bottom);
-                                PerformRuRuRuuRuRotation(Layer.Right);
+                                PerformRuRuRuuRuRotation(Side.Right);
+                                PerformRuRuRuuRuRotation(Side.Bottom);
+                                PerformRuRuRuuRuRotation(Side.Right);
                                 break;
                         }
                     }
@@ -144,10 +144,10 @@ namespace rubix_solver.Solvers
                     var correctEdge = middleEdges.First(b => b.isCorrect);
                     var sideToRotate = correctEdge.index switch
                     {
-                        (0, 1) => Layer.Left,
-                        (1, 2) => Layer.Bottom,
-                        (2, 1) => Layer.Right,
-                        (1, 0) => Layer.Top,
+                        (0, 1) => Side.Left,
+                        (1, 2) => Side.Bottom,
+                        (2, 1) => Side.Right,
+                        (1, 0) => Side.Top,
                         _ => throw new Exception("The selected block is not a middle edge")
                     };
 
@@ -155,7 +155,7 @@ namespace rubix_solver.Solvers
                 }
                 else
                 {
-                    _cube.RotateClockwise(Layer.Back);
+                    _cube.RotateClockwise(Side.Back);
                 }
             }
         }
@@ -174,7 +174,7 @@ namespace rubix_solver.Solvers
             {
                 if (GetIncorrectlyPositionedCornerBlocks().Count == 4)
                 {
-                    PerformUrulRotations(Layer.Top, Layer.Bottom);
+                    PerformUrulRotations(Side.Top, Side.Bottom);
                 }
 
                 if (GetIncorrectlyPositionedCornerBlocks().Count == 3)
@@ -184,22 +184,22 @@ namespace rubix_solver.Solvers
                     {
                         case (0, 0):
                         {
-                            PerformUrulRotations(Layer.Right, Layer.Left);
+                            PerformUrulRotations(Side.Right, Side.Left);
                             break;
                         }
                         case (0, 2):
                         {
-                            PerformUrulRotations(Layer.Top, Layer.Bottom);
+                            PerformUrulRotations(Side.Top, Side.Bottom);
                             break;
                         }
                         case (2, 0):
                         {
-                            PerformUrulRotations(Layer.Bottom, Layer.Top);
+                            PerformUrulRotations(Side.Bottom, Side.Top);
                             break;
                         }
                         case (2, 2):
                         {
-                            PerformUrulRotations(Layer.Left, Layer.Right);
+                            PerformUrulRotations(Side.Left, Side.Right);
                             break;
                         }
                         default:
@@ -228,19 +228,19 @@ namespace rubix_solver.Solvers
 
             while (!RubixCubeStatusEvaluator.IsSolved(_cube))
             {
-                var currentFace = _cube.GetFace(Layer.Back);
+                var currentFace = _cube.GetFace(Side.Back);
                 if (currentFace[x, y].Back == Colour.Yellow)
                 {
-                    _cube.RotateClockwise(Layer.Back);
+                    _cube.RotateClockwise(Side.Back);
                 }
                 else
                 {
                     var sideToRotate = (x, y) switch
                     {
-                        (0, 0) => Layer.Right,
-                        (0, 2) => Layer.Top,
-                        (2, 0) => Layer.Bottom,
-                        (2, 2) => Layer.Left,
+                        (0, 0) => Side.Right,
+                        (0, 2) => Side.Top,
+                        (2, 0) => Side.Bottom,
+                        (2, 2) => Side.Left,
                         _ => throw new Exception(
                             $"Can't correct corner orientation in the third layer as it is not a corner piece: ({x}, {y})")
                     };
@@ -250,57 +250,57 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void PerformFruRufRotations(Layer face, Layer side)
+        private void PerformFruRufRotations(Side face, Side side)
         {
             _cube.RotateClockwise(face);
             _cube.RotateClockwise(side);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
 
             _cube.RotateAntiClockwise(side);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(face);
         }
 
-        private void PerformRuRuRuuRuRotation(Layer sideToRotate)
+        private void PerformRuRuRuuRuRotation(Side sideToRotate)
         {
             _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
 
             _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
 
             _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
+            _cube.RotateClockwise(Side.Back);
 
             _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
         }
 
-        private void PerformUrulRotations(Layer rightSide, Layer leftSide)
+        private void PerformUrulRotations(Side rightSide, Side leftSide)
         {
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(rightSide);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(leftSide);
 
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateAntiClockwise(rightSide);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateClockwise(leftSide);
         }
 
-        private void PerformRdrdRotations(Layer sideToRotate)
+        private void PerformRdrdRotations(Side sideToRotate)
         {
             _cube.RotateAntiClockwise(sideToRotate);
-            _cube.RotateAntiClockwise(Layer.Front);
+            _cube.RotateAntiClockwise(Side.Front);
             _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Layer.Front);
+            _cube.RotateClockwise(Side.Front);
         }
 
         private Dictionary<(int, int), Block> GetCornerBlocks()
         {
-            var face = _cube.GetFace(Layer.Back);
+            var face = _cube.GetFace(Side.Back);
             return new Dictionary<(int, int), Block>
             {
                 {(0, 0), face[0, 0]},
@@ -362,7 +362,7 @@ namespace rubix_solver.Solvers
 
         private LinkedList<(bool isCorrect, Block, (int, int) index)> GetMiddleEdges()
         {
-            var face = _cube.GetFace(Layer.Back);
+            var face = _cube.GetFace(Side.Back);
 
             var middleEdges = new LinkedList<(bool isCorrect, Block, (int, int) index)>();
             middleEdges.AddLast((face[0, 1].Top == Colour.Green, face[0, 1], (0, 1)));
@@ -374,7 +374,7 @@ namespace rubix_solver.Solvers
 
         private bool MiddleEdgesAreSolved()
         {
-            var face = _cube.GetFace(Layer.Back);
+            var face = _cube.GetFace(Side.Back);
             return YellowCrossShowing() &&
                    face[0, 1].Top == Colour.Green &&
                    face[1, 2].Left == Colour.Red &&
@@ -384,7 +384,7 @@ namespace rubix_solver.Solvers
 
         private bool YellowCrossShowing()
         {
-            var face = _cube.GetFace(Layer.Back);
+            var face = _cube.GetFace(Side.Back);
             return face[0, 1].Back == Colour.Yellow &&
                    face[1, 2].Back == Colour.Yellow &&
                    face[2, 1].Back == Colour.Yellow &&

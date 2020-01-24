@@ -21,44 +21,44 @@ namespace rubix_solver.Solvers
                 {
                     if (_cube.Cube[1, 0, 0].Top != Colour.Yellow && _cube.Cube[1, 0, 0].Left != Colour.Yellow)
                     {
-                        PerformRightSwitch(Layer.Left, Layer.Top);
+                        PerformRightSwitch(Side.Left, Side.Top);
                     }
                     
                     if (_cube.Cube[1, 0, 2].Top != Colour.Yellow && _cube.Cube[1, 0, 2].Right != Colour.Yellow)
                     {
-                        PerformRightSwitch(Layer.Top, Layer.Right);
+                        PerformRightSwitch(Side.Top, Side.Right);
                     }
                     
                     if (_cube.Cube[1, 2, 0].Bottom != Colour.Yellow && _cube.Cube[1, 2, 0].Left != Colour.Yellow)
                     {
-                        PerformRightSwitch(Layer.Bottom, Layer.Left);
+                        PerformRightSwitch(Side.Bottom, Side.Left);
                     }
                     
                     if (_cube.Cube[1, 2, 2].Bottom != Colour.Yellow && _cube.Cube[1, 2, 2].Right != Colour.Yellow)
                     {
-                        PerformRightSwitch(Layer.Right, Layer.Bottom);
+                        PerformRightSwitch(Side.Right, Side.Bottom);
                     }
                 }
 
                 while (!MiddleEdgeIsCorrectlyPositioned(_cube.Cube))
                 {
-                    _cube.RotateClockwise(Layer.Back);
+                    _cube.RotateClockwise(Side.Back);
                 }
 
                 var (face, targetFace) = GetCorrectlyPositionedMiddleEdge(_cube.Cube);
                 {
-                    if (face == Layer.Top && targetFace == Layer.Left ||
-                        face == Layer.Left && targetFace == Layer.Bottom ||
-                        face == Layer.Bottom && targetFace == Layer.Right ||
-                        face == Layer.Right && targetFace == Layer.Top)
+                    if (face == Side.Top && targetFace == Side.Left ||
+                        face == Side.Left && targetFace == Side.Bottom ||
+                        face == Side.Bottom && targetFace == Side.Right ||
+                        face == Side.Right && targetFace == Side.Top)
                     {
                         PerformLeftSwitch(face, targetFace);
                     }
 
-                    if (face == Layer.Top && targetFace == Layer.Right ||
-                        face == Layer.Right && targetFace == Layer.Bottom ||
-                        face == Layer.Bottom && targetFace == Layer.Left ||
-                        face == Layer.Left && targetFace == Layer.Top)
+                    if (face == Side.Top && targetFace == Side.Right ||
+                        face == Side.Right && targetFace == Side.Bottom ||
+                        face == Side.Bottom && targetFace == Side.Left ||
+                        face == Side.Left && targetFace == Side.Top)
                     {
                         PerformRightSwitch(face, targetFace);
                     }
@@ -66,46 +66,46 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private (Layer face, Layer targetFace) GetCorrectlyPositionedMiddleEdge(Block[,,] cube)
+        private (Side face, Side targetFace) GetCorrectlyPositionedMiddleEdge(Block[,,] cube)
         {
             if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Red)
             {
-                return (Layer.Top, Layer.Left);
+                return (Side.Top, Side.Left);
             } 
             
             if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Orange)
             {
-                return (Layer.Top, Layer.Right);
+                return (Side.Top, Side.Right);
             } 
             
             if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Green)
             {
-                return (Layer.Left, Layer.Top);
+                return (Side.Left, Side.Top);
             } 
             
             if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Blue)
             {
-                return (Layer.Left, Layer.Bottom);
+                return (Side.Left, Side.Bottom);
             } 
             
             if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Green)
             {
-                return (Layer.Right, Layer.Top);
+                return (Side.Right, Side.Top);
             } 
             
             if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Blue)
             {
-                return (Layer.Right, Layer.Bottom);
+                return (Side.Right, Side.Bottom);
             } 
             
             if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Red)
             {
-                return (Layer.Bottom, Layer.Left);
+                return (Side.Bottom, Side.Left);
             } 
             
             if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange)
             {
-                return (Layer.Bottom, Layer.Right);
+                return (Side.Bottom, Side.Right);
             }
             
             throw new Exception("There are no matching middle edges but there should be...");
@@ -166,7 +166,7 @@ namespace rubix_solver.Solvers
 
         private Dictionary<(int, int), Block> GetMiddleEdges()
         {
-            var face = _cube.GetFace(Layer.Back);
+            var face = _cube.GetFace(Side.Back);
             return new Dictionary<(int, int), Block>
             {
                 {(0, 1), face[0, 1]}, 
@@ -176,27 +176,27 @@ namespace rubix_solver.Solvers
             };
         }
 
-        public void PerformLeftSwitch(Layer face, Layer side)
+        public void PerformLeftSwitch(Side face, Side side)
         {
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(side);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(side);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(face);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(face);
         }
 
-        public void PerformRightSwitch(Layer face, Layer side)
+        public void PerformRightSwitch(Side face, Side side)
         {
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(side);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(side);
-            _cube.RotateAntiClockwise(Layer.Back);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(face);
-            _cube.RotateClockwise(Layer.Back);
+            _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(face);
         }
     }

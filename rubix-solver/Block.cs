@@ -47,36 +47,36 @@ namespace rubix_solver
                    Back == colour;
         }
 
-        public Layer? GetLayer(Colour colour)
+        public Side? GetLayer(Colour colour)
         {
             if (Left == colour)
             {
-                return Layer.Left;
+                return Side.Left;
             }
 
             if (Right == colour)
             {
-                return Layer.Right;
+                return Side.Right;
             }
             
             if (Top == colour)
             {
-                return Layer.Top;
+                return Side.Top;
             }
 
             if (Bottom == colour)
             {
-                return Layer.Bottom;
+                return Side.Bottom;
             }
             
             if (Front == colour)
             {
-                return Layer.Front;
+                return Side.Front;
             }
 
             if (Back == colour)
             {
-                return Layer.Back;
+                return Side.Back;
             }
 
             return null;

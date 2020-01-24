@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using rubix_solver.Solvers;
 
@@ -402,6 +403,16 @@ namespace rubix_solver
         {
             var face = GetFace(layer);
             return face[1, 1];
+        }
+
+        public List<Block> GetMiddleLayer(Layer layer)
+        {
+            var face = GetFace(layer);
+            if (layer == Layer.Left || layer == Layer.Right)
+            {
+                return new List<Block> {face[0, 1], face[1, 1], face[2, 1]};
+            }
+            return new List<Block> {face[1, 0], face[1, 1], face[1, 2]};
         }
     }
 }

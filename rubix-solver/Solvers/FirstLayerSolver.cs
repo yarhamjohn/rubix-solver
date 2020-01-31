@@ -922,53 +922,99 @@ namespace rubix_solver.Solvers
         private List<Edge> GetMiddleEdges()
         {
             var edges = new List<Edge>();
-            var front = _cube.GetFace(Side.Front);
-            edges.AddRange(new List<Edge>
-            {
-                new Edge(Side.Front, Side.Top, front[0, 1]),
-                new Edge(Side.Front, Side.Left, front[1, 0]),
-                new Edge(Side.Front, Side.Right, front[1, 2]),
-                new Edge(Side.Front, Side.Bottom, front[2, 1])
-            });
+            edges.AddRange(_cube.GetFrontEdgeBlocks());
+            edges.AddRange(_cube.GetBackEdgeBlocks());
+            edges.AddRange(_cube.GetSideEdgeBlocks(Side.Left));
+            edges.AddRange(_cube.GetSideEdgeBlocks(Side.Right));
 
-            var back = _cube.GetFace(Side.Back);
-            edges.AddRange(new List<Edge>
-            {
-                new Edge(Side.Back, Side.Top, back[0, 1]),
-                new Edge(Side.Back, Side.Right, back[1, 0]),
-                new Edge(Side.Back, Side.Left, back[1, 2]),
-                new Edge(Side.Back, Side.Bottom, back[2, 1])
-            });
-            
-            var left = _cube.GetFace(Side.Left);
-            edges.AddRange(new List<Edge>
-            {
-                new Edge(Side.Left, Side.Top, left[0, 1]),
-                new Edge(Side.Left, Side.Bottom, left[2, 1])
-            });
-            
-            var right = _cube.GetFace(Side.Right);
-            edges.AddRange(new List<Edge>
-            {
-                new Edge(Side.Right, Side.Top, right[0, 1]),
-                new Edge(Side.Right, Side.Bottom, right[2, 1])
-            });
-
-            return edges.Where(e => e.Block.HasColour(Colour.White)).ToList();
+            return edges.Distinct().Where(e => e.Block.HasColour(Colour.White)).ToList();
         }
     }
 
-    public class Edge
+    public abstract class Edge
     {
         public Side SideOne { get; }
-        public Side SideTwo { get; }
+        public abstract Side SideTwo { get; set; }
         public Block Block { get; }
 
-        public Edge(Side sideOne, Side sideTwo, Block block)
+        protected Edge(Side sideOne, Block block)
         {
             SideOne = sideOne;
-            SideTwo = sideTwo;
             Block = block;
+        }
+    }
+
+    public class FrontEdge : Edge
+    {
+        public sealed override Side SideTwo { get; set; }
+
+        public FrontEdge((int x, int y) coordinates, Block block) : base(Side.Front, block)
+        {
+            SideTwo = coordinates switch
+            {
+                (0, 1) => Side.Top,
+                (1, 0) => Side.Left,
+                (1, 2) => Side.Right,
+                (2, 1) => Side.Bottom,
+                _ => throw new ArgumentException($"Not a valid edge coordinate: {coordinates}")
+            };
+        }
+    }
+
+    public class BackEdge : Edge
+    {
+        public sealed override Side SideTwo { get; set; }
+
+        public BackEdge((int x, int y) coordinates, Block block) : base(Side.Back, block)
+        {
+            SideTwo = coordinates switch
+            {
+                (0, 1) => Side.Top,
+                (1, 0) => Side.Right,
+                (1, 2) => Side.Left,
+                (2, 1) => Side.Bottom,
+                _ => throw new ArgumentException($"Not a valid edge coordinate: {coordinates}")
+            };
+        }
+    }
+
+    public class SideEdge : Edge
+    {
+        public sealed override Side SideTwo { get; set; }
+
+        public SideEdge(Side sideOne, (int x, int y) coordinates, Block block) : base(sideOne, block)
+        {
+            SideTwo = coordinates switch
+            {
+                (0, 1) => Side.Top,
+                (1, 0) => Side.Right,
+                (1, 2) => Side.Left,
+                (2, 1) => Side.Bottom,
+                _ => throw new ArgumentException($"Not a valid edge coordinate: {coordinates}")
+            };
+        }
+    }
+
+    public static class EdgeBuilder
+    {
+        public static Edge Build((int x, int y) coordinates, Block block, Side side)
+        {
+            if (side == Side.Front)
+            {
+                return new FrontEdge(coordinates, block);
+            }
+
+            if (side == Side.Back)
+            {
+                return new BackEdge(coordinates, block);
+            }
+
+            if (side == Side.Left || side == Side.Right)
+            {
+                return new SideEdge(side, coordinates, block);
+            }
+
+            throw new ArgumentException($"Not a valid side: {side}");
         }
     }
 }

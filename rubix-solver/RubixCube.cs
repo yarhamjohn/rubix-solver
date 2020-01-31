@@ -459,7 +459,34 @@ namespace rubix_solver
                 CornerBuilder.Build((0, 0), face[0, 0], side),
                 CornerBuilder.Build((0, 2), face[0, 2], side),
                 CornerBuilder.Build((2, 0), face[2, 0], side),
-                CornerBuilder.Build((2, 2), face[2, 2], side),
+                CornerBuilder.Build((2, 2), face[2, 2], side)
+            };
+        }
+
+        public IEnumerable<FrontEdge> GetFrontEdgeBlocks()
+        {
+            return GetEdgeBlocks(Side.Front).Select(x => (FrontEdge) x);
+        }
+
+        public IEnumerable<BackEdge> GetBackEdgeBlocks()
+        {
+            return GetEdgeBlocks(Side.Back).Select(x => (BackEdge) x);
+        }
+
+        public IEnumerable<SideEdge> GetSideEdgeBlocks(Side side)
+        {
+            return GetEdgeBlocks(side).Select(x => (SideEdge) x);
+        }
+
+        private IEnumerable<Edge> GetEdgeBlocks(Side side)
+        {
+            var face = GetFace(side);
+            return new List<Edge>
+            {
+                EdgeBuilder.Build((0, 1), face[0, 1], side),
+                EdgeBuilder.Build((1, 0), face[1, 0], side),
+                EdgeBuilder.Build((1, 2), face[1, 2], side),
+                EdgeBuilder.Build((2, 1), face[2, 1], side)
             };
         }
     }

@@ -2,6 +2,14 @@ using System;
 
 namespace rubix_solver.Solvers
 {
+    public enum CornerLocation
+    {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
+    }
+
     public abstract class Corner
     {
         public Block Block { get; }

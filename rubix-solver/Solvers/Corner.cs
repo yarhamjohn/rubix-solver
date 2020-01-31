@@ -114,7 +114,7 @@ namespace rubix_solver.Solvers
         {
             return side switch
             {
-                Side.Front => (Corner) new FrontCorner(coordinates, block),
+                Side.Front => new FrontCorner(coordinates, block),
                 Side.Back => new BackCorner(coordinates, block),
                 _ => throw new ArgumentException(
                     $"Corners can only be on either the front or back sides, not side: {side}")

@@ -90,7 +90,7 @@ namespace rubix_solver
             return face.Select(block => IsCorrectColour(side, block)).All(correctColour => correctColour);
         }
 
-        private static bool IsCorrectColour(Side side, Block block)
+        public static bool IsCorrectColour(Side side, Block block)
         {
             return side switch
             {

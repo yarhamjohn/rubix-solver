@@ -441,15 +441,15 @@ namespace rubix_solver
             };
         }
 
-        public List<((int x, int y), Block)> GetCornerBlocks(Side side)
+        public List<Corner> GetCornerBlocks(Side side)
         {
             var face = GetFace(side);
-            return new List<((int x, int y), Block)>
+            return new List<Corner>
             {
-                ((0, 0), face[0, 0]),
-                ((0, 2), face[0, 2]),
-                ((2, 0), face[2, 0]),
-                ((2, 2), face[2, 2])
+                new Corner((0, 0), face[0, 0]),
+                new Corner((0, 2), face[0, 2]),
+                new Corner((2, 0), face[2, 0]),
+                new Corner((2, 2), face[2, 2])
             };
         }
     }

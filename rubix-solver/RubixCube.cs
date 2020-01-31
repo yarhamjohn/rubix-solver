@@ -473,7 +473,7 @@ namespace rubix_solver
             return GetEdgeBlocks(Side.Back).Select(x => (BackEdge) x);
         }
 
-        public IEnumerable<SideEdge> GetSideEdgeBlocks(Side side)
+        public IEnumerable<SideEdge> GetSideEdgeBlocks()
         {
             var left = GetFace(Side.Left);
             var right = GetFace(Side.Right);

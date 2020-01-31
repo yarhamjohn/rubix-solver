@@ -329,14 +329,14 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
             {
-                var frontCorners = _cube.GetCornerBlocks(Side.Front).Where(c => !c.IsCorrectlyPositioned()).ToList();
+                var frontCorners = _cube.GetFrontCornerBlocks().Where(c => !c.IsCorrectlyPositioned()).ToList();
                 if (frontCorners.Any())
                 {
                     var corner = frontCorners.First();
                     RotateToBack(corner);
                 }
 
-                var backCorners = _cube.GetCornerBlocks(Side.Back).Where(c => c.IsCorrectlyPositioned()).ToList();
+                var backCorners = _cube.GetBackCornerBlocks().Where(c => c.IsCorrectlyPositioned()).ToList();
                 if (backCorners.Any())
                 {
                     var corner = backCorners.First();
@@ -349,93 +349,39 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void RotateToBack(Corner corner)
+        private void RotateToBack(FrontCorner corner)
         {
-            var sideToRotate = corner.Location switch
-            {
-                CornerLocation.TopLeft => Side.Top,
-                CornerLocation.TopRight => Side.Right,
-                CornerLocation.BottomLeft => Side.Left,
-                CornerLocation.BottomRight => Side.Bottom,
-                _ => throw new ArgumentException($"Invalid cornerLocation: {corner.Location}")
-            };
-
-            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(corner.SideToRotate);
             _cube.RotateClockwise(Side.Back);
-            _cube.RotateAntiClockwise(sideToRotate);
+            _cube.RotateAntiClockwise(corner.SideToRotate);
         }
 
-        private void RotateToFront(Corner corner)
+        private void RotateToFront(BackCorner corner)
         {
-            var sideOne = corner.Location switch
+            if (corner.Block.GetLayer(Colour.White) == corner.SideOne)
             {
-                CornerLocation.TopLeft => Side.Top,
-                CornerLocation.TopRight => Side.Left,
-                CornerLocation.BottomLeft => Side.Right,
-                CornerLocation.BottomRight => Side.Bottom,
-                _ => throw new Exception($"Not a valid location {corner.Location}")
-            };
-
-            var sideTwo = corner.Location switch
-            {
-                CornerLocation.TopLeft => Side.Right,
-                CornerLocation.TopRight => Side.Top,
-                CornerLocation.BottomLeft => Side.Bottom,
-                CornerLocation.BottomRight => Side.Left,
-                _ => throw new Exception($"Not a valid location {corner.Location}")
-            };
-
-            if (corner.Block.GetLayer(Colour.White) == sideOne)
-            {
-                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(corner.SideOne);
                 _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(sideOne);
+                _cube.RotateClockwise(corner.SideOne);
             }
-            else if (corner.Block.GetLayer(Colour.White) == sideTwo)
+            else if (corner.Block.GetLayer(Colour.White) == corner.SideTwo)
             {
-                _cube.RotateClockwise(sideTwo);
+                _cube.RotateClockwise(corner.SideTwo);
                 _cube.RotateClockwise(Side.Back);
-                _cube.RotateAntiClockwise(sideTwo);
+                _cube.RotateAntiClockwise(corner.SideTwo);
             }
             else
             {
-                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(corner.SideOne);
                 _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(sideOne);
-                _cube.RotateClockwise(sideTwo);
+                _cube.RotateClockwise(corner.SideOne);
+                _cube.RotateClockwise(corner.SideTwo);
                 _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateAntiClockwise(sideTwo);
-                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(corner.SideTwo);
+                _cube.RotateAntiClockwise(corner.SideOne);
                 _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(sideOne);
+                _cube.RotateClockwise(corner.SideOne);
             }
-        }
-
-        private void RotateToFrontThree(Side sideOne, Side sideTwo)
-        {
-            _cube.RotateAntiClockwise(sideOne);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateClockwise(sideOne);
-            _cube.RotateClockwise(sideTwo);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateAntiClockwise(sideTwo);
-            _cube.RotateAntiClockwise(sideOne);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateClockwise(sideOne);
-        }
-
-        private void RotateToFrontTwo(Side side)
-        {
-            _cube.RotateClockwise(side);
-            _cube.RotateClockwise(Side.Back);
-            _cube.RotateAntiClockwise(side);
-        }
-
-        private void RotateToFrontOne(Side side)
-        {
-            _cube.RotateAntiClockwise(side);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateClockwise(side);
         }
 
         private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Side, Side), Block) incorrectMiddleEdge)

@@ -20,20 +20,30 @@ namespace rubix_solver.Solvers
                 _ => throw new ArgumentException($"Not a corner location ({coordinates})")
             };
         }
-
-        public abstract bool IsCorrectlyPositioned();
     }
 
-    public class FrontCorner : Corner
+    public sealed class FrontCorner : Corner
     {
-        public FrontCorner((int x, int y) coordinates, Block block) : base(coordinates, block) {}
+        public Side SideToRotate { get; }
 
-        public override bool IsCorrectlyPositioned()
+        public FrontCorner((int x, int y) coordinates, Block block) : base(coordinates, block)
         {
-            return IsInCorrectFrontCorner() && Block.Front == Colour.White;
+            SideToRotate = Location switch
+            {
+                CornerLocation.TopLeft => Side.Top,
+                CornerLocation.TopRight => Side.Right,
+                CornerLocation.BottomLeft => Side.Left,
+                CornerLocation.BottomRight => Side.Bottom,
+                _ => throw new Exception($"Not a valid location {Location}")
+            };
         }
 
-        private bool IsInCorrectFrontCorner()
+        public bool IsCorrectlyPositioned()
+        {
+            return IsInCorrectCorner() && Block.Front == Colour.White;
+        }
+
+        private bool IsInCorrectCorner()
         {
             return Location switch
             {
@@ -46,16 +56,38 @@ namespace rubix_solver.Solvers
         }
     }
 
-    public class BackCorner : Corner
+    public sealed class BackCorner : Corner
     {
-        public BackCorner((int x, int y) coordinates, Block block) : base(coordinates, block) {}
+        public Side SideOne { get; }
+        public Side SideTwo { get; }
 
-        public override bool IsCorrectlyPositioned()
+        public BackCorner((int x, int y) coordinates, Block block) : base(coordinates, block)
         {
-            return IsInCorrectBackCorner() && Block.HasColour(Colour.White);
+            SideOne = Location switch
+            {
+                CornerLocation.TopLeft => Side.Top,
+                CornerLocation.TopRight => Side.Left,
+                CornerLocation.BottomLeft => Side.Right,
+                CornerLocation.BottomRight => Side.Bottom,
+                _ => throw new Exception($"Not a valid location {Location}")
+            };
+
+            SideTwo = Location switch
+            {
+                CornerLocation.TopLeft => Side.Right,
+                CornerLocation.TopRight => Side.Top,
+                CornerLocation.BottomLeft => Side.Bottom,
+                CornerLocation.BottomRight => Side.Left,
+                _ => throw new Exception($"Not a valid location {Location}")
+            };
         }
 
-        private bool IsInCorrectBackCorner()
+        public bool IsCorrectlyPositioned()
+        {
+            return IsInCorrectCorner() && Block.HasColour(Colour.White);
+        }
+
+        private bool IsInCorrectCorner()
         {
             return Location switch
             {

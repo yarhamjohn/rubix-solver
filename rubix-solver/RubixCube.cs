@@ -441,7 +441,17 @@ namespace rubix_solver
             };
         }
 
-        public List<Corner> GetCornerBlocks(Side side)
+        public IEnumerable<FrontCorner> GetFrontCornerBlocks()
+        {
+            return GetCornerBlocks(Side.Front).Select(x => (FrontCorner) x);
+        }
+
+        public IEnumerable<BackCorner> GetBackCornerBlocks()
+        {
+            return GetCornerBlocks(Side.Back).Select(x => (BackCorner) x);
+        }
+
+        private IEnumerable<Corner> GetCornerBlocks(Side side)
         {
             var face = GetFace(side);
             return new List<Corner>

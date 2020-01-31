@@ -329,40 +329,32 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
             {
-                var frontCorners = GetIncorrectFrontCorners();
+                var frontCorners = GetIncorrectFrontCornersWithWhiteFace();
                 if (frontCorners.Any())
                 {
                     var corner = frontCorners.First();
                     RotateToBack(corner);
                 }
 
-                var incorrectlyPositionedBackCorners = GetIncorrectlyPositionedBackCorners();
-                if (incorrectlyPositionedBackCorners.Any())
-                {
-                    var corner = incorrectlyPositionedBackCorners.First();
-                    RotateToCorrectCorner(corner);
-                }
-
-                var backCorners = GetSolvableBackCornerBlock();
+                var backCorners = GetSolvableBackCorners();
                 if (backCorners.Any())
                 {
                     var corner = backCorners.First();
                     RotateToFront(corner);
                 }
+                else
+                {
+                    _cube.RotateClockwise(Side.Back);
+                }
             }
         }
 
-        private List<Corner> GetIncorrectlyPositionedBackCorners()
-        {
-            return _cube.GetCornerBlocks(Side.Back).Where(c => c.Block.HasColour(Colour.White) && !IsInCorrectCorner(c)).ToList();
-        }
-
-        private List<Corner> GetIncorrectFrontCorners()
+        private List<Corner> GetIncorrectFrontCornersWithWhiteFace()
         {
             return _cube.GetCornerBlocks(Side.Front).Where(c => !c.IsCorrectlyPositioned()).ToList();
         }
 
-        private List<Corner> GetSolvableBackCornerBlock()
+        private List<Corner> GetSolvableBackCorners()
         {
             return _cube.GetCornerBlocks(Side.Back).Where(c => c.Block.HasColour(Colour.White) && IsInCorrectCorner(c)).ToList();
         }
@@ -967,97 +959,6 @@ namespace rubix_solver.Solvers
             });
 
             return edges.Where(e => e.Item2.HasColour(Colour.White)).ToList();
-        }
-
-        private void RotateToCorrectCorner(Corner corner)
-        {
-            if (corner.Location == CornerLocation.TopLeft) // Green and Orange
-            {
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateAntiClockwise(Side.Back);
-                    corner = new Corner((2, 0), _cube.GetFace(Side.Back)[2, 0]);
-                }
-
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((2, 2), _cube.GetFace(Side.Back)[2, 2]);
-                }
-
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((0, 2), _cube.GetFace(Side.Back)[0, 2]);
-                }
-            }
-
-            if (corner.Location == CornerLocation.TopRight) // Green and Red
-            {
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((2, 2), _cube.GetFace(Side.Back)[2, 2]);
-                }
-
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateAntiClockwise(Side.Back);
-                    corner = new Corner((0, 0), _cube.GetFace(Side.Back)[0, 0]);
-                }
-
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((2, 0), _cube.GetFace(Side.Back)[2, 0]);
-                }
-            }
-
-            if (corner.Location == CornerLocation.BottomLeft) // Blue and Orange
-            {
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateAntiClockwise(Side.Back);
-                    corner = new Corner((2, 2), _cube.GetFace(Side.Back)[2, 2]);
-                }
-
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((0, 0), _cube.GetFace(Side.Back)[0, 0]);
-                }
-
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((0, 2), _cube.GetFace(Side.Back)[0, 2]);
-                }
-            }
-
-            if (corner.Location == CornerLocation.BottomRight) // Blue and Red
-            {
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((0, 0), _cube.GetFace(Side.Back)[0, 0]);
-                }
-
-                if (corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Red))
-                {
-                    _cube.RotateAntiClockwise(Side.Back);
-                    corner = new Corner((0, 2), _cube.GetFace(Side.Back)[0, 2]);
-                }
-
-                if (corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Orange))
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    corner = new Corner((2, 0), _cube.GetFace(Side.Back)[2, 0]);
-                }
-            }
         }
 
         private void RotateToFront(Corner corner)

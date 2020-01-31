@@ -365,6 +365,67 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(sideToRotate);
         }
 
+        private void RotateToFront(Corner corner)
+        {
+            var sideOne = corner.Location switch
+            {
+                CornerLocation.TopLeft => Side.Top,
+                CornerLocation.TopRight => Side.Left,
+                CornerLocation.BottomLeft => Side.Right,
+                CornerLocation.BottomRight => Side.Bottom,
+                _ => throw new Exception($"Not a valid location {corner.Location}")
+            };
+
+            var sideTwo = corner.Location switch
+            {
+                CornerLocation.TopLeft => Side.Right,
+                CornerLocation.TopRight => Side.Top,
+                CornerLocation.BottomLeft => Side.Bottom,
+                CornerLocation.BottomRight => Side.Left,
+                _ => throw new Exception($"Not a valid location {corner.Location}")
+            };
+
+            if (corner.Block.GetLayer(Colour.White) == sideOne)
+            {
+                RotateToFrontOne(sideOne);
+            }
+            else if (corner.Block.GetLayer(Colour.White) == sideTwo)
+            {
+                RotateToFrontTwo(sideTwo);
+            }
+            else
+            {
+                RotateToFrontThree(sideOne, sideTwo);
+            }
+        }
+
+        private void RotateToFrontThree(Side sideOne, Side sideTwo)
+        {
+            _cube.RotateAntiClockwise(sideOne);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateClockwise(sideOne);
+            _cube.RotateClockwise(sideTwo);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateAntiClockwise(sideTwo);
+            _cube.RotateAntiClockwise(sideOne);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateClockwise(sideOne);
+        }
+
+        private void RotateToFrontTwo(Side side)
+        {
+            _cube.RotateClockwise(side);
+            _cube.RotateClockwise(Side.Back);
+            _cube.RotateAntiClockwise(side);
+        }
+
+        private void RotateToFrontOne(Side side)
+        {
+            _cube.RotateAntiClockwise(side);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateClockwise(side);
+        }
+
         private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Side, Side), Block) incorrectMiddleEdge)
         {
             var nonBackLayer = incorrectMiddleEdge.Item1.Item1 == Side.Back
@@ -936,121 +997,6 @@ namespace rubix_solver.Solvers
             });
 
             return edges.Where(e => e.Item2.HasColour(Colour.White)).ToList();
-        }
-
-        private void RotateToFront(Corner corner)
-        {
-            if (corner.Location == CornerLocation.TopLeft)
-            {
-                if (corner.Block.Top == Colour.White)
-                {
-                    _cube.RotateAntiClockwise(Side.Top);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Top);
-                }
-                else if (corner.Block.Right == Colour.White)
-                {
-                    _cube.RotateClockwise(Side.Right);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Right);
-                }
-                else
-                {
-                    _cube.RotateAntiClockwise(Side.Top);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Top);
-                    _cube.RotateClockwise(Side.Right);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Right);
-                    _cube.RotateAntiClockwise(Side.Top);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Top);
-                }
-            }
-
-            if (corner.Location == CornerLocation.TopRight)
-            {
-                if (corner.Block.Left == Colour.White)
-                {
-                    _cube.RotateAntiClockwise(Side.Left);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Left);
-                }
-                else if (corner.Block.Top == Colour.White)
-                {
-                    _cube.RotateClockwise(Side.Top);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Top);
-                }
-                else
-                {
-                    _cube.RotateAntiClockwise(Side.Left);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Left);
-                    _cube.RotateClockwise(Side.Top);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Top);
-                    _cube.RotateAntiClockwise(Side.Left);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Left);
-                }
-            }
-
-            if (corner.Location == CornerLocation.BottomLeft)
-            {
-                if (corner.Block.Right == Colour.White)
-                {
-                    _cube.RotateAntiClockwise(Side.Right);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Right);
-                }
-                else if (corner.Block.Bottom == Colour.White)
-                {
-                    _cube.RotateClockwise(Side.Bottom);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                }
-                else
-                {
-                    _cube.RotateAntiClockwise(Side.Right);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Right);
-                    _cube.RotateClockwise(Side.Bottom);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                    _cube.RotateAntiClockwise(Side.Right);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Right);
-                }
-            }
-
-            if (corner.Location == CornerLocation.BottomRight)
-            {
-                if (corner.Block.Bottom == Colour.White)
-                {
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Bottom);
-                }
-                else if (corner.Block.Left == Colour.White)
-                {
-                    _cube.RotateClockwise(Side.Left);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Left);
-                }
-                else
-                {
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Bottom);
-                    _cube.RotateClockwise(Side.Left);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Left);
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                    _cube.RotateAntiClockwise(Side.Back);
-                    _cube.RotateClockwise(Side.Bottom);
-                }
-            }
         }
     }
 

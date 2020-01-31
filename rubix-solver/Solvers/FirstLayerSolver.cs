@@ -336,7 +336,7 @@ namespace rubix_solver.Solvers
                     RotateToBack(corner);
                 }
 
-                var backCorners = _cube.GetCornerBlocks(Side.Back).Where(c => c.IsSolvable()).ToList();
+                var backCorners = _cube.GetCornerBlocks(Side.Back).Where(c => c.IsCorrectlyPositioned()).ToList();
                 if (backCorners.Any())
                 {
                     var corner = backCorners.First();
@@ -387,15 +387,27 @@ namespace rubix_solver.Solvers
 
             if (corner.Block.GetLayer(Colour.White) == sideOne)
             {
-                RotateToFrontOne(sideOne);
+                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(sideOne);
             }
             else if (corner.Block.GetLayer(Colour.White) == sideTwo)
             {
-                RotateToFrontTwo(sideTwo);
+                _cube.RotateClockwise(sideTwo);
+                _cube.RotateClockwise(Side.Back);
+                _cube.RotateAntiClockwise(sideTwo);
             }
             else
             {
-                RotateToFrontThree(sideOne, sideTwo);
+                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(sideOne);
+                _cube.RotateClockwise(sideTwo);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateAntiClockwise(sideTwo);
+                _cube.RotateAntiClockwise(sideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(sideOne);
             }
         }
 
@@ -1006,61 +1018,5 @@ namespace rubix_solver.Solvers
         TopRight,
         BottomLeft,
         BottomRight
-    }
-    
-    public class Corner
-    {
-        private readonly Block _block;
-
-        public Block Block => _block;
-
-        public CornerLocation Location { get; }
-
-        public Corner((int x, int y) coordinates, Block block)
-        {
-            _block = block;
-            Location = coordinates switch
-            {
-                (0, 0) => CornerLocation.TopLeft,
-                (0, 2) => CornerLocation.TopRight,
-                (2, 0) => CornerLocation.BottomLeft,
-                (2, 2) => CornerLocation.BottomRight,
-                _ => throw new ArgumentException($"Not a corner location ({coordinates})")
-            };
-        }
-
-        public bool IsCorrectlyPositioned()
-        {
-            return IsInCorrectFrontCorner() && Block.Front == Colour.White;
-        }
-
-        public bool IsSolvable()
-        {
-            return IsInCorrectBackCorner() && Block.HasColour(Colour.White);
-        }
-
-        private bool IsInCorrectFrontCorner()
-        {
-            return Location switch
-            {
-                CornerLocation.TopLeft => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Red),
-                CornerLocation.TopRight => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Orange),
-                CornerLocation.BottomLeft => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Red),
-                CornerLocation.BottomRight => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Orange),
-                _ => throw new Exception("This isn't a corner block...")
-            };
-        }
-
-        private bool IsInCorrectBackCorner()
-        {
-            return Location switch
-            {
-                CornerLocation.TopLeft => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Orange),
-                CornerLocation.TopRight => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Red),
-                CornerLocation.BottomLeft => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Orange),
-                CornerLocation.BottomRight => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Red),
-                _ => throw new Exception("This isn't a corner block...")
-            };
-        }
     }
 }

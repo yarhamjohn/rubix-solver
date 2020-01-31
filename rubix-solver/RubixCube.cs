@@ -446,10 +446,10 @@ namespace rubix_solver
             var face = GetFace(side);
             return new List<Corner>
             {
-                new Corner((0, 0), face[0, 0]),
-                new Corner((0, 2), face[0, 2]),
-                new Corner((2, 0), face[2, 0]),
-                new Corner((2, 2), face[2, 2])
+                CornerBuilder.Build((0, 0), face[0, 0], side),
+                CornerBuilder.Build((0, 2), face[0, 2], side),
+                CornerBuilder.Build((2, 0), face[2, 0], side),
+                CornerBuilder.Build((2, 2), face[2, 2], side),
             };
         }
     }

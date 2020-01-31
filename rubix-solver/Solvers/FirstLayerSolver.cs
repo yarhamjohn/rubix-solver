@@ -329,14 +329,14 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
             {
-                var frontCorners = GetIncorrectFrontCornersWithWhiteFace();
+                var frontCorners = _cube.GetCornerBlocks(Side.Front).Where(c => !c.IsCorrectlyPositioned()).ToList();
                 if (frontCorners.Any())
                 {
                     var corner = frontCorners.First();
                     RotateToBack(corner);
                 }
 
-                var backCorners = GetSolvableBackCorners();
+                var backCorners = _cube.GetCornerBlocks(Side.Back).Where(c => c.IsSolvable()).ToList();
                 if (backCorners.Any())
                 {
                     var corner = backCorners.First();
@@ -349,43 +349,20 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private List<Corner> GetIncorrectFrontCornersWithWhiteFace()
-        {
-            return _cube.GetCornerBlocks(Side.Front).Where(c => !c.IsCorrectlyPositioned()).ToList();
-        }
-
-        private List<Corner> GetSolvableBackCorners()
-        {
-            return _cube.GetCornerBlocks(Side.Back).Where(c => c.Block.HasColour(Colour.White) && IsInCorrectCorner(c)).ToList();
-        }
-
         private void RotateToBack(Corner corner)
         {
-            switch (corner.Location)
+            var sideToRotate = corner.Location switch
             {
-                case CornerLocation.TopLeft:
-                    _cube.RotateClockwise(Side.Top);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Top);
-                    break;
-                case CornerLocation.TopRight:
-                    _cube.RotateClockwise(Side.Right);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Right);
-                    break;
-                case CornerLocation.BottomLeft:
-                    _cube.RotateClockwise(Side.Left);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Left);
-                    break;
-                case CornerLocation.BottomRight:
-                    _cube.RotateClockwise(Side.Bottom);
-                    _cube.RotateClockwise(Side.Back);
-                    _cube.RotateAntiClockwise(Side.Bottom);
-                    break;
-                default:
-                    throw new Exception("Not a corner...");
-            }
+                CornerLocation.TopLeft => Side.Top,
+                CornerLocation.TopRight => Side.Right,
+                CornerLocation.BottomLeft => Side.Left,
+                CornerLocation.BottomRight => Side.Bottom,
+                _ => throw new ArgumentException($"Invalid cornerLocation: {corner.Location}")
+            };
+
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(Side.Back);
+            _cube.RotateAntiClockwise(sideToRotate);
         }
 
         private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(((Side, Side), Block) incorrectMiddleEdge)
@@ -1075,18 +1052,6 @@ namespace rubix_solver.Solvers
                 }
             }
         }
-
-        private static bool IsInCorrectCorner(Corner corner)
-        {
-            return corner.Location switch
-            {
-                CornerLocation.TopLeft => corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Orange),
-                CornerLocation.TopRight => corner.Block.HasColour(Colour.Green) && corner.Block.HasColour(Colour.Red),
-                CornerLocation.BottomLeft => corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Orange),
-                CornerLocation.BottomRight => corner.Block.HasColour(Colour.Blue) && corner.Block.HasColour(Colour.Red),
-                _ => throw new Exception("This isn't a corner block...")
-            };
-        }
     }
 
     public enum CornerLocation
@@ -1099,12 +1064,15 @@ namespace rubix_solver.Solvers
     
     public class Corner
     {
-        public Block Block { get; set; }
-        public CornerLocation Location { get; set; }
+        private readonly Block _block;
+
+        public Block Block => _block;
+
+        public CornerLocation Location { get; }
 
         public Corner((int x, int y) coordinates, Block block)
         {
-            Block = block;
+            _block = block;
             Location = coordinates switch
             {
                 (0, 0) => CornerLocation.TopLeft,
@@ -1117,10 +1085,15 @@ namespace rubix_solver.Solvers
 
         public bool IsCorrectlyPositioned()
         {
-            return IsBetweenCorrectFrontSides() && Block.Front == Colour.White;
+            return IsInCorrectFrontCorner() && Block.Front == Colour.White;
         }
 
-        private bool IsBetweenCorrectFrontSides()
+        public bool IsSolvable()
+        {
+            return IsInCorrectBackCorner() && Block.HasColour(Colour.White);
+        }
+
+        private bool IsInCorrectFrontCorner()
         {
             return Location switch
             {
@@ -1128,6 +1101,18 @@ namespace rubix_solver.Solvers
                 CornerLocation.TopRight => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Orange),
                 CornerLocation.BottomLeft => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Red),
                 CornerLocation.BottomRight => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Orange),
+                _ => throw new Exception("This isn't a corner block...")
+            };
+        }
+
+        private bool IsInCorrectBackCorner()
+        {
+            return Location switch
+            {
+                CornerLocation.TopLeft => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Orange),
+                CornerLocation.TopRight => Block.HasColour(Colour.Green) && Block.HasColour(Colour.Red),
+                CornerLocation.BottomLeft => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Orange),
+                CornerLocation.BottomRight => Block.HasColour(Colour.Blue) && Block.HasColour(Colour.Red),
                 _ => throw new Exception("This isn't a corner block...")
             };
         }

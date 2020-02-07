@@ -497,5 +497,18 @@ namespace rubix_solver
                 EdgeBuilder.Build((2, 1), face[2, 1], side)
             };
         }
+        
+        public Block GetBlock(Block oldBlock)
+        {
+            foreach (var block in Cube)
+            {
+                if (block.HasMatchingColours(oldBlock))
+                {
+                    return block;
+                }
+            }
+            
+            throw new Exception("The provided block was not found in the cube.");
+        }
     }
 }

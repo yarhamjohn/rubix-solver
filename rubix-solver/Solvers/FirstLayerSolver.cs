@@ -48,6 +48,12 @@ namespace rubix_solver.Solvers
 
         private void SolveIncorrectBackEdge(BackEdge incorrectBackEdge)
         {
+            if (BackEdgeIsSolvable(incorrectBackEdge))
+            {
+                _cube.RotateClockwise(incorrectBackEdge.SideTwo);
+                _cube.RotateClockwise(incorrectBackEdge.SideTwo);
+            }
+            
             if (incorrectBackEdge.Block.Back == Colour.White)
             {
                 SolveIncorrectBackEdgeWithWhiteOnBackFace(incorrectBackEdge);
@@ -57,6 +63,16 @@ namespace rubix_solver.Solvers
                 SolveIncorrectBackEdgeWithWhiteFaceNotOnBackFace(incorrectBackEdge);
             }
         }
+
+        private bool BackEdgeIsSolvable(BackEdge edge)
+        {
+            return edge.Block.Back == Colour.White
+                   && edge.SideTwo == Side.Left && edge.Block.GetColour(edge.SideTwo) == Colour.Red
+                   && edge.SideTwo == Side.Right && edge.Block.GetColour(edge.SideTwo) == Colour.Orange
+                   && edge.SideTwo == Side.Top && edge.Block.GetColour(edge.SideTwo) == Colour.Green
+                   && edge.SideTwo == Side.Bottom && edge.Block.GetColour(edge.SideTwo) == Colour.Blue;
+        }
+        
 
         private void SolveIncorrectFrontEdge(FrontEdge incorrectFrontEdge)
         {

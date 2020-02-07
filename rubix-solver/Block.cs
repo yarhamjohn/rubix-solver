@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace rubix_solver
 {
@@ -81,5 +83,61 @@ namespace rubix_solver
 
             return null;
         }
+        
+        public Colour? GetColour(Side side)
+        {
+            if (Side.Left == side)
+            {
+                return Left;
+            }
+
+            if (Side.Right == side)
+            {
+                return Right;
+            }
+            
+            if (Side.Top == side)
+            {
+                return Top;
+            }
+
+            if (Side.Bottom == side)
+            {
+                return Bottom;
+            }
+            
+            if (Side.Front == side)
+            {
+                return Front;
+            }
+
+            if (Side.Back == side)
+            {
+                return Back;
+            }
+
+            return null;
+        }
+        
+        private List<Colour?> GetColours()
+        {
+            return new List<Colour?>
+            {
+                Left,
+                Right,
+                Top,
+                Bottom,
+                Front,
+                Back
+            };
+        }
+
+        public bool HasMatchingColours(Block block)
+        {
+            var colours = GetColours().Where(c => c != null);
+            var blockColours = block.GetColours().Where(c => c != null);
+            return colours.All(c => blockColours.Contains(c));
+        }
+
     }
 }

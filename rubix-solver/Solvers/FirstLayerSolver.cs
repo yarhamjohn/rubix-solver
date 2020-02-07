@@ -27,39 +27,48 @@ namespace rubix_solver.Solvers
                 if (incorrectFrontEdges.Any())
                 {
                     var incorrectFrontEdge = incorrectFrontEdges.First();
-                    if (incorrectFrontEdge.Block.Front == Colour.White)
-                    {
-                        SolveIncorrectEdgeWithWhiteOnFrontFace(incorrectFrontEdge);
-                    }
-                    else
-                    {
-                        SolveIncorrectEdgeWithWhiteNotOnFrontFace(incorrectFrontEdge);
-                    }
+                    SolveIncorrectFrontEdge(incorrectFrontEdge);
                 }
 
                 var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
                 if (incorrectBackEdges.Any())
                 {
                     var incorrectBackEdge = incorrectBackEdges.First();
-                    if (incorrectBackEdge.Block.Back == Colour.White)
-                    {
-                        SolveIncorrectEdgeWithWhiteOnBackFace(incorrectBackEdge);
-                    }
-                    else
-                    {
-                        SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(incorrectBackEdge);
-                    }
+                    SolveIncorrectBackEdge(incorrectBackEdge);
                 }
 
                 var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
                 if (incorrectSideEdges.Any())
                 {
                     var incorrectSideEdge = incorrectSideEdges.First();
-                    SolveIncorrectEdgeWithWhiteFaceOnSide(incorrectSideEdge);
+                    SolveIncorrectMiddleEdge(incorrectSideEdge);
                 }
             }
         }
 
+        private void SolveIncorrectBackEdge(BackEdge incorrectBackEdge)
+        {
+            if (incorrectBackEdge.Block.Back == Colour.White)
+            {
+                SolveIncorrectBackEdgeWithWhiteOnBackFace(incorrectBackEdge);
+            }
+            else
+            {
+                SolveIncorrectBackEdgeWithWhiteFaceNotOnBackFace(incorrectBackEdge);
+            }
+        }
+
+        private void SolveIncorrectFrontEdge(FrontEdge incorrectFrontEdge)
+        {
+            if (incorrectFrontEdge.Block.Front == Colour.White)
+            {
+                SolveIncorrectFrontEdgeWithWhiteOnFrontFace(incorrectFrontEdge);
+            }
+            else
+            {
+                SolveIncorrectFrontEdgeWithWhiteNotOnFrontFace(incorrectFrontEdge);
+            }
+        }
 
         private void SolveCorners()
         {
@@ -120,7 +129,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteFaceNotOnBackFace(Edge incorrectMiddleEdge)
+        private void SolveIncorrectBackEdgeWithWhiteFaceNotOnBackFace(Edge incorrectMiddleEdge)
         {
             var nonBackLayer = incorrectMiddleEdge.SideOne == Side.Back
                 ? incorrectMiddleEdge.SideTwo
@@ -251,7 +260,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteOnBackFace(Edge incorrectMiddleEdge)
+        private void SolveIncorrectBackEdgeWithWhiteOnBackFace(Edge incorrectMiddleEdge)
         {
             var nonBackLayer = incorrectMiddleEdge.SideOne == Side.Back
                 ? incorrectMiddleEdge.SideTwo
@@ -374,7 +383,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteNotOnFrontFace(Edge incorrectMiddleEdge)
+        private void SolveIncorrectFrontEdgeWithWhiteNotOnFrontFace(Edge incorrectMiddleEdge)
         {
             var nonFrontLayer = incorrectMiddleEdge.SideOne == Side.Front
                 ? incorrectMiddleEdge.SideTwo
@@ -505,7 +514,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteOnFrontFace(Edge incorrectMiddleEdge)
+        private void SolveIncorrectFrontEdgeWithWhiteOnFrontFace(Edge incorrectMiddleEdge)
         {
             var nonFrontEdge = incorrectMiddleEdge.SideOne == Side.Front
                 ? incorrectMiddleEdge.SideTwo
@@ -615,7 +624,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectEdgeWithWhiteFaceOnSide(Edge incorrectSideEdge)
+        private void SolveIncorrectMiddleEdge(Edge incorrectSideEdge)
         {
             var whiteFace = incorrectSideEdge.Block.GetLayer(Colour.White);
             if (whiteFace == null)

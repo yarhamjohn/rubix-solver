@@ -140,10 +140,7 @@ namespace rubix_solver.Solvers
                 switch (incorrectMiddleEdge.Block.Back)
                 {
                     case Colour.Red:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Bottom);
+                        SolveIncorrectlyOrientatedBackEdge(nonBackLayer);
                         break;
                     case Colour.Green:
                         _cube.RotateClockwise(Side.Left);
@@ -187,10 +184,7 @@ namespace rubix_solver.Solvers
                         _cube.RotateAntiClockwise(Side.Right);
                         break;
                     case Colour.Orange:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Top);
+                        SolveIncorrectlyOrientatedBackEdge(nonBackLayer);
                         break;
                     default:
                         throw new Exception("Not a valid edge piece");
@@ -207,10 +201,7 @@ namespace rubix_solver.Solvers
                         _cube.RotateClockwise(Side.Top);
                         break;
                     case Colour.Green:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Left);
+                        SolveIncorrectlyOrientatedBackEdge(nonBackLayer);
                         break;
                     case Colour.Blue:
                         _cube.RotateClockwise(Side.Back);
@@ -244,10 +235,7 @@ namespace rubix_solver.Solvers
                         _cube.RotateClockwise(Side.Right);
                         break;
                     case Colour.Blue:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Right);
+                        SolveIncorrectlyOrientatedBackEdge(nonBackLayer);
                         break;
                     case Colour.Orange:
                         _cube.RotateAntiClockwise(Side.Bottom);
@@ -258,6 +246,23 @@ namespace rubix_solver.Solvers
                         throw new Exception("Not a valid edge piece");
                 }
             }
+        }
+
+        private void SolveIncorrectlyOrientatedBackEdge(Side targetSide)
+        {
+            var sideToRotate = targetSide switch
+            {
+                Side.Left => Side.Bottom,
+                Side.Right => Side.Top,
+                Side.Top => Side.Left,
+                Side.Bottom => Side.Right,
+                _ => throw new ArgumentException($"This is not a valid side for a back edge piece: {targetSide}")
+            };
+
+            _cube.RotateClockwise(Side.Back);
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateAntiClockwise(targetSide);
+            _cube.RotateAntiClockwise(sideToRotate);
         }
 
         private void SolveIncorrectBackEdgeWithWhiteOnBackFace(Edge incorrectMiddleEdge)

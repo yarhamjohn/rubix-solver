@@ -52,30 +52,29 @@ namespace rubix_solver.Solvers
             {
                 _cube.RotateClockwise(incorrectBackEdge.SideTwo);
                 _cube.RotateClockwise(incorrectBackEdge.SideTwo);
+                return;
             }
             
             if (incorrectBackEdge.Block.Back == Colour.White)
             {
-                
                 // rotate until solvable
                 SolveIncorrectBackEdgeWithWhiteOnBackFace(incorrectBackEdge);
             }
             else
             {
-                SolveIncorrectBackEdgeWithWhiteFaceNotOnBackFace(incorrectBackEdge);
+                ReOrientateBackEdge(incorrectBackEdge);
             }
         }
 
         private bool BackEdgeIsSolvable(BackEdge edge)
         {
             return edge.Block.Back == Colour.White
-                   && edge.SideTwo == Side.Left && edge.Block.GetColour(edge.SideTwo) == Colour.Red
-                   && edge.SideTwo == Side.Right && edge.Block.GetColour(edge.SideTwo) == Colour.Orange
-                   && edge.SideTwo == Side.Top && edge.Block.GetColour(edge.SideTwo) == Colour.Green
-                   && edge.SideTwo == Side.Bottom && edge.Block.GetColour(edge.SideTwo) == Colour.Blue;
+                   && (edge.SideTwo == Side.Left && edge.Block.GetColour(edge.SideTwo) == Colour.Red
+                   || edge.SideTwo == Side.Right && edge.Block.GetColour(edge.SideTwo) == Colour.Orange
+                   || edge.SideTwo == Side.Top && edge.Block.GetColour(edge.SideTwo) == Colour.Green
+                   || edge.SideTwo == Side.Bottom && edge.Block.GetColour(edge.SideTwo) == Colour.Blue);
         }
         
-
         private void SolveIncorrectFrontEdge(FrontEdge incorrectFrontEdge)
         {
             _cube.RotateClockwise(incorrectFrontEdge.SideTwo);
@@ -141,7 +140,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectBackEdgeWithWhiteFaceNotOnBackFace(BackEdge incorrectBackEdge)
+        private void ReOrientateBackEdge(BackEdge incorrectBackEdge)
         {
             var sideToRotate = incorrectBackEdge.SideTwo switch
             {
@@ -156,23 +155,6 @@ namespace rubix_solver.Solvers
             _cube.RotateClockwise(sideToRotate);
             _cube.RotateClockwise(Side.Back);
             _cube.RotateAntiClockwise(incorrectBackEdge.SideTwo);
-            _cube.RotateAntiClockwise(sideToRotate);
-        }
-
-        private void SolveIncorrectlyOrientatedBackEdge(Side targetSide)
-        {
-            var sideToRotate = targetSide switch
-            {
-                Side.Left => Side.Bottom,
-                Side.Right => Side.Top,
-                Side.Top => Side.Left,
-                Side.Bottom => Side.Right,
-                _ => throw new ArgumentException($"This is not a valid side for a back edge piece: {targetSide}")
-            };
-
-            _cube.RotateClockwise(Side.Back);
-            _cube.RotateClockwise(sideToRotate);
-            _cube.RotateAntiClockwise(targetSide);
             _cube.RotateAntiClockwise(sideToRotate);
         }
 

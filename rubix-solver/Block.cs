@@ -134,9 +134,9 @@ namespace rubix_solver
 
         public bool HasMatchingColours(Block block)
         {
-            var colours = GetColours().Where(c => c != null);
-            var blockColours = block.GetColours().Where(c => c != null);
-            return colours.All(c => blockColours.Contains(c));
+            var colours = GetColours().Where(c => c != null).ToList();
+            var blockColours = block.GetColours().Where(c => c != null).ToList();
+            return colours.All(c => blockColours.Contains(c)) && blockColours.All(c => colours.Contains(c));
         }
 
     }

@@ -48,31 +48,27 @@ namespace rubix_solver.Solvers
 
         private void SolveIncorrectBackEdge(BackEdge incorrectBackEdge)
         {
-            if (BackEdgeIsSolvable(incorrectBackEdge))
-            {
-                _cube.RotateClockwise(incorrectBackEdge.SideTwo);
-                _cube.RotateClockwise(incorrectBackEdge.SideTwo);
-                return;
-            }
-            
-            if (incorrectBackEdge.Block.Back == Colour.White)
-            {
-                // rotate until solvable
-                SolveIncorrectBackEdgeWithWhiteOnBackFace(incorrectBackEdge);
-            }
-            else
-            {
-                ReOrientateBackEdge(incorrectBackEdge);
-            }
-        }
+            var block = incorrectBackEdge.Block;
+            var nonWhiteColour = block.GetColour(incorrectBackEdge.SideTwo) ?? throw new Exception();
 
-        private bool BackEdgeIsSolvable(BackEdge edge)
-        {
-            return edge.Block.Back == Colour.White
-                   && (edge.SideTwo == Side.Left && edge.Block.GetColour(edge.SideTwo) == Colour.Red
-                   || edge.SideTwo == Side.Right && edge.Block.GetColour(edge.SideTwo) == Colour.Orange
-                   || edge.SideTwo == Side.Top && edge.Block.GetColour(edge.SideTwo) == Colour.Green
-                   || edge.SideTwo == Side.Bottom && edge.Block.GetColour(edge.SideTwo) == Colour.Blue);
+            while (!RubixCubeStatusEvaluator.IsCorrectColour(block.GetLayer(nonWhiteColour) ?? throw new Exception(),
+                block))
+            {
+                if (block.Back == Colour.White)
+                {
+                    _cube.RotateClockwise(Side.Back);
+                    block = _cube.GetBlock(incorrectBackEdge.Block);
+                }
+                else
+                {
+                    ReOrientateBackEdge(block.GetLayer(nonWhiteColour) ?? throw new Exception());
+                    block = _cube.GetBlock(incorrectBackEdge.Block);
+                }
+            }
+
+            _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
+            _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
+
         }
         
         private void SolveIncorrectFrontEdge(FrontEdge incorrectFrontEdge)
@@ -140,9 +136,9 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void ReOrientateBackEdge(BackEdge incorrectBackEdge)
+        private void ReOrientateBackEdge(Side side)
         {
-            var sideToRotate = incorrectBackEdge.SideTwo switch
+            var sideToRotate = side switch
             {
                 Side.Left => Side.Top,
                 Side.Top => Side.Right,
@@ -151,134 +147,11 @@ namespace rubix_solver.Solvers
                 _ => throw new Exception("Not a valid side to rotate")
             };
                     
-            _cube.RotateClockwise(incorrectBackEdge.SideTwo);
+            _cube.RotateClockwise(side);
             _cube.RotateClockwise(sideToRotate);
             _cube.RotateClockwise(Side.Back);
-            _cube.RotateAntiClockwise(incorrectBackEdge.SideTwo);
+            _cube.RotateAntiClockwise(side);
             _cube.RotateAntiClockwise(sideToRotate);
-        }
-
-        private void SolveIncorrectBackEdgeWithWhiteOnBackFace(Edge incorrectMiddleEdge)
-        {
-            var nonBackLayer = incorrectMiddleEdge.SideOne == Side.Back
-                ? incorrectMiddleEdge.SideTwo
-                : incorrectMiddleEdge.SideOne;
-
-            if (nonBackLayer == Side.Left)
-            {
-                switch (incorrectMiddleEdge.Block.Left)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception("Not a valid edge piece");
-                }
-            }
-
-            if (nonBackLayer == Side.Right)
-            {
-                switch (incorrectMiddleEdge.Block.Right)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception("Not a valid edge piece");
-                }
-            }
-
-            if (nonBackLayer == Side.Top)
-            {
-                switch (incorrectMiddleEdge.Block.Top)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception("Not a valid edge piece");
-                }
-            }
-
-            if (nonBackLayer == Side.Bottom)
-            {
-                switch (incorrectMiddleEdge.Block.Bottom)
-                {
-                    case Colour.Red:
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception("Not a valid edge piece");
-                }
-            }
         }
 
         private void SolveIncorrectMiddleEdge(Edge incorrectSideEdge)

@@ -27,14 +27,14 @@ namespace rubix_solver.Solvers
                 if (incorrectFrontEdges.Any())
                 {
                     var incorrectFrontEdge = incorrectFrontEdges.First();
-                    SolveIncorrectFrontEdge(incorrectFrontEdge);
+                    SolveIncorrectFrontEdge(incorrectFrontEdge.SideTwo);
                 }
 
                 var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
                 if (incorrectBackEdges.Any())
                 {
                     var incorrectBackEdge = incorrectBackEdges.First();
-                    SolveIncorrectBackEdge(incorrectBackEdge);
+                    SolveIncorrectBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
                 }
 
                 var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
@@ -46,10 +46,9 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectBackEdge(BackEdge incorrectBackEdge)
+        private void SolveIncorrectBackEdge(Block block, Side side)
         {
-            var block = incorrectBackEdge.Block;
-            var nonWhiteColour = block.GetColour(incorrectBackEdge.SideTwo) ?? throw new Exception();
+            var nonWhiteColour = block.GetColour(side) ?? throw new Exception();
 
             while (!RubixCubeStatusEvaluator.IsCorrectColour(block.GetLayer(nonWhiteColour) ?? throw new Exception(),
                 block))
@@ -57,83 +56,23 @@ namespace rubix_solver.Solvers
                 if (block.Back == Colour.White)
                 {
                     _cube.RotateClockwise(Side.Back);
-                    block = _cube.GetBlock(incorrectBackEdge.Block);
+                    block = _cube.GetBlock(block);
                 }
                 else
                 {
                     ReOrientateBackEdge(block.GetLayer(nonWhiteColour) ?? throw new Exception());
-                    block = _cube.GetBlock(incorrectBackEdge.Block);
+                    block = _cube.GetBlock(block);
                 }
             }
 
             _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
             _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
-
         }
         
-        private void SolveIncorrectFrontEdge(FrontEdge incorrectFrontEdge)
+        private void SolveIncorrectFrontEdge(Side side)
         {
-            _cube.RotateClockwise(incorrectFrontEdge.SideTwo);
-            _cube.RotateClockwise(incorrectFrontEdge.SideTwo);
-        }
-
-        private void SolveCorners()
-        {
-            while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
-            {
-                var frontCorners = _cube.GetFrontCornerBlocks().Where(c => !c.IsCorrectlyPositioned()).ToList();
-                if (frontCorners.Select(c => c.Block.HasColour(Colour.White)).Any())
-                {
-                    var corner = frontCorners.First();
-                    RotateCornerToBack(corner);
-                }
-
-                var backCorners = _cube.GetBackCornerBlocks().Where(c => c.IsCorrectlyPositioned()).ToList();
-                if (backCorners.Select(c => c.Block.HasColour(Colour.White)).Any())
-                {
-                    var corner = backCorners.First();
-                    RotateCornerToFront(corner);
-                }
-                else
-                {
-                    _cube.RotateClockwise(Side.Back);
-                }
-            }
-        }
-
-        private void RotateCornerToBack(FrontCorner corner)
-        {
-            _cube.RotateClockwise(corner.SideToRotate);
-            _cube.RotateClockwise(Side.Back);
-            _cube.RotateAntiClockwise(corner.SideToRotate);
-        }
-
-        private void RotateCornerToFront(BackCorner corner)
-        {
-            if (corner.Block.GetLayer(Colour.White) == corner.SideOne)
-            {
-                _cube.RotateAntiClockwise(corner.SideOne);
-                _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(corner.SideOne);
-            }
-            else if (corner.Block.GetLayer(Colour.White) == corner.SideTwo)
-            {
-                _cube.RotateClockwise(corner.SideTwo);
-                _cube.RotateClockwise(Side.Back);
-                _cube.RotateAntiClockwise(corner.SideTwo);
-            }
-            else
-            {
-                _cube.RotateAntiClockwise(corner.SideOne);
-                _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(corner.SideOne);
-                _cube.RotateClockwise(corner.SideTwo);
-                _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateAntiClockwise(corner.SideTwo);
-                _cube.RotateAntiClockwise(corner.SideOne);
-                _cube.RotateAntiClockwise(Side.Back);
-                _cube.RotateClockwise(corner.SideOne);
-            }
+            _cube.RotateClockwise(side);
+            _cube.RotateClockwise(side);
         }
 
         private void ReOrientateBackEdge(Side side)
@@ -443,6 +382,65 @@ namespace rubix_solver.Solvers
                         throw new Exception(
                             $"Incorrect edge piece: whiteFace = Bottom, {incorrectSideEdge.Block.Left.ToString()}");
                 }
+            }
+        }
+
+        private void SolveCorners()
+        {
+            while (!RubixCubeStatusEvaluator.FirstLayerIsSolved(_cube))
+            {
+                var frontCorners = _cube.GetFrontCornerBlocks().Where(c => !c.IsCorrectlyPositioned()).ToList();
+                if (frontCorners.Select(c => c.Block.HasColour(Colour.White)).Any())
+                {
+                    var corner = frontCorners.First();
+                    RotateCornerToBack(corner);
+                }
+
+                var backCorners = _cube.GetBackCornerBlocks().Where(c => c.IsCorrectlyPositioned()).ToList();
+                if (backCorners.Select(c => c.Block.HasColour(Colour.White)).Any())
+                {
+                    var corner = backCorners.First();
+                    RotateCornerToFront(corner);
+                }
+                else
+                {
+                    _cube.RotateClockwise(Side.Back);
+                }
+            }
+        }
+
+        private void RotateCornerToBack(FrontCorner corner)
+        {
+            _cube.RotateClockwise(corner.SideToRotate);
+            _cube.RotateClockwise(Side.Back);
+            _cube.RotateAntiClockwise(corner.SideToRotate);
+        }
+
+        private void RotateCornerToFront(BackCorner corner)
+        {
+            if (corner.Block.GetLayer(Colour.White) == corner.SideOne)
+            {
+                _cube.RotateAntiClockwise(corner.SideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(corner.SideOne);
+            }
+            else if (corner.Block.GetLayer(Colour.White) == corner.SideTwo)
+            {
+                _cube.RotateClockwise(corner.SideTwo);
+                _cube.RotateClockwise(Side.Back);
+                _cube.RotateAntiClockwise(corner.SideTwo);
+            }
+            else
+            {
+                _cube.RotateAntiClockwise(corner.SideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(corner.SideOne);
+                _cube.RotateClockwise(corner.SideTwo);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateAntiClockwise(corner.SideTwo);
+                _cube.RotateAntiClockwise(corner.SideOne);
+                _cube.RotateAntiClockwise(Side.Back);
+                _cube.RotateClockwise(corner.SideOne);
             }
         }
     }

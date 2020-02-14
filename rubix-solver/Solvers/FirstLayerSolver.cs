@@ -23,45 +23,34 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Front))
             {
-                SolveBackEdges();
-                SolveFrontEdges();
-                SolveSideEdges();
+                var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
+                if (incorrectBackEdges.Any())
+                {
+                    var incorrectBackEdge = incorrectBackEdges.First();
+                    SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
+                }
+
+                var incorrectFrontEdges = _cube.GetFrontEdgeBlocks()
+                    .Where(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White)).ToList();
+                if (incorrectFrontEdges.Any())
+                {
+                    var incorrectFrontEdge = incorrectFrontEdges.First();
+                    RotateFrontEdgeToBack(incorrectFrontEdge.SideTwo);
+                }
+
+                var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
+                if (incorrectSideEdges.Any())
+                {
+                    var incorrectSideEdge = incorrectSideEdges.First();
+                    RotateSideEdgeToBack(incorrectSideEdge.Block, incorrectSideEdge.SideOne, incorrectSideEdge.SideTwo);
+                }
             }
         }
 
-        private void SolveSideEdges()
-        {
-            while (_cube.GetSideEdgeBlocks().Any(e => e.Block.HasColour(Colour.White)))
-            {
-                var incorrectSideEdge = _cube.GetSideEdgeBlocks().First(e => e.Block.HasColour(Colour.White));
-                SolveSideEdge(incorrectSideEdge.Block, incorrectSideEdge.SideOne, incorrectSideEdge.SideTwo);
-            }
-        }
-
-        private void SolveFrontEdges()
-        {
-            while (_cube.GetFrontEdgeBlocks().Any(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White)))
-            {
-                var incorrectFrontEdge = _cube.GetFrontEdgeBlocks().First(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White));
-                SolveFrontEdge(incorrectFrontEdge.SideTwo);
-            }
-        }
-
-        private void SolveBackEdges()
-        {
-            while (_cube.GetBackEdgeBlocks().Any(e => e.Block.HasColour(Colour.White)))
-            {
-                var incorrectBackEdge = _cube.GetBackEdgeBlocks().First(e => e.Block.HasColour(Colour.White));
-                SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
-            }
-        }
-
-        private void SolveFrontEdge(Side side)
+        private void RotateFrontEdgeToBack(Side side)
         {
             _cube.RotateClockwise(side);
             _cube.RotateClockwise(side);
-
-            SolveBackEdges();
         }
 
         private void SolveBackEdge(Block block, Side nonBackSide)
@@ -110,7 +99,7 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(side);
         }
 
-        private void SolveSideEdge(Block block, Side sideOne, Side sideTwo)
+        private void RotateSideEdgeToBack(Block block, Side sideOne, Side sideTwo)
         {
             var sideOneColour = block.GetColour(sideOne);
             var whiteFace = sideOneColour == Colour.White ? sideOne : sideTwo;
@@ -122,31 +111,19 @@ namespace rubix_solver.Solvers
                 case Side.Right when nonWhiteFace == Side.Bottom:
                 case Side.Top when nonWhiteFace == Side.Right:
                 case Side.Bottom when nonWhiteFace == Side.Left:
-                    RotateSideClockwise(nonWhiteFace);
+                    _cube.RotateClockwise(nonWhiteFace);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(nonWhiteFace);
                     break;
                 case Side.Left when nonWhiteFace == Side.Bottom:
                 case Side.Right when nonWhiteFace == Side.Top:
                 case Side.Top when nonWhiteFace == Side.Left:
                 case Side.Bottom when nonWhiteFace == Side.Right:
-                    RotateSideAntiClockwise(nonWhiteFace);
+                    _cube.RotateAntiClockwise(nonWhiteFace);
+                    _cube.RotateAntiClockwise(Side.Back);
+                    _cube.RotateClockwise(nonWhiteFace);
                     break;
             }
-
-            SolveBackEdges();
-        }
-
-        private void RotateSideClockwise(Side nonWhiteFace)
-        {
-            _cube.RotateClockwise(nonWhiteFace);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateClockwise(nonWhiteFace);
-        }
-
-        private void RotateSideAntiClockwise(Side nonWhiteFace)
-        {
-            _cube.RotateAntiClockwise(nonWhiteFace);
-            _cube.RotateAntiClockwise(Side.Back);
-            _cube.RotateClockwise(nonWhiteFace);
         }
 
         private void SolveCorners()

@@ -487,16 +487,16 @@ namespace rubix_solver
             };
         }
 
-        public IEnumerable<SideEdge> GetSideEdgeBlocks()
+        public IEnumerable<Block> GetSideBlocks()
         {
             var left = GetFace(Side.Left);
             var right = GetFace(Side.Right);
-            return new List<SideEdge>
+            return new List<Block>
             {
-                (SideEdge) EdgeBuilder.Build((0, 1), left[0, 1], Side.Left),
-                (SideEdge) EdgeBuilder.Build((2, 1), left[2, 1], Side.Left),
-                (SideEdge) EdgeBuilder.Build((0, 1), right[0, 1], Side.Right),
-                (SideEdge) EdgeBuilder.Build((2, 1), right[2, 1], Side.Right)
+                left[0, 1],
+                left[2, 1],
+                right[0, 1],
+                right[2, 1]
             };
         }
 

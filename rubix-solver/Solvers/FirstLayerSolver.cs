@@ -38,11 +38,11 @@ namespace rubix_solver.Solvers
                     RotateFrontEdgeToBack(nonFrontSide);
                 }
 
-                var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
+                var incorrectSideEdges = _cube.GetSideBlocks().Where(b => b.HasColour(Colour.White)).ToList();
                 if (incorrectSideEdges.Any())
                 {
                     var incorrectSideEdge = incorrectSideEdges.First();
-                    RotateSideEdgeToBack(incorrectSideEdge.Block, incorrectSideEdge.SideOne, incorrectSideEdge.SideTwo);
+                    RotateSideEdgeToBack(incorrectSideEdge);
                 }
             }
         }
@@ -125,8 +125,15 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(side);
         }
 
-        private void RotateSideEdgeToBack(Block block, Side sideOne, Side sideTwo)
+        private void RotateSideEdgeToBack(Block block)
         {
+            var sides = block.GetNonNullSides();
+            if (sides.Count != 2)
+            {
+                throw new Exception("An edge block can only have two coloured sides");
+            }
+
+            var (sideOne, sideTwo) = (sides[0], sides[1]);
             var sideOneColour = block.GetColour(sideOne);
             var whiteFace = sideOneColour == Colour.White ? sideOne : sideTwo;
             var nonWhiteFace = sideOneColour == Colour.White ? sideTwo :sideOne;

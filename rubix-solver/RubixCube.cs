@@ -463,9 +463,16 @@ namespace rubix_solver
             };
         }
 
-        public IEnumerable<FrontEdge> GetFrontEdgeBlocks()
+        public List<Block> GetFrontEdges()
         {
-            return GetEdgeBlocks(Side.Front).Select(x => (FrontEdge) x);
+            var face = GetFace(Side.Front);
+            return new List<Block>
+            {
+                face[0, 1],
+                face[1, 0],
+                face[1, 2],
+                face[2, 1]
+            };
         }
 
         public IEnumerable<BackEdge> GetBackEdgeBlocks()

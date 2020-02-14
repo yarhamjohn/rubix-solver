@@ -139,5 +139,40 @@ namespace rubix_solver
             return colours.All(c => blockColours.Contains(c)) && blockColours.All(c => colours.Contains(c));
         }
 
+        public List<Side> GetNonNullSides()
+        {
+            var sides = new List<Side>();
+            if (Back != null)
+            {
+                sides.Add(Side.Back);
+            }
+
+            if (Front != null)
+            {
+                sides.Add(Side.Front);
+            }
+
+            if (Left != null)
+            {
+                sides.Add(Side.Left);
+            }
+
+            if (Right != null)
+            {
+                sides.Add(Side.Right);
+            }
+
+            if (Top != null)
+            {
+                sides.Add(Side.Top);
+            }
+
+            if (Bottom != null)
+            {
+                sides.Add(Side.Bottom);
+            }
+
+            return sides;
+        }
     }
 }

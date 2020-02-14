@@ -30,12 +30,11 @@ namespace rubix_solver.Solvers
                     SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
                 }
 
-                var incorrectFrontEdges = _cube.GetFrontEdgeBlocks()
-                    .Where(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White)).ToList();
-                if (incorrectFrontEdges.Any())
+                var incorrectFrontEdge = GetIncorrectFrontEdge();
+                if (incorrectFrontEdge != null)
                 {
-                    var incorrectFrontEdge = incorrectFrontEdges.First();
-                    RotateFrontEdgeToBack(incorrectFrontEdge.SideTwo);
+                    var side = GetNonFrontSide(incorrectFrontEdge);
+                    RotateFrontEdgeToBack(side);
                 }
 
                 var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
@@ -45,6 +44,32 @@ namespace rubix_solver.Solvers
                     RotateSideEdgeToBack(incorrectSideEdge.Block, incorrectSideEdge.SideOne, incorrectSideEdge.SideTwo);
                 }
             }
+        }
+
+        private Block? GetIncorrectFrontEdge()
+        {
+            var blocks = _cube.GetFrontEdges();
+            foreach (var block in blocks)
+            {
+                var nonFrontSide = GetNonFrontSide(block);
+                if (block.Front != Colour.White || !RubixCubeStatusEvaluator.SideIsCorrectColour(nonFrontSide, block))
+                {
+                    return block;
+                }
+            }
+
+            return null;
+        }
+
+        private static Side GetNonFrontSide(Block block)
+        {
+            var nonNullSides = block.GetNonNullSides();
+            if (nonNullSides.Count != 2)
+            {
+                throw new Exception("This block cannot be an edge as it doesn't have to coloured sides.");
+            }
+
+            return nonNullSides.Single(side => side != Side.Front);
         }
 
         private void RotateFrontEdgeToBack(Side side)

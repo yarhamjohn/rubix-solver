@@ -34,7 +34,7 @@ namespace rubix_solver.Solvers
             while (_cube.GetSideEdgeBlocks().Any(e => e.Block.HasColour(Colour.White)))
             {
                 var incorrectSideEdge = _cube.GetSideEdgeBlocks().First(e => e.Block.HasColour(Colour.White));
-                SolveSideEdge(incorrectSideEdge);
+                SolveSideEdge(incorrectSideEdge.Block, incorrectSideEdge.SideOne, incorrectSideEdge.SideTwo);
             }
         }
 
@@ -110,12 +110,11 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(side);
         }
 
-        private void SolveSideEdge(Edge incorrectSideEdge)
+        private void SolveSideEdge(Block block, Side sideOne, Side sideTwo)
         {
-            var whiteFace = incorrectSideEdge.Block.GetLayer(Colour.White);
-            var nonWhiteFace = incorrectSideEdge.SideOne == whiteFace
-                ? incorrectSideEdge.SideTwo
-                : incorrectSideEdge.SideOne;
+            var sideOneColour = block.GetColour(sideOne);
+            var whiteFace = sideOneColour == Colour.White ? sideOne : sideTwo;
+            var nonWhiteFace = sideOneColour == Colour.White ? sideTwo :sideOne;
 
             switch (whiteFace)
             {

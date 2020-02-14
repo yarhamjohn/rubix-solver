@@ -46,29 +46,34 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private void SolveIncorrectBackEdge(Block block, Side side)
+        private void SolveIncorrectBackEdge(Block block, Side nonBackSide)
         {
-            var nonWhiteColour = block.GetColour(side) ?? throw new Exception();
+            var nonWhiteColour = (block.Back == Colour.White ? block.GetColour(nonBackSide) : block.Back) ?? throw
+                                     new ArgumentException("Edge blocks must have a white and a non-white side.");
 
-            while (!RubixCubeStatusEvaluator.IsCorrectColour(block.GetLayer(nonWhiteColour) ?? throw new Exception(),
-                block))
+            if (block.Back == nonWhiteColour)
             {
-                if (block.Back == Colour.White)
-                {
-                    _cube.RotateClockwise(Side.Back);
-                    block = _cube.GetBlock(block);
-                }
-                else
-                {
-                    ReOrientateBackEdge(block.GetLayer(nonWhiteColour) ?? throw new Exception());
-                    block = _cube.GetBlock(block);
-                }
+                ReOrientateBackEdge(nonBackSide);
+                block = _cube.GetBlock(block);
             }
 
-            _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
-            _cube.RotateClockwise(block.GetLayer(nonWhiteColour) ?? throw new Exception());
+            while (!BackEdgeIsOnCorrectSide(block, nonWhiteColour))
+            {
+                _cube.RotateClockwise(Side.Back);
+                block = _cube.GetBlock(block);
+            }
+
+            var layer = block.GetLayer(nonWhiteColour) ?? throw new Exception();
+            _cube.RotateClockwise(layer);
+            _cube.RotateClockwise(layer);
         }
-        
+
+        private static bool BackEdgeIsOnCorrectSide(Block block, Colour nonWhiteColour)
+        {
+            var layer = block.GetLayer(nonWhiteColour) ?? throw new ArgumentException("Cannot be null here");
+            return RubixCubeStatusEvaluator.SideIsCorrectColour(layer, block);
+        }
+
         private void SolveIncorrectFrontEdge(Side side)
         {
             _cube.RotateClockwise(side);
@@ -88,9 +93,9 @@ namespace rubix_solver.Solvers
                     
             _cube.RotateClockwise(side);
             _cube.RotateClockwise(sideToRotate);
-            _cube.RotateClockwise(Side.Back);
-            _cube.RotateAntiClockwise(side);
+            _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(sideToRotate);
+            _cube.RotateAntiClockwise(side);
         }
 
         private void SolveIncorrectMiddleEdge(Edge incorrectSideEdge)

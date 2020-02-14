@@ -41,10 +41,10 @@ namespace rubix_solver
         public static bool CrossFaceIsFormed(RubixCube cube, Side side)
         {
             var face = cube.GetFace(side);
-            return IsCorrectColour(side, face[0, 1]) &&
-                   IsCorrectColour(side, face[1, 0]) &&
-                   IsCorrectColour(side, face[1, 2]) &&
-                   IsCorrectColour(side, face[2, 1]);
+            return SideIsCorrectColour(side, face[0, 1]) &&
+                   SideIsCorrectColour(side, face[1, 0]) &&
+                   SideIsCorrectColour(side, face[1, 2]) &&
+                   SideIsCorrectColour(side, face[2, 1]);
         }
 
         private static bool CentreBlocksAreOnCorrectFaces(RubixCube cube)
@@ -79,18 +79,18 @@ namespace rubix_solver
         {
             var leftFaceBlock = side == Side.Front ? face[1, 0] : face[1, 2];
             var rightFaceBlock = side == Side.Front ? face[1, 2] : face[1, 0];
-            return IsCorrectColour(Side.Top, face[0, 1]) &&
-                   IsCorrectColour(Side.Left, leftFaceBlock) &&
-                   IsCorrectColour(Side.Right, rightFaceBlock) &&
-                   IsCorrectColour(Side.Bottom, face[2, 1]);
+            return SideIsCorrectColour(Side.Top, face[0, 1]) &&
+                   SideIsCorrectColour(Side.Left, leftFaceBlock) &&
+                   SideIsCorrectColour(Side.Right, rightFaceBlock) &&
+                   SideIsCorrectColour(Side.Bottom, face[2, 1]);
         }
 
         private static bool BlockFacesAreSolved(Side side, IEnumerable<Block> face)
         {
-            return face.Select(block => IsCorrectColour(side, block)).All(correctColour => correctColour);
+            return face.Select(block => SideIsCorrectColour(side, block)).All(correctColour => correctColour);
         }
 
-        public static bool IsCorrectColour(Side side, Block block)
+        public static bool SideIsCorrectColour(Side side, Block block)
         {
             return side switch
             {

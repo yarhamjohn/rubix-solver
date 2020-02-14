@@ -34,7 +34,7 @@ namespace rubix_solver
 
         public bool IsCorrectlyPositioned()
         {
-            return Block.Front == Colour.White && RubixCubeStatusEvaluator.IsCorrectColour(SideTwo, Block);
+            return Block.Front == Colour.White && RubixCubeStatusEvaluator.SideIsCorrectColour(SideTwo, Block);
         }
     }
 

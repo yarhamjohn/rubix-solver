@@ -23,30 +23,48 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Front))
             {
-                var incorrectFrontEdges = _cube.GetFrontEdgeBlocks().Where(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White)).ToList();
-                if (incorrectFrontEdges.Any())
-                {
-                    var incorrectFrontEdge = incorrectFrontEdges.First();
-                    SolveIncorrectFrontEdge(incorrectFrontEdge.SideTwo);
-                }
-
-                var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
-                if (incorrectBackEdges.Any())
-                {
-                    var incorrectBackEdge = incorrectBackEdges.First();
-                    SolveIncorrectBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
-                }
-
-                var incorrectSideEdges = _cube.GetSideEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
-                if (incorrectSideEdges.Any())
-                {
-                    var incorrectSideEdge = incorrectSideEdges.First();
-                    SolveIncorrectMiddleEdge(incorrectSideEdge);
-                }
+                SolveBackEdges();
+                SolveFrontEdges();
+                SolveSideEdges();
             }
         }
 
-        private void SolveIncorrectBackEdge(Block block, Side nonBackSide)
+        private void SolveSideEdges()
+        {
+            while (_cube.GetSideEdgeBlocks().Any(e => e.Block.HasColour(Colour.White)))
+            {
+                var incorrectSideEdge = _cube.GetSideEdgeBlocks().First(e => e.Block.HasColour(Colour.White));
+                SolveSideEdge(incorrectSideEdge);
+            }
+        }
+
+        private void SolveFrontEdges()
+        {
+            while (_cube.GetFrontEdgeBlocks().Any(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White)))
+            {
+                var incorrectFrontEdge = _cube.GetFrontEdgeBlocks().First(e => !e.IsCorrectlyPositioned() && e.Block.HasColour(Colour.White));
+                SolveFrontEdge(incorrectFrontEdge.SideTwo);
+            }
+        }
+
+        private void SolveBackEdges()
+        {
+            while (_cube.GetBackEdgeBlocks().Any(e => e.Block.HasColour(Colour.White)))
+            {
+                var incorrectBackEdge = _cube.GetBackEdgeBlocks().First(e => e.Block.HasColour(Colour.White));
+                SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
+            }
+        }
+
+        private void SolveFrontEdge(Side side)
+        {
+            _cube.RotateClockwise(side);
+            _cube.RotateClockwise(side);
+
+            SolveBackEdges();
+        }
+
+        private void SolveBackEdge(Block block, Side nonBackSide)
         {
             var nonWhiteColour = (block.Back == Colour.White ? block.GetColour(nonBackSide) : block.Back) ?? throw
                                      new ArgumentException("Edge blocks must have a white and a non-white side.");
@@ -74,12 +92,6 @@ namespace rubix_solver.Solvers
             return RubixCubeStatusEvaluator.SideIsCorrectColour(layer, block);
         }
 
-        private void SolveIncorrectFrontEdge(Side side)
-        {
-            _cube.RotateClockwise(side);
-            _cube.RotateClockwise(side);
-        }
-
         private void ReOrientateBackEdge(Side side)
         {
             var sideToRotate = side switch
@@ -98,7 +110,7 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(side);
         }
 
-        private void SolveIncorrectMiddleEdge(Edge incorrectSideEdge)
+        private void SolveSideEdge(Edge incorrectSideEdge)
         {
             var whiteFace = incorrectSideEdge.Block.GetLayer(Colour.White);
             if (whiteFace == null)
@@ -387,6 +399,14 @@ namespace rubix_solver.Solvers
                         throw new Exception(
                             $"Incorrect edge piece: whiteFace = Bottom, {incorrectSideEdge.Block.Left.ToString()}");
                 }
+            }
+
+
+            var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
+            if (incorrectBackEdges.Any())
+            {
+                var incorrectBackEdge = incorrectBackEdges.First();
+                SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
             }
         }
 

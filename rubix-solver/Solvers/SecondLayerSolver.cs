@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace rubix_solver.Solvers
 {
@@ -16,7 +17,7 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.SecondLayerIsSolved(_cube))
             {
-                var middleEdges = GetMiddleEdges();
+                var middleEdges = _cube.GetBackEdges();
                 if (NumSwitchableMiddleEdges(middleEdges) == 0)
                 {
                     if (_cube.Cube[1, 0, 0].Top != Colour.Yellow && _cube.Cube[1, 0, 0].Left != Colour.Yellow)
@@ -123,60 +124,12 @@ namespace rubix_solver.Solvers
                    cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange;
         }
 
-        private static int NumSwitchableMiddleEdges(Dictionary<(int, int), Block> middleEdges)
+        private static int NumSwitchableMiddleEdges(IEnumerable<Block> middleEdges)
         {
-            var num = middleEdges.Count;
-            foreach (var (index, block) in middleEdges)
-            {
-                switch (index)
-                {
-                    case (0, 1):
-                        if (block.Top == Colour.Yellow || block.Back == Colour.Yellow)
-                        {
-                            num--;
-                        }
-
-                        break;
-                    case (1, 2):
-                        if (block.Left == Colour.Yellow || block.Back == Colour.Yellow)
-                        {
-                            num--;
-                        }
-
-                        break;
-                    case (2, 1):
-                        if (block.Bottom == Colour.Yellow || block.Back == Colour.Yellow)
-                        {
-                            num--;
-                        }
-
-                        break;
-                    case (1, 0):
-                        if (block.Right == Colour.Yellow || block.Back == Colour.Yellow)
-                        {
-                            num--;
-                        }
-
-                        break;
-                }
-            }
-
-            return num;
+            return middleEdges.Count(b => !b.HasColour(Colour.Yellow));
         }
 
-        private Dictionary<(int, int), Block> GetMiddleEdges()
-        {
-            var face = _cube.GetFace(Side.Back);
-            return new Dictionary<(int, int), Block>
-            {
-                {(0, 1), face[0, 1]}, 
-                {(1, 2), face[1, 2]}, 
-                {(2, 1), face[2, 1]}, 
-                {(1, 0), face[1, 0]}
-            };
-        }
-
-        public void PerformLeftSwitch(Side face, Side side)
+        private void PerformLeftSwitch(Side face, Side side)
         {
             _cube.RotateAntiClockwise(Side.Back);
             _cube.RotateAntiClockwise(side);
@@ -188,7 +141,7 @@ namespace rubix_solver.Solvers
             _cube.RotateAntiClockwise(face);
         }
 
-        public void PerformRightSwitch(Side face, Side side)
+        private void PerformRightSwitch(Side face, Side side)
         {
             _cube.RotateClockwise(Side.Back);
             _cube.RotateClockwise(side);

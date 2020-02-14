@@ -113,301 +113,41 @@ namespace rubix_solver.Solvers
         private void SolveSideEdge(Edge incorrectSideEdge)
         {
             var whiteFace = incorrectSideEdge.Block.GetLayer(Colour.White);
-            if (whiteFace == null)
-            {
-                throw new Exception("Should have a white face");
-            }
-
             var nonWhiteFace = incorrectSideEdge.SideOne == whiteFace
                 ? incorrectSideEdge.SideTwo
                 : incorrectSideEdge.SideOne;
-            if (whiteFace == Side.Left && nonWhiteFace == Side.Bottom)
+
+            switch (whiteFace)
             {
-                switch (incorrectSideEdge.Block.Bottom)
-                {
-                    case Colour.Red:
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Left, {incorrectSideEdge.Block.Bottom.ToString()}");
-                }
+                case Side.Left when nonWhiteFace == Side.Top:
+                case Side.Right when nonWhiteFace == Side.Bottom:
+                case Side.Top when nonWhiteFace == Side.Right:
+                case Side.Bottom when nonWhiteFace == Side.Left:
+                    RotateSideClockwise(nonWhiteFace);
+                    break;
+                case Side.Left when nonWhiteFace == Side.Bottom:
+                case Side.Right when nonWhiteFace == Side.Top:
+                case Side.Top when nonWhiteFace == Side.Left:
+                case Side.Bottom when nonWhiteFace == Side.Right:
+                    RotateSideAntiClockwise(nonWhiteFace);
+                    break;
             }
 
-            if (whiteFace == Side.Left && nonWhiteFace == Side.Top)
-            {
-                switch (incorrectSideEdge.Block.Top)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Top);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Top);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateAntiClockwise(Side.Top);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Left, {incorrectSideEdge.Block.Top.ToString()}");
-                }
-            }
+            SolveBackEdges();
+        }
 
-            if (whiteFace == Side.Right && nonWhiteFace == Side.Top)
-            {
-                switch (incorrectSideEdge.Block.Top)
-                {
-                    case Colour.Red:
-                        _cube.RotateAntiClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateAntiClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateAntiClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Top);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Right, {incorrectSideEdge.Block.Top.ToString()}");
-                }
-            }
+        private void RotateSideClockwise(Side nonWhiteFace)
+        {
+            _cube.RotateClockwise(nonWhiteFace);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateClockwise(nonWhiteFace);
+        }
 
-            if (whiteFace == Side.Right && nonWhiteFace == Side.Bottom)
-            {
-                switch (incorrectSideEdge.Block.Bottom)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Bottom);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Bottom);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Right, {incorrectSideEdge.Block.Bottom.ToString()}");
-                }
-            }
-
-            if (whiteFace == Side.Top && nonWhiteFace == Side.Left)
-            {
-                switch (incorrectSideEdge.Block.Left)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateAntiClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateAntiClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateAntiClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Left);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Top, {incorrectSideEdge.Block.Left.ToString()}");
-                }
-            }
-
-            if (whiteFace == Side.Top && nonWhiteFace == Side.Right)
-            {
-                switch (incorrectSideEdge.Block.Right)
-                {
-                    case Colour.Red:
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Right);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateAntiClockwise(Side.Right);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Right);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Top, {incorrectSideEdge.Block.Right.ToString()}");
-                }
-            }
-
-            if (whiteFace == Side.Bottom && nonWhiteFace == Side.Right)
-            {
-                switch (incorrectSideEdge.Block.Right)
-                {
-                    case Colour.Red:
-                        _cube.RotateAntiClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateAntiClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateAntiClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Right);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Bottom, {incorrectSideEdge.Block.Right.ToString()}");
-                }
-            }
-
-            if (whiteFace == Side.Bottom && nonWhiteFace == Side.Left)
-            {
-                switch (incorrectSideEdge.Block.Left)
-                {
-                    case Colour.Red:
-                        _cube.RotateAntiClockwise(Side.Left);
-                        break;
-                    case Colour.Orange:
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateClockwise(Side.Right);
-                        _cube.RotateAntiClockwise(Side.Left);
-                        break;
-                    case Colour.Green:
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateAntiClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateClockwise(Side.Top);
-                        _cube.RotateAntiClockwise(Side.Left);
-                        break;
-                    case Colour.Blue:
-                        _cube.RotateClockwise(Side.Left);
-                        _cube.RotateClockwise(Side.Back);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateClockwise(Side.Bottom);
-                        _cube.RotateAntiClockwise(Side.Right);
-                        break;
-                    default:
-                        throw new Exception(
-                            $"Incorrect edge piece: whiteFace = Bottom, {incorrectSideEdge.Block.Left.ToString()}");
-                }
-            }
-
-
-            var incorrectBackEdges = _cube.GetBackEdgeBlocks().Where(e => e.Block.HasColour(Colour.White)).ToList();
-            if (incorrectBackEdges.Any())
-            {
-                var incorrectBackEdge = incorrectBackEdges.First();
-                SolveBackEdge(incorrectBackEdge.Block, incorrectBackEdge.SideTwo);
-            }
+        private void RotateSideAntiClockwise(Side nonWhiteFace)
+        {
+            _cube.RotateAntiClockwise(nonWhiteFace);
+            _cube.RotateAntiClockwise(Side.Back);
+            _cube.RotateClockwise(nonWhiteFace);
         }
 
         private void SolveCorners()

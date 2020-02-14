@@ -487,7 +487,7 @@ namespace rubix_solver
             };
         }
 
-        public IEnumerable<Block> GetSideBlocks()
+        public IEnumerable<Block> GetSideEdges()
         {
             var left = GetFace(Side.Left);
             var right = GetFace(Side.Right);

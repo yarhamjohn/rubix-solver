@@ -36,7 +36,7 @@ namespace rubix_solver.Solvers
                     RotateFrontEdgeToBack(frontEdge);
                 }
 
-                var sideEdges = _cube.GetSideBlocks().Where(b => b.HasColour(Colour.White)).ToList();
+                var sideEdges = _cube.GetSideEdges().Where(b => b.HasColour(Colour.White)).ToList();
                 if (sideEdges.Any())
                 {
                     var sideEdge = sideEdges.First();

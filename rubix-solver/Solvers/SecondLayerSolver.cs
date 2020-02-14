@@ -17,28 +17,13 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.SecondLayerIsSolved(_cube))
             {
-                var middleEdges = _cube.GetBackEdges();
-                if (NumSwitchableMiddleEdges(middleEdges) == 0)
+                var backEdges = _cube.GetBackEdges();
+                if (backEdges.All(b => b.HasColour(Colour.Yellow)))
                 {
-                    if (_cube.Cube[1, 0, 0].Top != Colour.Yellow && _cube.Cube[1, 0, 0].Left != Colour.Yellow)
-                    {
-                        PerformRightSwitch(Side.Left, Side.Top);
-                    }
-                    
-                    if (_cube.Cube[1, 0, 2].Top != Colour.Yellow && _cube.Cube[1, 0, 2].Right != Colour.Yellow)
-                    {
-                        PerformRightSwitch(Side.Top, Side.Right);
-                    }
-                    
-                    if (_cube.Cube[1, 2, 0].Bottom != Colour.Yellow && _cube.Cube[1, 2, 0].Left != Colour.Yellow)
-                    {
-                        PerformRightSwitch(Side.Bottom, Side.Left);
-                    }
-                    
-                    if (_cube.Cube[1, 2, 2].Bottom != Colour.Yellow && _cube.Cube[1, 2, 2].Right != Colour.Yellow)
-                    {
-                        PerformRightSwitch(Side.Right, Side.Bottom);
-                    }
+                    PerformRightSwitch(Side.Left, Side.Top);
+                    PerformRightSwitch(Side.Top, Side.Right);
+                    PerformRightSwitch(Side.Bottom, Side.Left);
+                    PerformRightSwitch(Side.Right, Side.Bottom);
                 }
 
                 while (!MiddleEdgeIsCorrectlyPositioned(_cube.Cube))
@@ -122,11 +107,6 @@ namespace rubix_solver.Solvers
                    cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Blue || 
                    cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Red || 
                    cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange;
-        }
-
-        private static int NumSwitchableMiddleEdges(IEnumerable<Block> middleEdges)
-        {
-            return middleEdges.Count(b => !b.HasColour(Colour.Yellow));
         }
 
         private void PerformLeftSwitch(Side face, Side side)

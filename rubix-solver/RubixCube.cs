@@ -475,9 +475,16 @@ namespace rubix_solver
             };
         }
 
-        public IEnumerable<BackEdge> GetBackEdgeBlocks()
+        public IEnumerable<Block> GetBackEdges()
         {
-            return GetEdgeBlocks(Side.Back).Select(x => (BackEdge) x);
+            var face = GetFace(Side.Back);
+            return new List<Block>
+            {
+                face[0, 1],
+                face[1, 0],
+                face[1, 2],
+                face[2, 1]
+            };
         }
 
         public IEnumerable<SideEdge> GetSideEdgeBlocks()
@@ -493,18 +500,6 @@ namespace rubix_solver
             };
         }
 
-        private IEnumerable<Edge> GetEdgeBlocks(Side side)
-        {
-            var face = GetFace(side);
-            return new List<Edge>
-            {
-                EdgeBuilder.Build((0, 1), face[0, 1], side),
-                EdgeBuilder.Build((1, 0), face[1, 0], side),
-                EdgeBuilder.Build((1, 2), face[1, 2], side),
-                EdgeBuilder.Build((2, 1), face[2, 1], side)
-            };
-        }
-        
         public Block GetBlock(Block oldBlock)
         {
             foreach (var block in Cube)

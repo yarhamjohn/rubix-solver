@@ -23,36 +23,34 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Front))
             {
-                var incorrectBackEdges = _cube.GetBackEdges().Where(b => b.HasColour(Colour.White)).ToList();
-                if (incorrectBackEdges.Any())
+                var backEdges = _cube.GetBackEdges().Where(b => b.HasColour(Colour.White)).ToList();
+                if (backEdges.Any())
                 {
-                    var block = incorrectBackEdges.First();
-                    var nonBackSide = GetNonTargetSide(block, Side.Back);
-                    SolveBackEdge(block, nonBackSide);
+                    var backEdge = backEdges.First();
+                    SolveBackEdge(backEdge);
                 }
 
-                var incorrectFrontEdge = GetIncorrectFrontEdge();
-                if (incorrectFrontEdge != null)
+                var frontEdge = GetAnIncorrectFrontEdge();
+                if (frontEdge != null)
                 {
-                    var nonFrontSide = GetNonTargetSide(incorrectFrontEdge, Side.Front);
-                    RotateFrontEdgeToBack(nonFrontSide);
+                    RotateFrontEdgeToBack(frontEdge);
                 }
 
-                var incorrectSideEdges = _cube.GetSideBlocks().Where(b => b.HasColour(Colour.White)).ToList();
-                if (incorrectSideEdges.Any())
+                var sideEdges = _cube.GetSideBlocks().Where(b => b.HasColour(Colour.White)).ToList();
+                if (sideEdges.Any())
                 {
-                    var incorrectSideEdge = incorrectSideEdges.First();
-                    RotateSideEdgeToBack(incorrectSideEdge);
+                    var sideEdge = sideEdges.First();
+                    RotateSideEdgeToBack(sideEdge);
                 }
             }
         }
 
-        private Block? GetIncorrectFrontEdge()
+        private Block? GetAnIncorrectFrontEdge()
         {
             var blocks = _cube.GetFrontEdges().Where(b => b.HasColour(Colour.White));
             foreach (var block in blocks)
             {
-                var nonFrontSide = GetNonTargetSide(block, Side.Front);
+                var nonFrontSide = GetSideToRotate(block, Side.Front);
                 if (block.Front != Colour.White || !RubixCubeStatusEvaluator.SideIsCorrectColour(nonFrontSide, block))
                 {
                     return block;
@@ -62,7 +60,7 @@ namespace rubix_solver.Solvers
             return null;
         }
 
-        private static Side GetNonTargetSide(Block block, Side targetSide)
+        private static Side GetSideToRotate(Block block, Side nonRotatingSide)
         {
             var nonNullSides = block.GetNonNullSides();
             if (nonNullSides.Count != 2)
@@ -70,17 +68,20 @@ namespace rubix_solver.Solvers
                 throw new Exception("This block cannot be an edge as it doesn't have to coloured sides.");
             }
 
-            return nonNullSides.Single(side => side != targetSide);
+            return nonNullSides.Single(side => side != nonRotatingSide);
         }
 
-        private void RotateFrontEdgeToBack(Side side)
+        private void RotateFrontEdgeToBack(Block block)
         {
-            _cube.RotateClockwise(side);
-            _cube.RotateClockwise(side);
+            var sideToRotate = GetSideToRotate(block, Side.Front);
+
+            _cube.RotateClockwise(sideToRotate);
+            _cube.RotateClockwise(sideToRotate);
         }
 
-        private void SolveBackEdge(Block block, Side nonBackSide)
+        private void SolveBackEdge(Block block)
         {
+            var nonBackSide = GetSideToRotate(block, Side.Back);
             var nonWhiteColour = (block.Back == Colour.White ? block.GetColour(nonBackSide) : block.Back) ?? throw
                                      new ArgumentException("Edge blocks must have a white and a non-white side.");
 

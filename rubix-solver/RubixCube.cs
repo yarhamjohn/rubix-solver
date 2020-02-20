@@ -512,5 +512,18 @@ namespace rubix_solver
             
             throw new Exception("The provided block was not found in the cube.");
         }
+
+        public Side GetExpectedSide(Colour colour)
+        {
+            return colour switch
+            {
+                Colour.Blue => Side.Bottom,
+                Colour.Green => Side.Top,
+                Colour.Orange => Side.Right,
+                Colour.Red => Side.Left,
+                Colour.White => Side.Front,
+                Colour.Yellow => Side.Back
+            };
+        }
     }
 }

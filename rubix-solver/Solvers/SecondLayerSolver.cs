@@ -23,34 +23,34 @@ namespace rubix_solver.Solvers
                     RotateIncorrectSideEdgeToBack();
                 }
 
-                while (!BackHasSolvableEdge())
+                while (GetSolvableEdge() == null)
                 {
                     _cube.RotateClockwise(Side.Back);
                 }
 
-                SolveBackEdge();
+                SolveBackEdge(GetSolvableEdge());
             }
         }
 
-        private void SolveBackEdge()
+        private void SolveBackEdge(Block block)
         {
-            var (face, targetFace) = GetCorrectlyPositionedMiddleEdge(_cube.Cube);
+            var face = block.GetNonNullSides().Single(s => s != Side.Back);
+            var targetFace = _cube.GetExpectedSide(block.Back ?? throw new Exception("Something went wrong"));
+            
+            if (face == Side.Top && targetFace == Side.Left ||
+                face == Side.Left && targetFace == Side.Bottom ||
+                face == Side.Bottom && targetFace == Side.Right ||
+                face == Side.Right && targetFace == Side.Top)
             {
-                if (face == Side.Top && targetFace == Side.Left ||
-                    face == Side.Left && targetFace == Side.Bottom ||
-                    face == Side.Bottom && targetFace == Side.Right ||
-                    face == Side.Right && targetFace == Side.Top)
-                {
-                    PerformLeftSwitch(face, targetFace);
-                }
+                PerformLeftSwitch(face, targetFace);
+            }
 
-                if (face == Side.Top && targetFace == Side.Right ||
-                    face == Side.Right && targetFace == Side.Bottom ||
-                    face == Side.Bottom && targetFace == Side.Left ||
-                    face == Side.Left && targetFace == Side.Top)
-                {
-                    PerformRightSwitch(face, targetFace);
-                }
+            if (face == Side.Top && targetFace == Side.Right ||
+                face == Side.Right && targetFace == Side.Bottom ||
+                face == Side.Bottom && targetFace == Side.Left ||
+                face == Side.Left && targetFace == Side.Top)
+            {
+                PerformRightSwitch(face, targetFace);
             }
         }
 
@@ -80,52 +80,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        private (Side face, Side targetFace) GetCorrectlyPositionedMiddleEdge(Block[,,] cube)
-        {
-            if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Red)
-            {
-                return (Side.Top, Side.Left);
-            } 
-            
-            if (cube[2, 0, 1].Top == Colour.Green && cube[2, 0, 1].Back == Colour.Orange)
-            {
-                return (Side.Top, Side.Right);
-            } 
-            
-            if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Green)
-            {
-                return (Side.Left, Side.Top);
-            } 
-            
-            if (cube[2, 1, 0].Left == Colour.Red && cube[2, 1, 0].Back == Colour.Blue)
-            {
-                return (Side.Left, Side.Bottom);
-            } 
-            
-            if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Green)
-            {
-                return (Side.Right, Side.Top);
-            } 
-            
-            if (cube[2, 1, 2].Right == Colour.Orange && cube[2, 1, 2].Back == Colour.Blue)
-            {
-                return (Side.Right, Side.Bottom);
-            } 
-            
-            if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Red)
-            {
-                return (Side.Bottom, Side.Left);
-            } 
-            
-            if (cube[2, 2, 1].Bottom == Colour.Blue && cube[2, 2, 1].Back == Colour.Orange)
-            {
-                return (Side.Bottom, Side.Right);
-            }
-            
-            throw new Exception("There are no matching middle edges but there should be...");
-        }
-        
-        private bool BackHasSolvableEdge()
+        private Block GetSolvableEdge()
         {
             var backEdges = _cube.GetBackEdges().Where(b => !b.HasColour(Colour.Yellow));
             foreach (var block in backEdges)
@@ -134,11 +89,11 @@ namespace rubix_solver.Solvers
                 var nonBackSide = sides.Single(side => side != Side.Back);
                 if (RubixCubeStatusEvaluator.SideIsCorrectColour(nonBackSide, block))
                 {
-                    return true;
+                    return block;
                 }
             }
 
-            return false;
+            return null;
         }
 
         private void PerformLeftSwitch(Side face, Side side)

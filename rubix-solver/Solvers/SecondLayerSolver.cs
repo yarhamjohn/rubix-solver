@@ -12,7 +12,7 @@ namespace rubix_solver.Solvers
         {
             _cube = cube;
         }
-
+        
         public void Solve()
         {
             while (!RubixCubeStatusEvaluator.SecondLayerIsSolved(_cube))
@@ -20,35 +20,63 @@ namespace rubix_solver.Solvers
                 var backEdges = _cube.GetBackEdges();
                 if (backEdges.All(b => b.HasColour(Colour.Yellow)))
                 {
-                    PerformRightSwitch(Side.Left, Side.Top);
-                    PerformRightSwitch(Side.Top, Side.Right);
-                    PerformRightSwitch(Side.Bottom, Side.Left);
-                    PerformRightSwitch(Side.Right, Side.Bottom);
+                    RotateIncorrectSideEdgeToBack();
                 }
 
-                while (!BackEdgeIsSolvable())
+                while (!BackHasSolvableEdge())
                 {
                     _cube.RotateClockwise(Side.Back);
                 }
 
-                var (face, targetFace) = GetCorrectlyPositionedMiddleEdge(_cube.Cube);
-                {
-                    if (face == Side.Top && targetFace == Side.Left ||
-                        face == Side.Left && targetFace == Side.Bottom ||
-                        face == Side.Bottom && targetFace == Side.Right ||
-                        face == Side.Right && targetFace == Side.Top)
-                    {
-                        PerformLeftSwitch(face, targetFace);
-                    }
+                SolveBackEdge();
+            }
+        }
 
-                    if (face == Side.Top && targetFace == Side.Right ||
-                        face == Side.Right && targetFace == Side.Bottom ||
-                        face == Side.Bottom && targetFace == Side.Left ||
-                        face == Side.Left && targetFace == Side.Top)
-                    {
-                        PerformRightSwitch(face, targetFace);
-                    }
+        private void SolveBackEdge()
+        {
+            var (face, targetFace) = GetCorrectlyPositionedMiddleEdge(_cube.Cube);
+            {
+                if (face == Side.Top && targetFace == Side.Left ||
+                    face == Side.Left && targetFace == Side.Bottom ||
+                    face == Side.Bottom && targetFace == Side.Right ||
+                    face == Side.Right && targetFace == Side.Top)
+                {
+                    PerformLeftSwitch(face, targetFace);
                 }
+
+                if (face == Side.Top && targetFace == Side.Right ||
+                    face == Side.Right && targetFace == Side.Bottom ||
+                    face == Side.Bottom && targetFace == Side.Left ||
+                    face == Side.Left && targetFace == Side.Top)
+                {
+                    PerformRightSwitch(face, targetFace);
+                }
+            }
+        }
+
+        private void RotateIncorrectSideEdgeToBack()
+        {
+            var incorrectEdge = _cube.GetSideEdges().First(b => !RubixCubeStatusEvaluator.EdgeIsInCorrectPosition(b));
+            var sides = incorrectEdge.GetNonNullSides();
+
+            if (sides.Contains(Side.Top) && sides.Contains(Side.Left))
+            {
+                PerformRightSwitch(Side.Left, Side.Top);
+            }
+
+            if (sides.Contains(Side.Right) && sides.Contains(Side.Top))
+            {
+                PerformRightSwitch(Side.Top, Side.Right);
+            }
+
+            if (sides.Contains(Side.Bottom) && sides.Contains(Side.Right))
+            {
+                PerformRightSwitch(Side.Right, Side.Bottom);
+            }
+
+            if (sides.Contains(Side.Left) && sides.Contains(Side.Bottom))
+            {
+                PerformRightSwitch(Side.Bottom, Side.Left);
             }
         }
 
@@ -97,7 +125,7 @@ namespace rubix_solver.Solvers
             throw new Exception("There are no matching middle edges but there should be...");
         }
         
-        private bool BackEdgeIsSolvable()
+        private bool BackHasSolvableEdge()
         {
             var backEdges = _cube.GetBackEdges().Where(b => !b.HasColour(Colour.Yellow));
             foreach (var block in backEdges)

@@ -103,5 +103,19 @@ namespace rubix_solver
                 _ => throw new Exception($"Not a valid layer: {side.ToString()}")
             };
         }
+
+        public static bool EdgeIsInCorrectPosition(Block block)
+        {
+            var nonNullSides = block.GetNonNullSides();
+            foreach (var side in nonNullSides)
+            {
+                if (!SideIsCorrectColour(side, block))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

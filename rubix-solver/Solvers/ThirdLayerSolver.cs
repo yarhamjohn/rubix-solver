@@ -25,50 +25,84 @@ namespace rubix_solver.Solvers
         {
             while (!RubixCubeStatusEvaluator.CrossFaceIsFormed(_cube, Side.Back))
             {
-                var face = _cube.GetFace(Side.Back);
-                if (_cube.GetBackFaceCrossBlocks().Count(b => b.Back == Colour.Yellow) < 3)
+                var crossBlocks = _cube.GetBackFaceCrossBlocks().ToList();
+
+                if (CrossHasFewerThanThreeCorrectBlocks(crossBlocks))
                 {
                     // Any rotation is fine here (providing the face matches the side)
                     PerformFruRufRotations(Side.Right, Side.Bottom);
                 }
-                else
+
+                if (CrossIsCurrentlyAnArrow(crossBlocks))
                 {
-                    if (face[0, 1].Back == Colour.Yellow && face[1, 2].Back == Colour.Yellow &&
-                        face[1, 1].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Right, Side.Bottom);
-                    }
-                    else if (face[0, 1].Back == Colour.Yellow && face[1, 0].Back == Colour.Yellow &&
-                             face[1, 1].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Bottom, Side.Left);
-                    }
-                    else if (face[1, 2].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
-                             face[1, 1].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Top, Side.Right);
-                    }
-                    else if (face[1, 0].Back == Colour.Yellow && face[2,1].Back == Colour.Yellow &&
-                             face[1, 1].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Left, Side.Top);
-                    }
-                    else if (face[0, 1].Back == Colour.Yellow &&
-                             face[1, 1].Back == Colour.Yellow &&
-                             face[2, 1].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Right, Side.Bottom);
-                    }
-                    else if (face[1, 0].Back == Colour.Yellow &&
-                             face[1, 1].Back == Colour.Yellow &&
-                             face[1, 2].Back == Colour.Yellow)
-                    {
-                        PerformFruRufRotations(Side.Bottom, Side.Left);
-                    }
+                    var sides = GetIncorrectCrossBlockSides(crossBlocks);
+                    var faceToRotate = GetFaceToRotate(sides);
+                    var sideToRotate = GetSideToRotate(faceToRotate);
+                    PerformFruRufRotations(faceToRotate, sideToRotate);
+                }
+
+                if (CrossIsCurrentlyALine(crossBlocks))
+                {
+                    var faceToRotate = GetIncorrectCrossBlockSides(crossBlocks).First();
+                    var sideToRotate = GetSideToRotate(faceToRotate);
+                    PerformFruRufRotations(faceToRotate, sideToRotate);
                 }
             }
         }
-        
+
+        private Side GetSideToRotate(Side faceToRotate)
+        {
+            return faceToRotate switch
+            {
+                Side.Left => Side.Top,
+                Side.Right => Side.Bottom,
+                Side.Top => Side.Right,
+                Side.Bottom => Side.Left,
+                _ => throw new Exception("Not a valid face")
+            };
+        }
+
+        private static Side GetFaceToRotate(List<Side> sides)
+        {
+            return sides.Contains(Side.Left) && sides.Contains(Side.Top)
+                ? Side.Left
+                : sides.Contains(Side.Left) && sides.Contains(Side.Bottom)
+                    ? Side.Bottom
+                    : sides.Contains(Side.Right) && sides.Contains(Side.Top)
+                        ? Side.Top
+                        : sides.Contains(Side.Right) && sides.Contains(Side.Bottom)
+                            ? Side.Right
+                            : throw new Exception($"This isn't right {string.Join(", ", sides)}");
+        }
+
+        private static List<Side> GetIncorrectCrossBlockSides(List<Block> crossBlocks)
+        {
+            return crossBlocks
+                .Where(b => b.Back != Colour.Yellow)
+                .Select(b => b.GetNonNullSides().Single(s => s != Side.Back))
+                .ToList();
+        }
+
+        private bool CrossIsCurrentlyAnArrow(List<Block> crossBlocks)
+        {
+            var blocks = GetIncorrectCrossBlockSides(crossBlocks);
+            return blocks.Count == 2 && !CrossIsCurrentlyALine(crossBlocks);
+        }
+
+        private bool CrossIsCurrentlyALine(List<Block> crossBlocks)
+        {
+            var blocks = GetIncorrectCrossBlockSides(crossBlocks);
+            return blocks.Count == 2 &&
+                   blocks.Contains(Side.Left) && blocks.Contains(Side.Right) ||
+                   blocks.Contains(Side.Top) && blocks.Contains(Side.Bottom);
+        }
+
+        private bool CrossHasFewerThanThreeCorrectBlocks(IEnumerable<Block> blocks)
+        {
+            // Orientation of the cube matters only once there are 3 blocks with yellow faces on the back in the cross
+            return blocks.Count(b => b.Back == Colour.Yellow) < 3;
+        }
+
         private void ReorganiseMiddleEdges()
         {
             while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Back))

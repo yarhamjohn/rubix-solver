@@ -122,7 +122,7 @@ namespace rubix_solver.tests
             
             var solver = new ThirdLayerSolver(cube);
             
-            var ex = Assert.Throws<Exception>(solver.CorrectCornerOrientation);
+            var ex = Assert.Throws<Exception>(solver.Solve);
             Assert.That(ex.Message, Is.EqualTo("Something is wrong with the Rubix Cube layout - it should not be possible to have only one incorrect corner block."));
         }
         
@@ -185,8 +185,7 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -249,8 +248,7 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -313,8 +311,7 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
 
@@ -377,8 +374,7 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -441,8 +437,7 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -505,74 +500,8 @@ namespace rubix_solver.tests
             });    
             
             var solver = new ThirdLayerSolver(cube);
-            solver.CorrectCornerOrientation();
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
-        }
-        
-        [Test]
-        public void ReorganiseCorners_ReturnsUnchangedCube_GivenFourCorrectlyPositionedCorners()
-        {
-            var cube = new RubixCube(new[,,]
-            {
-                {
-                    {
-                        new Block(Colour.Red, null, Colour.Green, null, Colour.White, null),
-                        new Block(null, null, Colour.Green, null, Colour.White, null),
-                        new Block(null, Colour.Orange, Colour.Green, null, Colour.White, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, Colour.White, null),
-                        new Block(null, null, null, null, Colour.White, null),
-                        new Block(null, Colour.Orange, null, null, Colour.White, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, Colour.Blue, Colour.White, null),
-                        new Block(null, null, null, Colour.Blue, Colour.White, null),
-                        new Block(null, Colour.Orange, null, Colour.Blue, Colour.White, null)
-                    }
-                },
-                {
-                    {
-                        new Block(Colour.Red, null, Colour.Green, null, null, null),
-                        new Block(null, null, Colour.Green, null, null, null),
-                        new Block(null, Colour.Orange, Colour.Green, null, null, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, null, null),
-                        new Block(null, null, null, null, null, null),
-                        new Block(null, Colour.Orange, null, null, null, null)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, Colour.Blue, null, null),
-                        new Block(null, null, null, Colour.Blue, null, null),
-                        new Block(null, Colour.Orange, null, Colour.Blue, null, null)
-                    }
-                },
-                {
-                    {
-                        new Block(Colour.Green, null, Colour.Yellow, null, null, Colour.Red),
-                        new Block(null, null, Colour.Green, null, null, Colour.Yellow),
-                        new Block(null, Colour.Green, Colour.Yellow, null, null, Colour.Orange)
-                    },
-                    {
-                        new Block(Colour.Red, null, null, null, null, Colour.Yellow),
-                        new Block(null, null, null, null, null, Colour.Yellow),
-                        new Block(null, Colour.Orange, null, null, null, Colour.Yellow)
-                    },
-                    {
-                        new Block(Colour.Blue, null, null, Colour.Yellow, null, Colour.Red),
-                        new Block(null, null, null, Colour.Blue, null, Colour.Yellow),
-                        new Block(null, Colour.Blue, null, Colour.Yellow, null, Colour.Orange)
-                    }
-                }
-            });
-
-            var expectedCube = cube.CloneCube();
-            var solver = new ThirdLayerSolver(cube);
-            solver.ReorganiseCorners();
-            
-            Assert.That(expectedCube, Is.EquivalentTo(cube.Cube));
         }
 
         [Test]
@@ -638,7 +567,7 @@ namespace rubix_solver.tests
 
             var solver = new ThirdLayerSolver(cube);
 
-            var ex = Assert.Throws<Exception>(solver.ReorganiseCorners);
+            var ex = Assert.Throws<Exception>(solver.Solve);
             Assert.That(ex.Message,
                 Is.EqualTo("Something has gone wrong. There can only be 0, 3 or 4 incorrect blocks at this stage."));
         }
@@ -702,9 +631,7 @@ namespace rubix_solver.tests
             });
         
             var solver = new ThirdLayerSolver(cube);
-            solver.ReorganiseCorners();
-            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -767,9 +694,7 @@ namespace rubix_solver.tests
             });
         
             var solver = new ThirdLayerSolver(cube);
-            solver.ReorganiseCorners();
-            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -832,10 +757,7 @@ namespace rubix_solver.tests
             });
         
             var solver = new ThirdLayerSolver(cube);
-            solver.ReorganiseMiddleEdges();
-            solver.ReorganiseCorners();
-            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
 
@@ -898,10 +820,7 @@ namespace rubix_solver.tests
             });
         
             var solver = new ThirdLayerSolver(cube);
-            solver.ReorganiseMiddleEdges();
-            solver.ReorganiseCorners();
-            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
         
@@ -964,11 +883,7 @@ namespace rubix_solver.tests
             });
         
             var solver = new ThirdLayerSolver(cube);
-            solver.FormYellowCross();
-            solver.ReorganiseMiddleEdges();
-            solver.ReorganiseCorners();
-            solver.CorrectCornerOrientation(); // The only way to really test this easily is to run the whole cube solver.
-            
+            solver.Solve();
             Assert.That(_solvedCube, Is.EquivalentTo(cube.Cube));
         }
     }

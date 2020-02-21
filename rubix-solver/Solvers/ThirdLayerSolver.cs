@@ -21,21 +21,12 @@ namespace rubix_solver.Solvers
             CorrectCornerOrientation();
         }
 
-        public void FormYellowCross()
+        private void FormYellowCross()
         {
             while (!RubixCubeStatusEvaluator.CrossFaceIsFormed(_cube, Side.Back))
             {
                 var face = _cube.GetFace(Side.Back);
-                var crossBlocks = new Dictionary<(int, int), Block>
-                {
-                    {(0, 1), face[0, 1]},
-                    {(1, 1), face[1, 1]},
-                    {(2, 1), face[2, 1]},
-                    {(1, 0), face[1, 0]},
-                    {(1, 2), face[1, 2]},
-                };
-
-                if (crossBlocks.Values.Count(f => f.Back == Colour.Yellow) < 3)
+                if (_cube.GetBackFaceCrossBlocks().Count(b => b.Back == Colour.Yellow) < 3)
                 {
                     // Any rotation is fine here (providing the face matches the side)
                     PerformFruRufRotations(Side.Right, Side.Bottom);
@@ -78,7 +69,7 @@ namespace rubix_solver.Solvers
             }
         }
         
-        public void ReorganiseMiddleEdges()
+        private void ReorganiseMiddleEdges()
         {
             while (!RubixCubeStatusEvaluator.CrossIsFormed(_cube, Side.Back))
             {
@@ -160,7 +151,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        public void ReorganiseCorners()
+        private void ReorganiseCorners()
         {
             switch (GetIncorrectlyPositionedCornerBlocks().Count)
             {
@@ -210,7 +201,7 @@ namespace rubix_solver.Solvers
             }
         }
 
-        public void CorrectCornerOrientation()
+        private void CorrectCornerOrientation()
         {
             if (RubixCubeStatusEvaluator.ThirdLayerIsSolved(_cube))
             {

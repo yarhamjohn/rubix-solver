@@ -341,64 +341,6 @@ namespace rubix_solver
             }
         }
 
-        public Block[,,] CloneCube()
-        {
-            return new[,,]
-            {
-                {
-                    {
-                        new Block(Cube[0, 0, 0].Left, Cube[0, 0, 0].Right, Cube[0, 0, 0].Top, Cube[0, 0, 0].Bottom, Cube[0, 0, 0].Front, Cube[0, 0, 0].Back),
-                        new Block(Cube[0, 0, 1].Left, Cube[0, 0, 1].Right, Cube[0, 0, 1].Top, Cube[0, 0, 1].Bottom, Cube[0, 0, 1].Front, Cube[0, 0, 1].Back),
-                        new Block(Cube[0, 0, 2].Left, Cube[0, 0, 2].Right, Cube[0, 0, 2].Top, Cube[0, 0, 2].Bottom, Cube[0, 0, 2].Front, Cube[0, 0, 2].Back)
-                    },
-                    {
-                        new Block(Cube[0, 1, 0].Left, Cube[0, 1, 0].Right, Cube[0, 1, 0].Top, Cube[0, 1, 0].Bottom, Cube[0, 1, 0].Front, Cube[0, 1, 0].Back),
-                        new Block(Cube[0, 1, 1].Left, Cube[0, 1, 1].Right, Cube[0, 1, 1].Top, Cube[0, 1, 1].Bottom, Cube[0, 1, 1].Front, Cube[0, 1, 1].Back),
-                        new Block(Cube[0, 1, 2].Left, Cube[0, 1, 2].Right, Cube[0, 1, 2].Top, Cube[0, 1, 2].Bottom, Cube[0, 1, 2].Front, Cube[0, 1, 2].Back)
-                    },
-                    {
-                        new Block(Cube[0, 2, 0].Left, Cube[0, 2, 0].Right, Cube[0, 2, 0].Top, Cube[0, 2, 0].Bottom, Cube[0, 2, 0].Front, Cube[0, 2, 0].Back),
-                        new Block(Cube[0, 2, 1].Left, Cube[0, 2, 1].Right, Cube[0, 2, 1].Top, Cube[0, 2, 1].Bottom, Cube[0, 2, 1].Front, Cube[0, 2, 1].Back),
-                        new Block(Cube[0, 2, 2].Left, Cube[0, 2, 2].Right, Cube[0, 2, 2].Top, Cube[0, 2, 2].Bottom, Cube[0, 2, 2].Front, Cube[0, 2, 2].Back)
-                    }
-                },
-                {
-                    {
-                        new Block(Cube[1, 0, 0].Left, Cube[1, 0, 0].Right, Cube[1, 0, 0].Top, Cube[1, 0, 0].Bottom, Cube[1, 0, 0].Front, Cube[1, 0, 0].Back),
-                        new Block(Cube[1, 0, 1].Left, Cube[1, 0, 1].Right, Cube[1, 0, 1].Top, Cube[1, 0, 1].Bottom, Cube[1, 0, 1].Front, Cube[1, 0, 1].Back),
-                        new Block(Cube[1, 0, 2].Left, Cube[1, 0, 2].Right, Cube[1, 0, 2].Top, Cube[1, 0, 2].Bottom, Cube[1, 0, 2].Front, Cube[1, 0, 2].Back)
-                    },
-                    {
-                        new Block(Cube[1, 1, 0].Left, Cube[1, 1, 0].Right, Cube[1, 1, 0].Top, Cube[1, 1, 0].Bottom, Cube[1, 1, 0].Front, Cube[1, 1, 0].Back),
-                        new Block(Cube[1, 1, 1].Left, Cube[1, 1, 1].Right, Cube[1, 1, 1].Top, Cube[1, 1, 1].Bottom, Cube[1, 1, 1].Front, Cube[1, 1, 1].Back),
-                        new Block(Cube[1, 1, 2].Left, Cube[1, 1, 2].Right, Cube[1, 1, 2].Top, Cube[1, 1, 2].Bottom, Cube[1, 1, 2].Front, Cube[1, 1, 2].Back)
-                    },
-                    {
-                        new Block(Cube[1, 2, 0].Left, Cube[1, 2, 0].Right, Cube[1, 2, 0].Top, Cube[1, 2, 0].Bottom, Cube[1, 2, 0].Front, Cube[1, 2, 0].Back),
-                        new Block(Cube[1, 2, 1].Left, Cube[1, 2, 1].Right, Cube[1, 2, 1].Top, Cube[1, 2, 1].Bottom, Cube[1, 2, 1].Front, Cube[1, 2, 1].Back),
-                        new Block(Cube[1, 2, 2].Left, Cube[1, 2, 2].Right, Cube[1, 2, 2].Top, Cube[1, 2, 2].Bottom, Cube[1, 2, 2].Front, Cube[1, 2, 2].Back)
-                    }
-                },
-                {
-                    {
-                        new Block(Cube[2, 0, 0].Left, Cube[2, 0, 0].Right, Cube[2, 0, 0].Top, Cube[2, 0, 0].Bottom, Cube[2, 0, 0].Front, Cube[2, 0, 0].Back),
-                        new Block(Cube[2, 0, 1].Left, Cube[2, 0, 1].Right, Cube[2, 0, 1].Top, Cube[2, 0, 1].Bottom, Cube[2, 0, 1].Front, Cube[2, 0, 1].Back),
-                        new Block(Cube[2, 0, 2].Left, Cube[2, 0, 2].Right, Cube[2, 0, 2].Top, Cube[2, 0, 2].Bottom, Cube[2, 0, 2].Front, Cube[2, 0, 2].Back)
-                    },
-                    {
-                        new Block(Cube[2, 1, 0].Left, Cube[2, 1, 0].Right, Cube[2, 1, 0].Top, Cube[2, 1, 0].Bottom, Cube[2, 1, 0].Front, Cube[2, 1, 0].Back),
-                        new Block(Cube[2, 1, 1].Left, Cube[2, 1, 1].Right, Cube[2, 1, 1].Top, Cube[2, 1, 1].Bottom, Cube[2, 1, 1].Front, Cube[2, 1, 1].Back),
-                        new Block(Cube[2, 1, 2].Left, Cube[2, 1, 2].Right, Cube[2, 1, 2].Top, Cube[2, 1, 2].Bottom, Cube[2, 1, 2].Front, Cube[2, 1, 2].Back)
-                    },
-                    {
-                        new Block(Cube[2, 2, 0].Left, Cube[2, 2, 0].Right, Cube[2, 2, 0].Top, Cube[2, 2, 0].Bottom, Cube[2, 2, 0].Front, Cube[2, 2, 0].Back),
-                        new Block(Cube[2, 2, 1].Left, Cube[2, 2, 1].Right, Cube[2, 2, 1].Top, Cube[2, 2, 1].Bottom, Cube[2, 2, 1].Front, Cube[2, 2, 1].Back),
-                        new Block(Cube[2, 2, 2].Left, Cube[2, 2, 2].Right, Cube[2, 2, 2].Top, Cube[2, 2, 2].Bottom, Cube[2, 2, 2].Front, Cube[2, 2, 2].Back)
-                    }
-                }
-            };
-        }
-
         public Colour? GetCenterBlockFace(Side side)
         {
             return side switch
@@ -497,6 +439,19 @@ namespace rubix_solver
                 left[2, 1],
                 right[0, 1],
                 right[2, 1]
+            };
+        }
+
+        public IEnumerable<Block> GetBackFaceCrossBlocks()
+        {
+            var face = GetFace(Side.Back);
+            return new List<Block>
+            {
+                face[0, 1],
+                face[1, 1],
+                face[2, 1],
+                face[1, 0],
+                face[1, 2],
             };
         }
 

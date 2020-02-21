@@ -102,29 +102,29 @@ namespace rubix_solver
             {
                 {
                     {
-                        new Block(ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Left), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Right), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Top), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Front), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Left), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.TopRow.RightColumn.Left), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Right), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Top), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Front), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Back))
+                        new Block(cube.FrontFace.TopRow.LeftColumn.LeftColour, ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Right), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Top), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Front), ConvertToColour(cube.FrontFace.TopRow.LeftColumn.Back)),
+                        new Block(cube.FrontFace.TopRow.MiddleColumn.LeftColour, ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.FrontFace.TopRow.MiddleColumn.Back)),
+                        new Block(cube.FrontFace.TopRow.RightColumn.LeftColour, ConvertToColour(cube.FrontFace.TopRow.RightColumn.Right), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Top), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Front), ConvertToColour(cube.FrontFace.TopRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Left), ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Right),
+                        new Block(cube.FrontFace.MiddleRow.LeftColumn.LeftColour, ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Right),
                             ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Top), ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Bottom),
                             ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Front), ConvertToColour(cube.FrontFace.MiddleRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Left), ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Right),
+                        new Block(cube.FrontFace.MiddleRow.MiddleColumn.LeftColour, ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Right),
                             ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Top), ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Front), ConvertToColour(cube.FrontFace.MiddleRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Left), ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Right),
+                        new Block(cube.FrontFace.MiddleRow.RightColumn.LeftColour, ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Right),
                             ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Top), ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Bottom),
                             ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Front), ConvertToColour(cube.FrontFace.MiddleRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Left), ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Right),
+                        new Block(cube.FrontFace.BottomRow.LeftColumn.LeftColour, ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Right),
                             ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Top), ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Bottom),
                             ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Front), ConvertToColour(cube.FrontFace.BottomRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Left), ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Right),
+                        new Block(cube.FrontFace.BottomRow.MiddleColumn.LeftColour, ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Right),
                             ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Top), ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Front), ConvertToColour(cube.FrontFace.BottomRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Left), ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Right),
+                        new Block(cube.FrontFace.BottomRow.RightColumn.LeftColour, ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Right),
                             ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Top), ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Bottom),
                             ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Front), ConvertToColour(cube.FrontFace.BottomRow.RightColumn.Back))
 
@@ -132,29 +132,29 @@ namespace rubix_solver
                 },
                 {
                     {
-                        new Block(ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Left), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Left), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Left), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Back))
+                        new Block(cube.MiddleFace.TopRow.LeftColumn.LeftColour, ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.LeftColumn.Back)),
+                        new Block(cube.MiddleFace.TopRow.MiddleColumn.LeftColour, ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.MiddleColumn.Back)),
+                        new Block(cube.MiddleFace.TopRow.RightColumn.LeftColour, ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Right), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Top), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Front), ConvertToColour(cube.MiddleFace.TopRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Left), ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Right),
+                        new Block(cube.MiddleFace.MiddleRow.LeftColumn.LeftColour, ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Right),
                             ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Top), ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Front), ConvertToColour(cube.MiddleFace.MiddleRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Left), ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Right),
+                        new Block(cube.MiddleFace.MiddleRow.MiddleColumn.LeftColour, ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Right),
                             ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Top), ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Front), ConvertToColour(cube.MiddleFace.MiddleRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Left), ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Right),
+                        new Block(cube.MiddleFace.MiddleRow.RightColumn.LeftColour, ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Right),
                             ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Top), ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Front), ConvertToColour(cube.MiddleFace.MiddleRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Left), ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Right),
+                        new Block(cube.MiddleFace.BottomRow.LeftColumn.LeftColour, ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Right),
                             ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Top), ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Front), ConvertToColour(cube.MiddleFace.BottomRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Left), ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Right),
+                        new Block(cube.MiddleFace.BottomRow.MiddleColumn.LeftColour, ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Right),
                             ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Top), ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Front), ConvertToColour(cube.MiddleFace.BottomRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Left), ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Right),
+                        new Block(cube.MiddleFace.BottomRow.RightColumn.LeftColour, ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Right),
                             ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Top), ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Bottom),
                             ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Front), ConvertToColour(cube.MiddleFace.BottomRow.RightColumn.Back))
 
@@ -162,29 +162,29 @@ namespace rubix_solver
                 },
                 {
                     {
-                        new Block(ConvertToColour(cube.BackFace.TopRow.LeftColumn.Left), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Right), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Top), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Front), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Left), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.TopRow.RightColumn.Left), ConvertToColour(cube.BackFace.TopRow.RightColumn.Right), ConvertToColour(cube.BackFace.TopRow.RightColumn.Top), ConvertToColour(cube.BackFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.RightColumn.Front), ConvertToColour(cube.BackFace.TopRow.RightColumn.Back))
+                        new Block(cube.BackFace.TopRow.LeftColumn.LeftColour, ConvertToColour(cube.BackFace.TopRow.LeftColumn.Right), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Top), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Front), ConvertToColour(cube.BackFace.TopRow.LeftColumn.Back)),
+                        new Block(cube.BackFace.TopRow.MiddleColumn.LeftColour, ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Right), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Top), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Front), ConvertToColour(cube.BackFace.TopRow.MiddleColumn.Back)),
+                        new Block(cube.BackFace.TopRow.RightColumn.LeftColour, ConvertToColour(cube.BackFace.TopRow.RightColumn.Right), ConvertToColour(cube.BackFace.TopRow.RightColumn.Top), ConvertToColour(cube.BackFace.TopRow.RightColumn.Bottom), ConvertToColour(cube.BackFace.TopRow.RightColumn.Front), ConvertToColour(cube.BackFace.TopRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Left), ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Right),
+                        new Block(cube.BackFace.MiddleRow.LeftColumn.LeftColour, ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Right),
                             ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Top), ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Bottom),
                             ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Front), ConvertToColour(cube.BackFace.MiddleRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Left), ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Right),
+                        new Block(cube.BackFace.MiddleRow.MiddleColumn.LeftColour, ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Right),
                             ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Top), ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Front), ConvertToColour(cube.BackFace.MiddleRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Left), ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Right),
+                        new Block(cube.BackFace.MiddleRow.RightColumn.LeftColour, ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Right),
                             ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Top), ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Bottom),
                             ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Front), ConvertToColour(cube.BackFace.MiddleRow.RightColumn.Back))
                     },
                     {
-                        new Block(ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Left), ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Right),
+                        new Block(cube.BackFace.BottomRow.LeftColumn.LeftColour, ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Right),
                             ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Top), ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Bottom),
                             ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Front), ConvertToColour(cube.BackFace.BottomRow.LeftColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Left), ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Right),
+                        new Block(cube.BackFace.BottomRow.MiddleColumn.LeftColour, ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Right),
                             ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Top), ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Bottom),
                             ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Front), ConvertToColour(cube.BackFace.BottomRow.MiddleColumn.Back)),
-                        new Block(ConvertToColour(cube.BackFace.BottomRow.RightColumn.Left), ConvertToColour(cube.BackFace.BottomRow.RightColumn.Right),
+                        new Block(cube.BackFace.BottomRow.RightColumn.LeftColour, ConvertToColour(cube.BackFace.BottomRow.RightColumn.Right),
                             ConvertToColour(cube.BackFace.BottomRow.RightColumn.Top), ConvertToColour(cube.BackFace.BottomRow.RightColumn.Bottom),
                             ConvertToColour(cube.BackFace.BottomRow.RightColumn.Front), ConvertToColour(cube.BackFace.BottomRow.RightColumn.Back))
 

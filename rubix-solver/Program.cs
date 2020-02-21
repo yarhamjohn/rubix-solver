@@ -18,23 +18,22 @@ namespace rubix_solver
 
         public static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(opts =>
-                {
-                    var cube = JsonConvert.DeserializeObject<Cube>(opts.Cube);
-                    var rubixCube = new RubixCube(cube);
-                    RubixCubePrinter.Print(rubixCube);
+            Parser.Default.ParseArguments<Options>(args).WithParsed(SolveRubixCube);
+        }
 
-                    var solver = new RubixCubeSolver(rubixCube);
-                    solver.Solve();
-                    RubixCubePrinter.Print(rubixCube);
+        private static void SolveRubixCube(Options opts)
+        {
+            var cube = JsonConvert.DeserializeObject<Cube>(opts.Cube);
+            var rubixCube = new RubixCube(cube);
 
-                    using var file = new StreamWriter(opts.OutputPath);
-                    foreach (var (num, direction, side) in rubixCube.Instructions)
-                    {
-                        file.WriteLine($"{num} - {direction}: {side}");
-                    }
-                });
+            var solver = new RubixCubeSolver(rubixCube);
+            solver.Solve();
+
+            using var file = new StreamWriter(opts.OutputPath);
+            foreach (var (num, direction, side) in rubixCube.Instructions)
+            {
+                file.WriteLine($"{num} - {direction}: {side}");
+            }
         }
     }
 }

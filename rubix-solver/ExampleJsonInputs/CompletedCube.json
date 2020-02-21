@@ -1,0 +1,134 @@
+{
+  "frontFace": {
+    "topRow": {
+      "leftColumn": {
+        "top": "green",
+        "front": "white",
+        "left": "red"
+      },
+      "middleColumn": {
+        "top": "green",
+        "front": "white"
+      },
+      "rightColumn": {
+        "top": "green",
+        "front": "white",
+        "right": "orange"
+      }
+    },
+    "middleRow": {
+      "leftColumn": {
+        "front": "white",
+        "left": "red"
+      },
+      "middleColumn": {
+        "front": "white"
+      },
+      "rightColumn": {
+        "front": "white",
+        "right": "orange"
+      }
+    },
+    "bottomRow": {
+      "leftColumn": {
+        "bottom": "blue",
+        "front": "white",
+        "left": "red"
+      },
+      "middleColumn": {
+        "bottom": "blue",
+        "front": "white"
+      },
+      "rightColumn": {
+        "bottom": "blue",
+        "front": "white",
+        "right": "orange"
+      }
+    }
+  },
+  "middleFace": {
+    "topRow": {
+      "leftColumn": {
+        "top": "green",
+        "left": "red"
+      },
+      "middleColumn": {
+        "top": "green"
+      },
+      "rightColumn": {
+        "top": "green",
+        "right": "orange"
+      }
+    },
+    "middleRow": {
+      "leftColumn": {
+        "left": "red"
+      },
+      "middleColumn": {
+      },
+      "rightColumn": {
+        "right": "orange"
+      }
+    },
+    "bottomRow": {
+      "leftColumn": {
+        "bottom": "blue",
+        "left": "red"
+      },
+      "middleColumn": {
+        "bottom": "blue"
+      },
+      "rightColumn": {
+        "bottom": "blue",
+        "right": "orange"
+      }
+    }
+  },
+  "backFace": {
+    "topRow": {
+      "leftColumn": {
+        "top": "green",
+        "back": "yellow",
+        "left": "red"
+      },
+      "middleColumn": {
+        "top": "green",
+        "back": "yellow"
+      },
+      "rightColumn": {
+        "top": "green",
+        "back": "yellow",
+        "right": "orange"
+      }
+    },
+    "middleRow": {
+      "leftColumn": {
+        "back": "yellow",
+        "left": "red"
+      },
+      "middleColumn": {
+        "back": "yellow"
+      },
+      "rightColumn": {
+        "back": "yellow",
+        "right": "orange"
+      }
+    },
+    "bottomRow": {
+      "leftColumn": {
+        "bottom": "blue",
+        "back": "yellow",
+        "left": "red"
+      },
+      "middleColumn": {
+        "bottom": "blue",
+        "back": "yellow"
+      },
+      "rightColumn": {
+        "bottom": "blue",
+        "back": "yellow",
+        "right": "orange"
+      }
+    }
+  }
+}

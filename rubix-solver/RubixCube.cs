@@ -378,7 +378,7 @@ namespace rubix_solver
             }
 
             SetFace(newFace, side);
-            Instructions.Add((Instructions.Count + 1, "clockwise", side));
+            AddInstruction("clockwise", side);
         }
 
         public void RotateAntiClockwise(Side side)
@@ -440,7 +440,44 @@ namespace rubix_solver
             }
 
             SetFace(newFace, side);
-            Instructions.Add((Instructions.Count + 1, "anti-clockwise", side));
+            AddInstruction("anti-clockwise", side);
+        }
+
+        private void AddInstruction(string direction, Side side)
+        {
+            var numInstructions = Instructions.Count;
+            if (numInstructions == 0)
+            {
+                Instructions.Add((1, direction, side));
+                return;
+            }
+
+            if (IsSameSideOppositeDirection(direction, side))
+            {
+                Instructions.RemoveAt(numInstructions - 1);
+                return;
+            }
+
+            if (numInstructions > 1 && MatchesLastTwoInstructions(direction, side, numInstructions))
+            {
+                Instructions.RemoveRange(numInstructions - 2, 2);
+                Instructions.Add((numInstructions - 1, direction == "clockwise" ? "anti-clockwise" : "clockwise", side));
+                return;
+            }
+
+            Instructions.Add((numInstructions + 1, direction, side));
+        }
+
+        private bool MatchesLastTwoInstructions(string direction, Side side, int numInstructions)
+        {
+            var lastTwoInstructions = Instructions.GetRange(numInstructions - 2, 2);
+            return lastTwoInstructions.Count(i => i.direction == direction && i.side == side) == 2;
+        }
+
+        private bool IsSameSideOppositeDirection(string direction, Side side)
+        {
+            var lastInstruction = Instructions.Last();
+            return lastInstruction.side == side && lastInstruction.direction != direction;
         }
 
         public void Randomise()

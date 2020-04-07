@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace rubix_solver.tests
@@ -444,6 +446,38 @@ namespace rubix_solver.tests
             Assert.AreEqual(Colour.Orange, face[2, 2].Right);
             Assert.AreEqual(Colour.Green, face[2, 2].Back);
             Assert.AreEqual(Colour.Yellow, face[2, 2].Bottom);
+        }
+
+        [Test]
+        public void AddingFirstInstruction_AddsInstruction()
+        {
+            var testCube = new RubixCube { Instructions = new List<(int num, string direction, Side side)>()};
+            
+            testCube.RotateAntiClockwise(Side.Front);
+            
+            Assert.That(testCube.Instructions.Count, Is.EqualTo(1));
+            Assert.That(testCube.Instructions.Single(), Is.EqualTo((1, "anti-clockwise", Side.Front)));
+        }
+
+        [Test]
+        public void AddingOppositeDirectionToSameFaceAsPreviousInstruction_RemovesPreviousInstruction()
+        {
+            var testCube = new RubixCube { Instructions = new List<(int num, string direction, Side side)> { (1, "clockwise", Side.Front) }};
+            
+            testCube.RotateAntiClockwise(Side.Front);
+            
+            Assert.That(testCube.Instructions.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AddingThirdConsecutiveSameDirectionToSameFace_ReversesDirectionOneRotation()
+        {
+            var testCube = new RubixCube { Instructions = new List<(int num, string direction, Side side)> { (1, "clockwise", Side.Front), (2, "clockwise", Side.Front) }};
+            
+            testCube.RotateClockwise(Side.Front);
+            
+            Assert.That(testCube.Instructions.Count, Is.EqualTo(1));
+            Assert.That(testCube.Instructions.Single(), Is.EqualTo((1, "anti-clockwise", Side.Front)));
         }
     }
 }

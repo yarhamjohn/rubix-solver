@@ -12,7 +12,7 @@ namespace rubix_solver
                 {
                     public Colour? LeftColour
                     {
-                        get { return Left switch {"red" => Colour.Red, "blue" => Colour.Blue, "green" => Colour.Green, "white" => Colour.White, "yellow" => Colour.Yellow, "orange" => Colour.Orange}; }
+                        get { return Left switch {"red" => Colour.Red, "blue" => Colour.Blue, "green" => Colour.Green, "white" => Colour.White, "yellow" => Colour.Yellow, "orange" => Colour.Orange, _ => null}; }
                     }
 
                     [JsonProperty("left")] public string? Left { get; set; }

@@ -18,6 +18,8 @@ At the moment, the `rubix-solver` works assuming a particular orientation for th
 - Top: Green
 - Bottom: Blue
 
+If an invalid cube (i.e. unsolvable) cube is entered the application will either crash or end up in an infinite loop...
+
 ## Example JSON input
 ```
 {

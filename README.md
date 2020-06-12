@@ -1,6 +1,7 @@
 # rubix-solver
 Solves Rubix Cubes!
 
+![.NET Core](https://github.com/yarhamjohn/rubix-solver/workflows/.NET%20Core/badge.svg)
 
 ## Use
 This application consists of a command line application that takes the following parameters:

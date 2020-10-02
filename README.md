@@ -6,11 +6,11 @@ Solves Rubix Cubes!
 ## Use
 This application consists of a command line application that takes the following parameters:
 
-- `--cube-json (-j)` : Json-formatted string representing the cube to be solved
-- `--cube-json-file-path (-f)` : Path to the json-formatted file containing the representation of the cube to solve
+- `--inputJson (-i)` : Json-formatted string representing the cube to be solved
+- `--inputJsonFile (-j)` : Path to the json-formatted file containing the representation of the cube to solve
 - `--output (-o)` : Path specifying a text file for outputting the list of instructions to solve the cube.
 
-Only one of `--cube-json` and `--cube-json-file-path` needs be specfied.
+Only one of `--inputJson` and `--inputJsonFile` needs be specfied.
 At the moment, the `rubix-solver` works assuming a particular orientation for the cube:
 - Front: White
 - Back: Yellow

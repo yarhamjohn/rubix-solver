@@ -1,6 +1,10 @@
 # rubix-solver
 Solves Rubix Cubes!
 
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/yarhamjohn/rubix-solver?style=for-the-badge)
+![Docker Stars](https://img.shields.io/docker/stars/yarhamjohn/rubix-solver?style=for-the-badge)
+![Docker Pulls](https://img.shields.io/docker/pulls/yarhamjohn/rubix-solver?style=for-the-badge)
+
 ![.NET Core](https://github.com/yarhamjohn/rubix-solver/workflows/.NET%20Core/badge.svg)
 
 ## Use

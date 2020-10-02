@@ -10,13 +10,13 @@ namespace rubix_solver
     {
         private class Options
         {
-            [Option('j', "cube-json", Required = true, HelpText = "Json string representing the Rubix Cube.", SetName = "json")]
+            [Option('i', "inputJson", Required = true, HelpText = "Json string representing the Rubix Cube.", SetName = "json")]
             public string CubeJson { get; set; }
             
-            [Option('f', "cube-json-file-path", Required = true, HelpText = "Path to Json file containing the Rubix Cube definition.", SetName = "json-file")]
+            [Option('j', "inputJsonFile", Required = true, HelpText = "Path to Json file containing the Rubix Cube definition.", SetName = "json-file")]
             public string CubeJsonFilePath { get; set; }
             
-            [Option('o', "output", Required = true, HelpText = "Path to text file for instruction output.")]
+            [Option('o', "outputFile", Required = true, HelpText = "Path to text file for instruction output.")]
             public string OutputPath { get; set; }
         }
 
